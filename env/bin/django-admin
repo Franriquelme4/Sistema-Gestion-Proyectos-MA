@@ -1,5 +1,5 @@
 #!/bin/sh
-'''exec' "/Users/franciscoriquelme/Desktop/Fran/FPUNA/septimo semestre/is2/sistema/env/bin/python3.9" "$0" "$@"
+'''exec' "/Users/franciscoriquelme/Desktop/Fran/FPUNA/septimo semestre/is2/sistema/env/bin/python3.10" "$0" "$@"
 ' '''
 # -*- coding: utf-8 -*-
 import re

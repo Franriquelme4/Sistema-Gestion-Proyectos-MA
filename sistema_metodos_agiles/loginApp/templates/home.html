@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}HOME{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col">
+    {% if es_usuario_nuevo %}
+    <h1>El usuario {{data.email}} es un nuevo usuario y se le asigna el rol por defecto de observador</h1>
+    {% else %}
+    <h1>Usuario ya registrado en el sistema</h1>
+    <h3>Nombre - {{data.nombre}}</h3>
+    <h3>Apellido - {{data.apellido}}</h3>
+    <h3>Nombre de usuario - {{data.nombre_usuario}}</h3>
+    <h3>correo - {{data.email}}</h3>
+    <h3>rol - {{data.roles}}</h3>
+    {% endif %}
+    <a href="{% url 'logout' %}" class="btn btn-danger">Cerrar Sesion</a>
+  </div>
+</div>
+{% endblock %}
