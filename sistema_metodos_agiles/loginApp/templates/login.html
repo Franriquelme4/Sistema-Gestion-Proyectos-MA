@@ -2,20 +2,27 @@
 {% block title %}{% endblock %}
 
 {% block content %}
-<section class="vh-100" style="background-color: #508bfc;">
-    <div class="container py-5 h-100">
-      <div class="row d-flex justify-content-center align-items-center h-100">
-        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-          <div class="card shadow-2-strong" style="border-radius: 1rem;">
-            <div class="card-body p-5 text-center">
-  
-              <h3 class="mb-5">Sign in</h3>
-              <a class="btn btn-lg btn-block btn-primary" style="background-color: #dd4b39;" href="{% url 'social:begin' 'google-oauth2' %}"><i class="fab fa-google me-2"></i> Sign in with google</a>
-            </div>
-          </div>
+  <div class="pagina">
+    <div class="container">
+      <div class="left">
+        <div class="login">Iniciar Sesi&oacute;n</div>
+      </div>
+      <div class="right">
+        <svg viewBox="0 0 320 300">
+          <defs>
+            <linearGradient inkscape:collect="always" id="linearGradient" x1="13" y1="193.49992" x2="307" y2="193.49992"
+              gradientUnits="userSpaceOnUse">
+            </linearGradient>
+          </defs>
+          <path
+            d="m 40,120.00016 239.99984,-3.2e-4 c 0,0 24.99263,0.79932 25.00016,35.00016 0.008,34.20084 -25.00016,35 -25.00016,35 h -239.99984 c 0,-0.0205 -25,4.01348 -25,38.5 0,34.48652 25,38.5 25,38.5 h 215 c 0,0 20,-0.99604 20,-25 0,-24.00396 -20,-25 -20,-25 h -190 c 0,0 -20,1.71033 -20,25 0,24.00396 20,25 20,25 h 168.57143" />
+        </svg>
+        <div class="form">
+          <label for="usuario">Inicie Sesi&oacute;n o registrese con Google</label><br><br>
+          <a href="{% url 'social:begin' 'google-oauth2' %}"><img id="imagen" src="../static/imagenes/botonGoogle.png"></a>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 {% endblock %}
 
