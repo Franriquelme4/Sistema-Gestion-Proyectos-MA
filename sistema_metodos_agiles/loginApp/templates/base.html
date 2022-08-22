@@ -13,12 +13,11 @@
 </head>
 
 <body>
-    <div class="container-fluid">
-        <h1>{% block title %}{% endblock %}</h1>
-        <div class="card">
-            {% block content %}{% endblock %}
-        </div>
-    </div>
+
+    {% block title %}{% endblock %}
+
+    {% block content %}{% endblock %}
+
 </body>
 
 </html>
