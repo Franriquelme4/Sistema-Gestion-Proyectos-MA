@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Usuario(models.Model):
+    """Modelo de la tabla usuarios, en la cual se almacenan todos los datos del usuario"""
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
