@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+
+<div class="container-sm">
+  <div class="card">
+    <h5 class="card-header">Datos del Usuario</h5>
+    <div class="card-body">
+      {% if es_usuario_nuevo %}
+      <div class="alert alert-primary" role="alert">
+        <h4>El usuario {{data.email}} es un nuevo usuario y se le asigna el rol por defecto de observador</h4>
+      </div>
+      {% else %}
+      <div class="alert alert-success" role="alert">
+        Usuario ya registrado previamente
+      </div>
+     <div class="row">
+       <div class="col">
+        <h5><strong>Nombre</strong></h5>
+       </div>
+       <div class="col">
+        <h5>{{data.nombre}}</h5>
+      </div>
+     </div>
+     <div class="row">
+      <div class="col">
+       <h5><strong>Apellido</strong></h5>
+      </div>
+      <div class="col">
+       <h5>{{data.apellido}}</h5>
+     </div>
+    </div>
+    <div class="row">
+      <div class="col">
+       <h5><strong>Nombre de Usuario</strong></h5>
+      </div>
+      <div class="col">
+       <h5>{{data.nombre_usuario}}</h5>
+     </div>
+    </div>
+    <div class="row">
+      <div class="col">
+       <h5><strong>Correo</strong></h5>
+      </div>
+      <div class="col">
+       <h5>{{data.email}}</h5>
+     </div>
+    </div>
+    <div class="row">
+      <div class="col">
+       <h5><strong>Rol</strong></h5>
+      </div>
+      <div class="col">
+       <h5>{{data.roles}}</h5>
+     </div>
+    </div>
+      {% endif %}
+ 
+    </div>
+    <div class="card-footer">
+      <a href="{% url 'logout' %}" class="btn btn-danger">Cerrar Sesion</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
