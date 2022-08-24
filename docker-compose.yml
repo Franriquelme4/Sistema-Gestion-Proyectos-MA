@@ -1,0 +1,44 @@
+version: '3.7'
+
+services: # the different images that will be running as containers
+  nginx: # service name
+    build: ./nginx 
+    ports: 
+      - 1339:80 
+    volumes:  
+      - static_volume:/home/app/microservice/static 
+    depends_on: 
+      - web 
+    restart: "on-failure" 
+  web: # service name
+    build: . 
+    command: sh -c "python manage.py makemigrations &&
+                    python manage.py migrate &&
+                    gunicorn microservice_sample_app.wsgi:application --bind 0.0.0.0:${APP_PORT}" 
+    volumes: 
+      - ./sistema_metodos_agiles:/microservice 
+      - static_volume:/home/app/microservice/static
+    env_file: 
+      - .env # name of the env file
+    image: microservice_app 
+    expose: 
+      - ${APP_PORT} # retrieved from the .env file
+    restart: "on-failure"
+    depends_on: 
+      - db
+  db: # service name
+    image: postgres:14-alpine 
+    container_name: postgres
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_data:/var/lib/postgresql/data/
+# access credentials from the .env file
+    environment: 
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - PGPORT=${DB_PORT}
+      - POSTGRES_USER=${POSTGRES_USER}
+    restart: "on-failure"
+volumes:
+  postgres_data:
+  static_volume:
