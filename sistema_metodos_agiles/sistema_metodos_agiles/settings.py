@@ -12,7 +12,11 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 from telnetlib import AUTHENTICATION
-
+import environ
+import os
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -82,14 +86,13 @@ WSGI_APPLICATION = 'sistema_metodos_agiles.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'metodologias_agiles', 
-        'USER': 'postgres', 
-        'PASSWORD': 'postgres',
-        'HOST': '127.0.0.1', 
-        'PORT': '5432',
+        'NAME': os.environ['DB_NAME'], 
+        'USER': os.environ['POSTGRES_USER'], 
+        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+        'HOST': os.environ['DB_HOST'], 
+        'PORT': int(os.environ['DB_PORT']),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
