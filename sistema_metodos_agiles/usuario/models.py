@@ -30,6 +30,7 @@ class Usuario(models.Model):
     apellido = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
     nombre_usuario = models.CharField(max_length=100)
+    activo = models.BooleanField(default=False)
     rol = models.ManyToManyField(Rol)
     class Meta:
         verbose_name = 'Usuario'
