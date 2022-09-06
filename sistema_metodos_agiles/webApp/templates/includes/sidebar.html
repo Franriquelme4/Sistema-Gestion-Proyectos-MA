@@ -8,42 +8,29 @@
       <div class="sidebar-wrapper">
         <ul class="nav">
           
-        {% if data.activo %}
 
-          <li class="nav-item {% if 'index' in segment %} active {% endif %}">
-            <a class="nav-link" href="/">
-              <i class="material-icons">dashboard</i>
-              <p>Inicio</p>
-            </a>
-          </li>
+        <li class="nav-item {% if 'index' in segment %} active {% endif %}">
+          <a class="nav-link" href="/">
+            <i class="material-icons">dashboard</i>
+            <p>Inicio</p>
+          </a>
+        </li>
 
-         
-          <li class="nav-item {% if 'page-user' in segment %} active {% endif %}">
-            <a class="nav-link" href="{% url 'webApp:proyectos' %}">
-              <i class="material-icons">person</i>
-              <p>Proyectos</p>
-            </a>
-          </li>
-
-          <li class="nav-item {% if 'ui-tables' in segment %} active {% endif %}">
-            <a class="nav-link" href="{% url 'webApp:usuarios' %}">
-              <i class="material-icons">library_books</i>
-              <p>Usuarios</p>
-            </a>
-          </li>
        
-        {% else %}
+        <li class="nav-item {% if 'page-user' in segment %} active {% endif %}">
+          <a class="nav-link" href="{% url 'webApp:proyectos' %}">
+            <i class="material-icons">person</i>
+            <p>Proyectos</p>
+          </a>
+        </li>
 
-          <li class="nav-item active">
-            <a class="nav-link" 
-               target="_blank" rel="noopener noreferrer"  
-               href="https://appseed.us/admin-dashboards/django-dashboard-material-pro">
-              <i class="material-icons">unarchive</i>
-              <p>Nuevo Usuario</p>
-            </a>
-          </li>          
-
-        {% endif %}
+        <li class="nav-item {% if 'ui-tables' in segment %} active {% endif %}">
+          <a class="nav-link" href="{% url 'webApp:usuarios' %}">
+            <i class="material-icons">library_books</i>
+            <p>Usuarios</p>
+          </a>
+        </li>
+     
         </ul>
       </div>
 

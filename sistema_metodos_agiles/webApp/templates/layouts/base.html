@@ -12,7 +12,7 @@
 =========================================================
 
  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
-
+ {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,7 +36,6 @@
   <link href="/static/assets/css/material-dashboard.css?v=2.1.2" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="/static/assets/demo/demo.css" rel="stylesheet" />
-
   <!-- Specific Page CSS goes HERE  -->
   {% block stylesheets %}{% endblock stylesheets %}
 
@@ -44,8 +43,14 @@
 
 <body class="">
   <div class="wrapper ">
-
-    {% include 'includes/sidebar.html' %}
+    {% if segment == "index" %}
+      {% if userSession.activo %}
+          {% include 'includes/sidebar.html' %}
+      {% endif %}
+    {% else %}
+      {% include 'includes/sidebar.html' %}
+    {% endif %}
+  
 
     <div class="main-panel">
 
@@ -71,7 +76,9 @@
   {% include 'includes/scripts-sidebar.html' %}
   
   <!-- Specific Page JS goes HERE  -->
-  {% block javascripts %}{% endblock javascripts %}
+  {% block javascripts %}
   
+  {% endblock javascripts %}
+  <script type="text/javascript" src="{% static 'index.js' %}"></script>
 </body>
 </html>
