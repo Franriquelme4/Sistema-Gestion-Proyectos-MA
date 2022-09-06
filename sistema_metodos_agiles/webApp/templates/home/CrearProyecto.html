@@ -1,14 +1,5 @@
 {% extends "layouts/base.html" %}
 {% block title %} UI Typography {% endblock %} 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nuevo Proyecto</title>
-</head>
-<body>
   {% block content %} 
 <div class="card">
     <div class="card-header card-header-primary">
@@ -37,12 +28,12 @@
         <input type="date" class="form-control" id="exampleInputPassword1">
       </div>
       <div class="mb-3">
-        
+        <label for="exampleInputPassword1" class="form-label">Scrum Master</label>
         <select class="form-control" aria-label="Default select example">
-          <option selected>Scrum Master</option>
-          <option value="1">One</option>
-          <option value="2">Two</option>
-          <option value="3">Three</option>
+          <option selected>Seleccionar el Scrum Master</option>
+          {% for usuario in usuarios %}
+          <option value="{{usuario.id}}">{{usuario.nombre}} {{usuario.apellido}}</option>
+          {% endfor %}
         </select>
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
@@ -53,5 +44,3 @@
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}{% endblock javascripts %}
-</body>
-</html>

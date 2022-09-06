@@ -56,6 +56,13 @@ def proyectos(request):
     return HttpResponse(html_template.render(context, request))
 
 def CrearProyecto(request):
-    context = {}
+    usuarios = Usuario.objects.all()
+    context = {'usuarios':usuarios,'segment': 'crearProyecto'}
     html_template = loader.get_template('home/CrearProyecto.html')
     return HttpResponse(html_template.render(context, request))
+
+def activarUsuario(request,id):
+    usuario = Usuario.objects.get(id=id)
+    usuario.activo = True
+    usuario.save()
+    return redirect('/')
