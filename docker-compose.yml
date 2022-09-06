@@ -4,7 +4,7 @@ services: # the different images that will be running as containers
   nginx: # service name
     build: ./nginx 
     ports: 
-      - 1339:80 
+      - 80:80
     volumes:  
       - static_volume:/home/app/webapp/webApp/static
     depends_on: 
