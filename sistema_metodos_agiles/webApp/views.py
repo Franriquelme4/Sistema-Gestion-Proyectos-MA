@@ -79,3 +79,7 @@ def proyectos(request):
     html_template = loader.get_template('home/proyectos.html')
     return HttpResponse(html_template.render(context, request))
 
+def CrearProyecto(request):
+    context = {}
+    html_template = loader.get_template('home/CrearProyecto.html')
+    return HttpResponse(html_template.render(context, request))
