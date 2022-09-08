@@ -1,0 +1,23 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+
+          <li class="class="nav-item"">
+            <a class="nav-link " href="{% url 'webApp:rolesProyecto' %}"  >
+                <i class="material-icons">block</i>
+               Roles del Proyecto 
+              </a>
+          </li>
+          <li class="class="nav-item"">
+            <a class="nav-link " href="#"  >
+                <i class="material-icons">account_circle</i>
+               Colaboradores 
+              </a>
+          </li>
+
+      </ul>
+
+      <p class="my-2 my-lg-0 mr-sm-4">Rol : {{proyecto.descripcion_rol}}</p>
+    </div>
+  </nav>
