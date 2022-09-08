@@ -5,12 +5,8 @@ import datetime
 
 class Permiso(models.Model):
     """Los permisos se tienen previamente cargados, cada permiso se asiganan a los distintos roles"""
-<<<<<<< HEAD
     descripcion_permiso = models.CharField(max_length=100,blank=False,null=False)
-=======
     nombre_permiso = models.CharField(max_length=15,blank=False,null=False)
-    descripcion = models.CharField(max_length=100,blank=False,null=False)
->>>>>>> developer
     class Meta:
         verbose_name = 'Permiso'
         verbose_name_plural = 'Permisos'
