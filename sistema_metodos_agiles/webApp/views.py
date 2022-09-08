@@ -1,10 +1,11 @@
 
 
+
 from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
-from usuario.utils import getUsuarioSesion,getIdScrumRol,getProyectsByUsuarioID,getProyectsByID
-from usuario.models import Usuario,Cliente,Proyecto,MiembroEquipo
+from usuario.utils import getUsuarioSesion,getIdScrumRol,getProyectsByUsuarioID,getProyectsByID,getRolByProyectId
+from usuario.models import Usuario,Cliente,Proyecto,MiembroEquipo,Permiso,Rol,ProyectoRol
 from django.template import loader
 from django import template
 # Create your views here.
@@ -105,14 +106,40 @@ def crearProyectoGuardar(request):
 
 def verProyecto(request,id):
     userSession = getUsuarioSesion(request.user.email)
-    print(id,userSession.id)
     proyecto = getProyectsByID(id,userSession.id)
-    print(proyecto)
     context= {'userSession':userSession,'proyecto':proyecto[0],'segment': 'verProyecto'}
     html_template = loader.get_template('home/vistaProyectos.html')
     return HttpResponse(html_template.render(context,request))
 
-def rolesProyecto(request):
-    context={}
+def rolesProyecto(request,id):
+    userSession = getUsuarioSesion(request.user.email)
+    rolesProyecto = getRolByProyectId(id)
+    permisos = Permiso.objects.all()
+    proyecto = getProyectsByID(id,userSession.id)
+    context= {  'userSession':userSession,
+                'proyecto':proyecto[0],
+                'segment': 'rolesProyecto',
+                'permisos':permisos,
+                'rolesProyecto':rolesProyecto
+                }
     html_template = loader.get_template('home/rolesProyecto.html')
     return HttpResponse(html_template.render(context,request))
+
+def crearRolProyecto(request,id):
+    variables = request.POST
+    if request.method == 'POST':
+        rol = Rol(
+            descripcion_rol = variables.get('descripcion',False)
+        )
+        rol.save()
+        for permiso in variables.getlist('permisos',False):
+            print(permiso)
+            rol.permiso.add(Permiso.objects.get(id=permiso))
+        # rol.permiso.add(Permiso.objects.get(id=variables['permisos']))
+        proyecto_rol = ProyectoRol(
+            descripcion_proyecto_rol=''
+        )
+        proyecto_rol.save()
+        proyecto_rol.rol.add(rol)
+        proyecto_rol.proyecto.add(Proyecto.objects.get(id=id))
+    return redirect('/')

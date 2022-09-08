@@ -5,24 +5,24 @@ import datetime
 
 class Permiso(models.Model):
     """Los permisos se tienen previamente cargados, cada permiso se asiganan a los distintos roles"""
-    descripcion = models.CharField(max_length=100,blank=False,null=False)
+    descripcion_permiso = models.CharField(max_length=100,blank=False,null=False)
     class Meta:
         verbose_name = 'Permiso'
         verbose_name_plural = 'Permisos'
-        ordering = ['descripcion']
+        ordering = ['descripcion_permiso']
     def __str__(self):
-        return self.descripcion
+        return self.descripcion_permiso
 
 class Rol(models.Model):
     """Se agrega la tabla roles para tener un control de todos los roles que tiene un determinado usuario, existen 3 roles ya creados previamente"""
-    descripcion = models.CharField(max_length=100,blank=False,null=False)
+    descripcion_rol = models.CharField(max_length=100,blank=False,null=False)
     permiso = models.ManyToManyField(Permiso)
     class Meta:
         verbose_name = 'Rol'
         verbose_name_plural = 'Roles'
-        ordering = ['descripcion']
+        ordering = ['descripcion_rol']
     def __str__(self):
-        return self.descripcion
+        return self.descripcion_rol
 
 class Usuario(models.Model):
     """Modelo de la tabla usuarios, en la cual se almacenan todos los datos del usuario"""
@@ -82,6 +82,15 @@ class Proyecto(models.Model):
         ordering = ['nombre_proyecto']
     def __str__(self):
         return self.nombre_proyecto
+
+class ProyectoRol(models.Model):
+    """Se almacenan los roles por proyecto"""
+    rol = models.ManyToManyField('Rol')
+    proyecto = models.ManyToManyField('Proyecto')
+    descripcion_proyecto_rol = models.CharField(max_length=100,default='')
+    class Meta:
+        verbose_name = 'ProyectoRol'
+        verbose_name_plural = 'ProyectoRoles'
     
     
 

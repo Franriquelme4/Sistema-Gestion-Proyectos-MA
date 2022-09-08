@@ -15,7 +15,8 @@ urlpatterns = [
     path('proyecto/',views.proyectos, name='proyectos'),
     path('CrearProyecto/',views.CrearProyecto, name='CrearProyecto'),
     path('CrearProyecto/guardar',views.crearProyectoGuardar, name='crearProyectoGuardar'),
-    path('proyecto/roles',views.rolesProyecto, name='rolesProyecto'),
+    path('proyecto/roles/<int:id>',views.rolesProyecto, name='rolesProyecto'),
+    path('proyecto/roles/guardar/<int:id>',views.crearRolProyecto, name='crearRolProyecto'),
     path('proyecto/<int:id>',views.verProyecto, name='verProyecto'),
     path('test/',views.request_page , name='test'),
 ]
