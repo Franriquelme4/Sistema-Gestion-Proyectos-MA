@@ -7,7 +7,7 @@ def getUsuarioSesion(email):
     return usuario
 
 def getIdScrumRol():
-    rol = Rol.objects.get(descripcion = "Scrum")
+    rol = Rol.objects.get(id = 3)
     return rol
 
 def getProyectsByUsuarioID(id):
@@ -42,9 +42,19 @@ def getProyectsByID(idProyecto,idUsuario):
     return proyecto
 
 def getRolByProyectId(id):
-	proyecto_rol = ProyectoRol.objects.raw(f"""select up.*, ur.descripcion_rol from usuario_proyectorol up 
+	proyecto_rol = ProyectoRol.objects.raw(f"""select up.*, ur.descripcion_rol, ur.id as id_rol from usuario_proyectorol up 
 	join usuario_proyectorol_proyecto upp on upp.proyectorol_id = up.id
 	join usuario_proyectorol_rol upr on upr.proyectorol_id  = up.id 
 	join usuario_proyecto up2 on up2.id = upp.proyecto_id 
 	join usuario_rol ur on ur.id = upr.rol_id where up2.id = {id}""")
 	return proyecto_rol
+def getColaboratorsByProyect(id):
+	colaboradores = Usuario.objects.raw(f"""
+		select uu.*, ur.id as id_rol, ur.nombre_rol as nombre_rol,ur.descripcion_rol as descripcion_rol from usuario_usuario uu 
+		join usuario_miembroequipo_miembro_usuario ummu on ummu.usuario_id = uu.id 
+		join usuario_miembroequipo_miembro_rol ummr on ummr.miembroequipo_id = ummu.miembroequipo_id 
+		join usuario_proyecto_miembro_proyecto upmp on upmp.miembroequipo_id = ummu.miembroequipo_id 
+		join usuario_rol ur on ur.id = ummr.rol_id 
+		join usuario_proyecto up on up.id = upmp.proyecto_id where up.id = {id}
+		""")
+	return colaboradores

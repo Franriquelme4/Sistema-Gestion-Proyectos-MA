@@ -19,4 +19,6 @@ urlpatterns = [
     path('proyecto/roles/guardar/<int:id>',views.crearRolProyecto, name='crearRolProyecto'),
     path('proyecto/<int:id>',views.verProyecto, name='verProyecto'),
     path('test/',views.request_page , name='test'),
+    path('proyecto/colaboradores/<int:id>',views.colaboradoresProyecto, name='colaboradoresProyecto'),
+    path('proyecto/colaboradores/guardar/<int:id>',views.asignarColaboradorProyecto, name='asignarColaboradorProyecto')
 ]

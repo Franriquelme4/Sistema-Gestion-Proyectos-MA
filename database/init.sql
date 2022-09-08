@@ -1,10 +1,10 @@
-INSERT INTO public.usuario_rol(id, nombre_rol, descripcion)
+INSERT INTO public.usuario_rol(id, nombre_rol, descripcion_rol)
 VALUES 
 (1,'Administrador','Rol para administrar el sistema'),
 (2,'Observador','Rol por default para todos los usuarios'),
 (3,'Scrum','Rol para gestionar proyecto');
 
-INSERT INTO public.usuario_permiso(id, nombre_permiso, descripcion)
+INSERT INTO public.usuario_permiso(id, nombre_permiso, descripcion_permiso)
 VALUES 
 (1, 'def'				,'Default'							),
 (2, 'crt_Sprint'		,'Crear Sprint'						),
