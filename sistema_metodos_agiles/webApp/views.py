@@ -4,7 +4,7 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
-from usuario.utils import getUsuarioSesion,getIdScrumRol,getProyectsByUsuarioID,getProyectsByID,getRolByProyectId
+from usuario.utils import getUsuarioSesion,getIdScrumRol,getProyectsByUsuarioID,getProyectsByID,getRolByProyectId,getColaboratorsByProyect
 from usuario.models import Usuario,Cliente,Proyecto,MiembroEquipo,Permiso,Rol,ProyectoRol
 from django.template import loader
 from django import template
@@ -142,4 +142,24 @@ def crearRolProyecto(request,id):
         proyecto_rol.save()
         proyecto_rol.rol.add(rol)
         proyecto_rol.proyecto.add(Proyecto.objects.get(id=id))
+    return redirect('/')
+
+def colaboradoresProyecto(request,id):
+    userSession = getUsuarioSesion(request.user.email)
+    proyecto = getProyectsByID(id,userSession.id)
+    rolesProyecto = getRolByProyectId(id)
+    colaboradores = getColaboratorsByProyect(id)
+    context={
+        'colaboradores':colaboradores,
+        'rolesProyecto':rolesProyecto,
+        'userSession':userSession,
+        'proyecto':proyecto[0],
+        }
+    html_template = loader.get_template('home/colaboradoresProyecto.html')
+    return HttpResponse(html_template.render(context,request))
+
+def asignarColaboradorProyecto(request,id):
+    variables = request.POST
+    if request.method == 'POST':
+        pass
     return redirect('/')
