@@ -5,7 +5,12 @@ import datetime
 
 class Permiso(models.Model):
     """Los permisos se tienen previamente cargados, cada permiso se asiganan a los distintos roles"""
+<<<<<<< HEAD
     descripcion_permiso = models.CharField(max_length=100,blank=False,null=False)
+=======
+    nombre_permiso = models.CharField(max_length=15,blank=False,null=False)
+    descripcion = models.CharField(max_length=100,blank=False,null=False)
+>>>>>>> developer
     class Meta:
         verbose_name = 'Permiso'
         verbose_name_plural = 'Permisos'
@@ -15,6 +20,7 @@ class Permiso(models.Model):
 
 class Rol(models.Model):
     """Se agrega la tabla roles para tener un control de todos los roles que tiene un determinado usuario, existen 3 roles ya creados previamente"""
+    nombre_rol = models.CharField(max_length=50,blank=False,null=False)
     descripcion_rol = models.CharField(max_length=100,blank=False,null=False)
     permiso = models.ManyToManyField(Permiso)
     class Meta:
