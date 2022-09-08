@@ -1,6 +1,6 @@
 
 from django.db import models
-
+import datetime
 # Create your models here.
 
 class Permiso(models.Model):
@@ -31,7 +31,6 @@ class Usuario(models.Model):
     email = models.CharField(max_length=100)
     nombre_usuario = models.CharField(max_length=100)
     activo = models.BooleanField(default=False)
-    #rol = models.ManyToManyField(Rol)
     df_rol = models.ForeignKey('Rol',on_delete=models.CASCADE,default=2)
     class Meta:
         verbose_name = 'Usuario'
@@ -44,13 +43,12 @@ class MiembroEquipo(models.Model):
     """Modelo de la tabla miembro, en la cual se almacenan todos los datos del cliente"""
     miembro_usuario = models.ManyToManyField(Usuario)
     miembro_rol = models.ManyToManyField(Rol)
-    miembro_descripcion = models.CharField(max_length=100)
+    descripcion = models.CharField(max_length=100,default='')
     class Meta:
         verbose_name = 'Miembro'
         verbose_name_plural = 'Miembros'
-        ordering = ['miembro_descripcion']
     def __str__(self):
-        return self.miembro_descripcion
+        return self.descripcion
 
 
 class Cliente(models.Model):
@@ -75,13 +73,17 @@ class Proyecto(models.Model):
     fecha_fin_proyecto = models.DateField(null=True)
     descripcion_proyecto = models.CharField(max_length=100,default='')
     estado_proyecto = models.CharField(max_length=1,default='1')
-    miembro_proyecto = models.ForeignKey('MiembroEquipo',on_delete=models.CASCADE,) 
+    miembro_proyecto = models.ManyToManyField('MiembroEquipo')
+    sprint_dias = models.IntegerField(default=0)
+    fecha_creacion = models.DateField(default=datetime.date.today)
     class Meta:
         verbose_name = 'Proyecto'
         verbose_name_plural = 'Proyectos'
         ordering = ['nombre_proyecto']
     def __str__(self):
         return self.nombre_proyecto
+    
+    
 
 
 
