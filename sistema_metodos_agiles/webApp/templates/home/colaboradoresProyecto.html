@@ -43,8 +43,10 @@
       </div>
     </div>
   </div>
-<button class="btn btn-primary " data-toggle="modal" data-target="#exampleModal"><i class="material-icons">add</i>Agregar rol</button>
-        <div class="row">
+{% if validacionPermisos.agr_Colaborador %}
+<button class="btn btn-primary " data-toggle="modal" data-target="#exampleModal"><i class="material-icons">add</i>Agregar colaborador</button>
+{% endif %}  
+<div class="row">
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header card-header-primary">

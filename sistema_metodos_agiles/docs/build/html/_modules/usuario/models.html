@@ -32,19 +32,108 @@
           <div class="body" role="main">
             
   <h1>Source code for usuario.models</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
-
+<span></span>
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
 <span class="c1"># Create your models here.</span>
+
+<div class="viewcode-block" id="Permiso"><a class="viewcode-back" href="../../modules/usuario.html#usuario.models.Permiso">[docs]</a><span class="k">class</span> <span class="nc">Permiso</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Los permisos se tienen previamente cargados, cada permiso se asiganan a los distintos roles&quot;&quot;&quot;</span>
+    <span class="n">descripcion_permiso</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">blank</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">null</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">nombre_permiso</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span><span class="n">blank</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">null</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s1">&#39;Permiso&#39;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s1">&#39;Permisos&#39;</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;descripcion_permiso&#39;</span><span class="p">]</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">descripcion_permiso</span></div>
+
+<div class="viewcode-block" id="Rol"><a class="viewcode-back" href="../../modules/usuario.html#usuario.models.Rol">[docs]</a><span class="k">class</span> <span class="nc">Rol</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Se agrega la tabla roles para tener un control de todos los roles que tiene un determinado usuario, existen 3 roles ya creados previamente&quot;&quot;&quot;</span>
+    <span class="n">nombre_rol</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span><span class="n">blank</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">null</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">descripcion_rol</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">blank</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">null</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">permiso</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Permiso</span><span class="p">)</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s1">&#39;Rol&#39;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s1">&#39;Roles&#39;</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;descripcion_rol&#39;</span><span class="p">]</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">descripcion_rol</span>
+<div class="viewcode-block" id="Rol.getPermisos"><a class="viewcode-back" href="../../modules/usuario.html#usuario.models.Rol.getPermisos">[docs]</a>    <span class="k">def</span> <span class="nf">getPermisos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">permiso</span><span class="o">.</span><span class="n">all</span><span class="p">()</span></div>
+<div class="viewcode-block" id="Rol.poseePermiso"><a class="viewcode-back" href="../../modules/usuario.html#usuario.models.Rol.poseePermiso">[docs]</a>    <span class="k">def</span> <span class="nf">poseePermiso</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">codigo</span><span class="p">):</span>
+        <span class="n">permiso</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">permiso</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">nombre_permiso</span><span class="o">=</span><span class="n">codigo</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">permiso</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span></div></div>
+
+
 <div class="viewcode-block" id="Usuario"><a class="viewcode-back" href="../../modules/usuario.html#usuario.models.Usuario">[docs]</a><span class="k">class</span> <span class="nc">Usuario</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Modelo de la tabla usuarios, en la cual se almacenan todos los datos del usuario&quot;&quot;&quot;</span>
     <span class="n">nombre</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
     <span class="n">apellido</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
     <span class="n">email</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-    <span class="n">telefono</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
     <span class="n">nombre_usuario</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-    <span class="n">roles</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;observador&quot;</span><span class="p">)</span>
+    <span class="n">activo</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">df_rol</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;Rol&#39;</span><span class="p">,</span><span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s1">&#39;Usuario&#39;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s1">&#39;Usuarios&#39;</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;nombre_usuario&#39;</span><span class="p">]</span>
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nombre_usuario</span></div>
+
+<div class="viewcode-block" id="MiembroEquipo"><a class="viewcode-back" href="../../modules/usuario.html#usuario.models.MiembroEquipo">[docs]</a><span class="k">class</span> <span class="nc">MiembroEquipo</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Modelo de la tabla miembro, en la cual se almacenan todos los datos del cliente&quot;&quot;&quot;</span>
+    <span class="n">miembro_usuario</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Usuario</span><span class="p">)</span>
+    <span class="n">miembro_rol</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Rol</span><span class="p">)</span>
+    <span class="n">descripcion</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s1">&#39;Miembro&#39;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s1">&#39;Miembros&#39;</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">descripcion</span></div>
+
+
+<div class="viewcode-block" id="Cliente"><a class="viewcode-back" href="../../modules/usuario.html#usuario.models.Cliente">[docs]</a><span class="k">class</span> <span class="nc">Cliente</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Modelo de la tabla clientes, en la cual se almacenan todos los datos del cliente&quot;&quot;&quot;</span>
+    <span class="n">nombre_cliente</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">apellido_cliente</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">email_cliente</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">telefono_cliente</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">empresa_cliente</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s1">&#39;Cliente&#39;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s1">&#39;Clientes&#39;</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;nombre_cliente&#39;</span><span class="p">]</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nombre_cliente</span></div>
+
+<div class="viewcode-block" id="Proyecto"><a class="viewcode-back" href="../../modules/usuario.html#usuario.models.Proyecto">[docs]</a><span class="k">class</span> <span class="nc">Proyecto</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Modelo de la tabla proyectos, en la cual se almacenan todos los datos del proyecto&quot;&quot;&quot;</span>
+    <span class="n">nombre_proyecto</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">cliente_proyecto</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;Cliente&#39;</span><span class="p">,</span><span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,)</span>
+    <span class="n">fecha_ini_proyecto</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">fecha_fin_proyecto</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">descripcion_proyecto</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">estado_proyecto</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">)</span>
+    <span class="n">miembro_proyecto</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="s1">&#39;MiembroEquipo&#39;</span><span class="p">)</span>
+    <span class="n">sprint_dias</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">fecha_creacion</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">)</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s1">&#39;Proyecto&#39;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s1">&#39;Proyectos&#39;</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;nombre_proyecto&#39;</span><span class="p">]</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nombre_proyecto</span></div>
+
+<div class="viewcode-block" id="ProyectoRol"><a class="viewcode-back" href="../../modules/usuario.html#usuario.models.ProyectoRol">[docs]</a><span class="k">class</span> <span class="nc">ProyectoRol</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Se almacenan los roles por proyecto&quot;&quot;&quot;</span>
+    <span class="n">rol</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="s1">&#39;Rol&#39;</span><span class="p">)</span>
+    <span class="n">proyecto</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="s1">&#39;Proyecto&#39;</span><span class="p">)</span>
+    <span class="n">descripcion_proyecto_rol</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s1">&#39;ProyectoRol&#39;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s1">&#39;ProyectoRoles&#39;</span></div>
+
     
 </pre></div>
 
