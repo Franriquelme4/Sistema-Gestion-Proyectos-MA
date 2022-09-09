@@ -21,6 +21,10 @@
             <form method="post" action="{% url 'webApp:crearRolProyecto' proyecto.id %}">
                 {% csrf_token %}
                 <div class="form-group">
+                  <label for="recipient-name" class="col-form-label" >Nombre del Rol</label>
+                  <input type="text" class="form-control" id="recipient-name" name="nombre_rol">
+                </div>
+                <div class="form-group">
                   <label for="recipient-name" class="col-form-label" >Descripcion de rol</label>
                   <input type="text" class="form-control" id="recipient-name" name="descripcion">
                 </div>
@@ -39,7 +43,10 @@
       </div>
     </div>
   </div>
+{% if validacionPermisos.crt_rol %}
 <button class="btn btn-primary " data-toggle="modal" data-target="#exampleModal"><i class="material-icons">add</i>Agregar rol</button>
+{% endif %}
+
         <div class="row">
             <div class="col-md-12">
               <div class="card">
@@ -57,12 +64,18 @@
                         <th>
                           Nombre del Rol
                         </th>
+                        <th>
+                          Descripcion del Rol
+                        </th>
                       </thead>
                       <tbody>
                         {% for rolProyecto in rolesProyecto %}
                         <tr>
                           <td>
                             {{forloop.counter}}
+                          </td>
+                          <td>
+                            {{rolProyecto.nombre_rol}}
                           </td>
                           <td>
                             {{rolProyecto.descripcion_rol}}

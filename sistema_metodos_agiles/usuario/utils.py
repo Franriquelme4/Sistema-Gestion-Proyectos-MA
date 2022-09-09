@@ -14,7 +14,8 @@ def getProyectsByUsuarioID(id):
     proyectos = Proyecto.objects.raw(f"""
 	select up.* as proyecto,
 		uu.id as id_usuario,
-		ur.id as id_rol, ur.descripcion_rol  as descripcion_rol 
+		ur.id as id_rol, ur.descripcion_rol  as descripcion_rol,
+		ur.nombre_rol  as nombre_rol 
 	from usuario_proyecto up 
 	join usuario_proyecto_miembro_proyecto upmp on upmp.proyecto_id = up.id 
 	join usuario_miembroequipo_miembro_usuario ummu on ummu.miembroequipo_id = upmp.miembroequipo_id
@@ -26,7 +27,6 @@ def getProyectsByUsuarioID(id):
     return proyectos
 
 def getProyectsByID(idProyecto,idUsuario):
-	
     proyecto = Proyecto.objects.raw(f"""
 	select up.* as proyecto,
 		uu.id as id_usuario,
@@ -42,7 +42,7 @@ def getProyectsByID(idProyecto,idUsuario):
     return proyecto
 
 def getRolByProyectId(id):
-	proyecto_rol = ProyectoRol.objects.raw(f"""select up.*, ur.descripcion_rol, ur.id as id_rol from usuario_proyectorol up 
+	proyecto_rol = ProyectoRol.objects.raw(f"""select up.*, ur.descripcion_rol ,ur.nombre_rol, ur.id as id_rol from usuario_proyectorol up 
 	join usuario_proyectorol_proyecto upp on upp.proyectorol_id = up.id
 	join usuario_proyectorol_rol upr on upr.proyectorol_id  = up.id 
 	join usuario_proyecto up2 on up2.id = upp.proyecto_id 
@@ -58,3 +58,9 @@ def getColaboratorsByProyect(id):
 		join usuario_proyecto up on up.id = upmp.proyecto_id where up.id = {id}
 		""")
 	return colaboradores
+
+def validarPermisos(permisosVista,rolUsuario):
+	permisos = {}
+	for permisoVista in permisosVista:
+		permisos[permisoVista] = rolUsuario.poseePermiso(permisoVista)
+	return permisos
