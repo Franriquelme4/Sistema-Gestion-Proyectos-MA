@@ -7,24 +7,45 @@
 
 {% block content %}
   {% if userSession.df_rol.id == 1 %}
-  <div class="card card-stats m-3">
-    <div class="card-header card-header-warning card-header-icon">
-      <div class="card-icon">
-        <i class="material-icons">content_copy</i>
+  <div class="d-flex">
+    <div class="card card-stats m-3">
+      <div class="card-header card-header-danger card-header-icon">
+        <div class="card-icon">
+          <i class="material-icons">account_circle</i>
+        </div>
+        <p class="card-category">Usuarios</p>
+        <h3 class="card-title">
+          <small>{{total_usuarios}}</small>
+        </h3>
+  
       </div>
-      <p class="card-category">Proyectos</p>
-      <h3 class="card-title">
-        <small>Catidad</small>
-      </h3>
-
+      <div class="card-footer">
+        <div class="stats">
+          <i class="material-icons ">developer_board</i>
+          <a href="{% url 'webApp:usuarios' %}">Ver Usuarios</a>
+        </div>
+      </div>
     </div>
-    <div class="card-footer">
-      <div class="stats">
-        <i class="material-icons ">developer_board</i>
-        <a href="#pablo">Ver proyectos</a>
+    <div class="card card-stats m-3">
+      <div class="card-header card-header-warning card-header-icon">
+        <div class="card-icon">
+          <i class="material-icons">content_copy</i>
+        </div>
+        <p class="card-category">Proyectos</p>
+        <h3 class="card-title">
+          <small>{{total_proyectos}}</small>
+        </h3>
+  
+      </div>
+      <div class="card-footer">
+        <div class="stats">
+          <i class="material-icons ">developer_board</i>
+          <a href="{% url 'webApp:proyectos' %}">Ver proyectos</a>
+        </div>
       </div>
     </div>
   </div>
+
   {% else %}
         {% if userSession.activo %}
         <div class="d-flex">

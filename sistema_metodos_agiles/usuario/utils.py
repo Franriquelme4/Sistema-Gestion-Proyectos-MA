@@ -30,7 +30,8 @@ def getProyectsByID(idProyecto,idUsuario):
     proyecto = Proyecto.objects.raw(f"""
 	select up.* as proyecto,
 		uu.id as id_usuario,
-		ur.id as id_rol, ur.descripcion_rol  as descripcion_rol 
+		ur.id as id_rol, ur.descripcion_rol  as descripcion_rol,
+		ur.nombre_rol  as nombre_rol
     from usuario_proyecto up 
 	join usuario_proyecto_miembro_proyecto upmp on upmp.proyecto_id = up.id 
 	join usuario_miembroequipo_miembro_usuario ummu on ummu.miembroequipo_id = upmp.miembroequipo_id
