@@ -1,0 +1,88 @@
+{% extends "layouts/base.html" %}
+{% block title %} UI Typography {% endblock %}
+{% block content %}
+<div class="card">
+  <div class="card-header card-header-primary">
+    <h4 class="card-title">Nuevo Proyecto</h4>
+
+  </div>
+  <form class="m-3" method="post" action="{% url 'webApp:crearProyectoGuardar' %}">
+    {% csrf_token %}
+    <h3>Datos del Proyecto</h3>
+    <div class="row">
+      <div class="col-6">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Nombre del Proyecto</label>
+          <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="nombreProyecto">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Scrum Master</label>
+          <select class="form-control" aria-label="Default select example" name="scrumMaster">
+            <option selected>Seleccionar el Scrum Master</option>
+            {% for usuario in usuarios %}
+            <option value="{{usuario.id}}">{{usuario.nombre}} {{usuario.apellido}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Descripcion</label>
+          <input type="text" class="form-control" id="exampleInputPassword1" name="descripcion">
+        </div>
+
+      </div>
+
+      <div class="col-6">
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Fecha Inicio</label>
+          <input type="date" class="form-control" id="exampleInpu tPassword1" name="fechaInicio">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Fecha Fin</label>
+          <input type="date" class="form-control" id="exampleInputPassword1" name="fechaFin">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Duracion de Sprint en dias</label>
+          <input type="number" class="form-control" id="exampleInputPassword1" name="sprintDias">
+        </div>
+      </div>
+    </div>
+
+
+    <h3>Datos del Cliente</h3>
+    <div class="row">
+
+      <div class="col-6">
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Nombre</label>
+          <input type="text" class="form-control" id="exampleInputPassword1" name="nombreCliente">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Apellido</label>
+          <input type="text" class="form-control" id="exampleInputPassword1" name="apellidoCliente">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Email</label>
+          <input type="text" class="form-control" id="exampleInputPassword1" name="emailCliente">
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Telefono</label>
+          <input type="text" class="form-control" id="exampleInputPassword1" name="telefonoCliente">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Empresa</label>
+          <input type="text" class="form-control" id="exampleInputPassword1" name="empresaCliente">
+        </div>
+      </div>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

@@ -1,0 +1,344 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>webApp.views &#8212; Sistema de gestion de proyectos  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for webApp.views</h1><div class="highlight"><pre>
+<span></span>
+
+
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span><span class="n">get_object_or_404</span><span class="p">,</span><span class="n">redirect</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span><span class="p">,</span> <span class="n">HttpResponseRedirect</span>
+<span class="kn">from</span> <span class="nn">usuario.utils</span> <span class="kn">import</span> <span class="n">validarPermisos</span><span class="p">,</span><span class="n">getUsuarioSesion</span><span class="p">,</span><span class="n">getIdScrumRol</span><span class="p">,</span><span class="n">getProyectsByUsuarioID</span><span class="p">,</span><span class="n">getProyectsByID</span><span class="p">,</span><span class="n">getRolByProyectId</span><span class="p">,</span><span class="n">getColaboratorsByProyect</span>
+<span class="kn">from</span> <span class="nn">usuario.models</span> <span class="kn">import</span> <span class="n">Usuario</span><span class="p">,</span><span class="n">Cliente</span><span class="p">,</span><span class="n">Proyecto</span><span class="p">,</span><span class="n">MiembroEquipo</span><span class="p">,</span><span class="n">Permiso</span><span class="p">,</span><span class="n">Rol</span><span class="p">,</span><span class="n">ProyectoRol</span>
+<span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">loader</span>
+<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
+
+<span class="c1"># Create your views here.</span>
+<div class="viewcode-block" id="login"><a class="viewcode-back" href="../../modules/webApp.html#webApp.views.login">[docs]</a><span class="k">def</span> <span class="nf">login</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Metodo de redireccion del login para poder ingresar mediante sso</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="s1">&#39;accounts/login.html&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="index"><a class="viewcode-back" href="../../modules/webApp.html#webApp.views.index">[docs]</a><span class="nd">@login_required</span><span class="p">(</span><span class="n">login_url</span><span class="o">=</span><span class="s2">&quot;/login/&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Luego de loguease se lleva a la vista principal la cual tiene</span>
+<span class="sd">    distintas opciones dependiendo el rol que tenga </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+    <span class="n">usuario</span> <span class="o">=</span> <span class="n">Usuario</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">email</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">email</span><span class="p">)</span>
+    <span class="n">es_usuario_nuevo</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">usuario</span><span class="p">:</span>
+        <span class="n">es_usuario_nuevo</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">nuevo_usuario</span> <span class="o">=</span> <span class="n">Usuario</span><span class="p">(</span>
+            <span class="n">nombre</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">first_name</span><span class="p">,</span>
+            <span class="n">apellido</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">last_name</span><span class="p">,</span>
+            <span class="n">email</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+            <span class="n">nombre_usuario</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">username</span>
+        <span class="p">)</span>
+        <span class="n">nuevo_usuario</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">userSession</span> <span class="o">=</span> <span class="n">nuevo_usuario</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">userSession</span> <span class="o">=</span> <span class="n">usuario</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">proyectos</span> <span class="o">=</span> <span class="n">getProyectsByUsuarioID</span><span class="p">(</span><span class="n">userSession</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="n">total_proyectos</span> <span class="o">=</span> <span class="n">Proyecto</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+    <span class="n">total_usuarios</span> <span class="o">=</span> <span class="n">Usuario</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;segment&#39;</span><span class="p">:</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;userSession&#39;</span><span class="p">:</span><span class="n">userSession</span><span class="p">,</span>
+        <span class="s1">&#39;proyectos&#39;</span><span class="p">:</span><span class="n">proyectos</span><span class="p">,</span>
+        <span class="s1">&#39;total_proyectos&#39;</span><span class="p">:</span><span class="n">total_proyectos</span><span class="p">,</span>
+        <span class="s1">&#39;total_usuarios&#39;</span><span class="p">:</span><span class="n">total_usuarios</span>
+        <span class="p">}</span>
+    <span class="n">html_template</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s1">&#39;home/index.html&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">html_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="usuarios"><a class="viewcode-back" href="../../modules/webApp.html#webApp.views.usuarios">[docs]</a><span class="k">def</span> <span class="nf">usuarios</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Se lista los usuarios actuales del sistema, este metodo se utiliza en el usuario admin</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">userSession</span> <span class="o">=</span> <span class="n">getUsuarioSesion</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">)</span>
+    <span class="n">usuarios</span> <span class="o">=</span> <span class="n">Usuario</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">rolUsuario</span> <span class="o">=</span> <span class="n">Rol</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">userSession</span><span class="o">.</span><span class="n">df_rol</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="n">permisosProyecto</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;act_Usuario&#39;</span><span class="p">,</span><span class="s1">&#39;dct_Usuario&#39;</span><span class="p">]</span>
+    <span class="n">validacionPermisos</span> <span class="o">=</span> <span class="n">validarPermisos</span><span class="p">(</span><span class="n">permisosProyecto</span><span class="p">,</span><span class="n">rolUsuario</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;usuarios&#39;</span><span class="p">:</span><span class="n">usuarios</span><span class="p">,</span>
+                <span class="s1">&#39;segment&#39;</span><span class="p">:</span> <span class="s1">&#39;usuarios&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;userSession&#39;</span><span class="p">:</span><span class="n">userSession</span><span class="p">,</span>
+                <span class="s1">&#39;rolUsuario&#39;</span><span class="p">:</span><span class="n">rolUsuario</span><span class="p">,</span>
+                <span class="s1">&#39;validacionPermisos&#39;</span><span class="p">:</span><span class="n">validacionPermisos</span><span class="p">}</span>
+    <span class="n">html_template</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s1">&#39;home/usuarios.html&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">html_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="proyectos"><a class="viewcode-back" href="../../modules/webApp.html#webApp.views.proyectos">[docs]</a><span class="k">def</span> <span class="nf">proyectos</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Se lista los proyectos actuales del sistema, este metodo se utiliza en el usuario admin</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">userSession</span> <span class="o">=</span> <span class="n">getUsuarioSesion</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">)</span>
+    <span class="n">rolUsuario</span> <span class="o">=</span> <span class="n">Rol</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">userSession</span><span class="o">.</span><span class="n">df_rol</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="n">proyectos</span> <span class="o">=</span> <span class="n">Proyecto</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">permisosProyecto</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;crt_Proyecto&#39;</span><span class="p">,</span><span class="s1">&#39;asg_Proyecto&#39;</span><span class="p">]</span>
+    <span class="n">validacionPermisos</span> <span class="o">=</span> <span class="n">validarPermisos</span><span class="p">(</span><span class="n">permisosProyecto</span><span class="p">,</span><span class="n">rolUsuario</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;userSession&#39;</span><span class="p">:</span><span class="n">userSession</span><span class="p">,</span>
+                <span class="s1">&#39;proyectos&#39;</span><span class="p">:</span><span class="n">proyectos</span><span class="p">,</span>
+                <span class="s1">&#39;rolUsuario&#39;</span><span class="p">:</span><span class="n">rolUsuario</span><span class="p">,</span>
+                <span class="s1">&#39;validacionPermisos&#39;</span><span class="p">:</span><span class="n">validacionPermisos</span><span class="p">}</span>
+    <span class="n">html_template</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s1">&#39;home/proyectos.html&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">html_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="CrearProyecto"><a class="viewcode-back" href="../../modules/webApp.html#webApp.views.CrearProyecto">[docs]</a><span class="k">def</span> <span class="nf">CrearProyecto</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Redirige a la vista de creacion de proyectos, consiste en un formulario</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">usuarios</span> <span class="o">=</span> <span class="n">Usuario</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">userSession</span> <span class="o">=</span> <span class="n">getUsuarioSesion</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">)</span>
+    <span class="n">rolUsuario</span> <span class="o">=</span> <span class="n">Rol</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">userSession</span><span class="o">.</span><span class="n">df_rol</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;usuarios&#39;</span><span class="p">:</span><span class="n">usuarios</span><span class="p">,</span>
+                <span class="s1">&#39;segment&#39;</span><span class="p">:</span> <span class="s1">&#39;crearProyecto&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;userSession&#39;</span><span class="p">:</span><span class="n">userSession</span><span class="p">,</span>
+                <span class="s1">&#39;rolUsuario&#39;</span><span class="p">:</span><span class="n">rolUsuario</span>
+                <span class="p">}</span>
+    <span class="n">html_template</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s1">&#39;home/CrearProyecto.html&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">html_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="activarUsuario"><a class="viewcode-back" href="../../modules/webApp.html#webApp.views.activarUsuario">[docs]</a><span class="k">def</span> <span class="nf">activarUsuario</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="nb">id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Cuando un usuario nuevo se loguea en el sistema queda en estado pendiente hasta que el admin le de acceso</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">usuario</span> <span class="o">=</span> <span class="n">Usuario</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+    <span class="n">usuario</span><span class="o">.</span><span class="n">activo</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">usuario</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="crearProyectoGuardar"><a class="viewcode-back" href="../../modules/webApp.html#webApp.views.crearProyectoGuardar">[docs]</a><span class="k">def</span> <span class="nf">crearProyectoGuardar</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Metodo en el se crea el proyecto, realizando todos los inserts requeridos</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;nombreProyecto&#39;</span><span class="p">])</span>
+    <span class="n">variables</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">cliente</span> <span class="o">=</span> <span class="n">Cliente</span><span class="p">(</span>
+           <span class="n">nombre_cliente</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="s1">&#39;nombreCliente&#39;</span><span class="p">]</span> <span class="p">,</span>
+           <span class="n">apellido_cliente</span> <span class="o">=</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;apellidoCliente&#39;</span><span class="p">]</span> <span class="p">,</span>
+           <span class="n">email_cliente</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="s1">&#39;emailCliente&#39;</span><span class="p">],</span>
+           <span class="n">telefono_cliente</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="s1">&#39;telefonoCliente&#39;</span><span class="p">],</span>
+           <span class="n">empresa_cliente</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="s1">&#39;empresaCliente&#39;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">cliente</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">miembro</span> <span class="o">=</span> <span class="n">MiembroEquipo</span><span class="p">(</span>
+           <span class="n">descripcion</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="p">)</span>
+        <span class="n">miembro</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">miembro</span><span class="o">.</span><span class="n">miembro_rol</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">getIdScrumRol</span><span class="p">())</span>
+        <span class="n">miembro</span><span class="o">.</span><span class="n">miembro_usuario</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Usuario</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;scrumMaster&#39;</span><span class="p">]))</span>
+        <span class="n">proyecto</span> <span class="o">=</span> <span class="n">Proyecto</span><span class="p">(</span>
+           <span class="n">nombre_proyecto</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="s1">&#39;nombreProyecto&#39;</span><span class="p">],</span>
+           <span class="n">cliente_proyecto</span> <span class="o">=</span> <span class="n">cliente</span><span class="p">,</span>
+           <span class="n">fecha_ini_proyecto</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="s1">&#39;fechaInicio&#39;</span><span class="p">],</span>
+           <span class="n">fecha_fin_proyecto</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="s1">&#39;fechaFin&#39;</span><span class="p">],</span>
+           <span class="n">descripcion_proyecto</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="s1">&#39;descripcion&#39;</span><span class="p">],</span>
+           <span class="n">sprint_dias</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="s1">&#39;sprintDias&#39;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">proyecto</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">proyecto</span><span class="o">.</span><span class="n">miembro_proyecto</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">miembro</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="verProyecto"><a class="viewcode-back" href="../../modules/webApp.html#webApp.views.verProyecto">[docs]</a><span class="k">def</span> <span class="nf">verProyecto</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="nb">id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Cuando un usuario ingresa a un proyecto en el cual fue asignado se visualizan </span>
+<span class="sd">    todos los datos de la misma </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">userSession</span> <span class="o">=</span> <span class="n">getUsuarioSesion</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">)</span>
+    <span class="n">proyecto</span> <span class="o">=</span> <span class="n">getProyectsByID</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span><span class="n">userSession</span><span class="o">.</span><span class="n">id</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">rolUsuario</span> <span class="o">=</span> <span class="n">Rol</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">proyecto</span><span class="o">.</span><span class="n">id_rol</span><span class="p">)</span>
+    <span class="n">permisosProyecto</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;dsp_Colaborador&#39;</span><span class="p">,</span><span class="s1">&#39;dsp_Roles&#39;</span><span class="p">]</span>
+    <span class="n">validacionPermisos</span> <span class="o">=</span> <span class="n">validarPermisos</span><span class="p">(</span><span class="n">permisosProyecto</span><span class="p">,</span><span class="n">rolUsuario</span><span class="p">)</span>
+    <span class="n">context</span><span class="o">=</span> <span class="p">{</span>  <span class="s1">&#39;userSession&#39;</span><span class="p">:</span><span class="n">userSession</span><span class="p">,</span>
+                <span class="s1">&#39;proyecto&#39;</span><span class="p">:</span><span class="n">proyecto</span><span class="p">,</span>
+                <span class="s1">&#39;segment&#39;</span><span class="p">:</span> <span class="s1">&#39;verProyecto&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;rolUsuario&#39;</span><span class="p">:</span><span class="n">rolUsuario</span><span class="p">,</span>
+                <span class="s1">&#39;validacionPermisos&#39;</span><span class="p">:</span><span class="n">validacionPermisos</span>
+                <span class="p">}</span>
+    <span class="n">html_template</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s1">&#39;home/vistaProyectos.html&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">html_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="n">request</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="rolesProyecto"><a class="viewcode-back" href="../../modules/webApp.html#webApp.views.rolesProyecto">[docs]</a><span class="k">def</span> <span class="nf">rolesProyecto</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="nb">id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Se lista todos los roles especificos de cada proyecto</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">userSession</span> <span class="o">=</span> <span class="n">getUsuarioSesion</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">)</span>
+    <span class="n">rolesProyecto</span> <span class="o">=</span> <span class="n">getRolByProyectId</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+    <span class="n">permisos</span> <span class="o">=</span> <span class="n">Permiso</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">proyecto</span> <span class="o">=</span> <span class="n">getProyectsByID</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span><span class="n">userSession</span><span class="o">.</span><span class="n">id</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">rolUsuario</span> <span class="o">=</span> <span class="n">Rol</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">proyecto</span><span class="o">.</span><span class="n">id_rol</span><span class="p">)</span>
+    <span class="n">permisosProyecto</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;crt_rol&#39;</span><span class="p">]</span>
+    <span class="n">validacionPermisos</span> <span class="o">=</span> <span class="n">validarPermisos</span><span class="p">(</span><span class="n">permisosProyecto</span><span class="p">,</span><span class="n">rolUsuario</span><span class="p">)</span>
+    <span class="n">context</span><span class="o">=</span> <span class="p">{</span>  <span class="s1">&#39;userSession&#39;</span><span class="p">:</span><span class="n">userSession</span><span class="p">,</span>
+                <span class="s1">&#39;proyecto&#39;</span><span class="p">:</span><span class="n">proyecto</span><span class="p">,</span>
+                <span class="s1">&#39;segment&#39;</span><span class="p">:</span> <span class="s1">&#39;rolesProyecto&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;permisos&#39;</span><span class="p">:</span><span class="n">permisos</span><span class="p">,</span>
+                <span class="s1">&#39;rolesProyecto&#39;</span><span class="p">:</span><span class="n">rolesProyecto</span><span class="p">,</span>
+                <span class="s1">&#39;rolUsuario&#39;</span><span class="p">:</span><span class="n">rolUsuario</span><span class="p">,</span>
+                <span class="s1">&#39;validacionPermisos&#39;</span><span class="p">:</span><span class="n">validacionPermisos</span>
+                <span class="p">}</span>
+    <span class="n">html_template</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s1">&#39;home/rolesProyecto.html&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">html_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="n">request</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="crearRolProyecto"><a class="viewcode-back" href="../../modules/webApp.html#webApp.views.crearRolProyecto">[docs]</a><span class="k">def</span> <span class="nf">crearRolProyecto</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="nb">id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Se crea un nuevo rol con todos los permisos asociados&quot;&quot;&quot;</span>
+    <span class="n">variables</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">rol</span> <span class="o">=</span> <span class="n">Rol</span><span class="p">(</span>
+            <span class="n">descripcion_rol</span> <span class="o">=</span> <span class="n">variables</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;descripcion&#39;</span><span class="p">,</span><span class="kc">False</span><span class="p">),</span>
+            <span class="n">nombre_rol</span> <span class="o">=</span> <span class="n">variables</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;nombre_rol&#39;</span><span class="p">,</span><span class="kc">False</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">rol</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">permiso</span> <span class="ow">in</span> <span class="n">variables</span><span class="o">.</span><span class="n">getlist</span><span class="p">(</span><span class="s1">&#39;permisos&#39;</span><span class="p">,</span><span class="kc">False</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">permiso</span><span class="p">)</span>
+            <span class="n">rol</span><span class="o">.</span><span class="n">permiso</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Permiso</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">permiso</span><span class="p">))</span>
+        <span class="c1"># rol.permiso.add(Permiso.objects.get(id=variables[&#39;permisos&#39;]))</span>
+        <span class="n">proyecto_rol</span> <span class="o">=</span> <span class="n">ProyectoRol</span><span class="p">(</span>
+            <span class="n">descripcion_proyecto_rol</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+        <span class="p">)</span>
+        <span class="n">proyecto_rol</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">proyecto_rol</span><span class="o">.</span><span class="n">rol</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">rol</span><span class="p">)</span>
+        <span class="n">proyecto_rol</span><span class="o">.</span><span class="n">proyecto</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Proyecto</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="colaboradoresProyecto"><a class="viewcode-back" href="../../modules/webApp.html#webApp.views.colaboradoresProyecto">[docs]</a><span class="k">def</span> <span class="nf">colaboradoresProyecto</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="nb">id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Se lista todos colaboradores del proyecto</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">userSession</span> <span class="o">=</span> <span class="n">getUsuarioSesion</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">)</span>
+    <span class="n">proyecto</span> <span class="o">=</span> <span class="n">getProyectsByID</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span><span class="n">userSession</span><span class="o">.</span><span class="n">id</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">rolUsuario</span> <span class="o">=</span> <span class="n">Rol</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">proyecto</span><span class="o">.</span><span class="n">id_rol</span><span class="p">)</span>
+    <span class="n">rolesProyecto</span> <span class="o">=</span> <span class="n">getRolByProyectId</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+    <span class="n">colaboradores</span> <span class="o">=</span> <span class="n">getColaboratorsByProyect</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+    <span class="n">usuarios</span> <span class="o">=</span> <span class="n">Usuario</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">~</span><span class="n">Q</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">userSession</span><span class="o">.</span><span class="n">id</span><span class="p">))</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">~</span><span class="n">Q</span><span class="p">(</span><span class="n">df_rol</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">permisosProyecto</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;agr_Colaborador&#39;</span><span class="p">]</span>
+    <span class="n">validacionPermisos</span> <span class="o">=</span> <span class="n">validarPermisos</span><span class="p">(</span><span class="n">permisosProyecto</span><span class="p">,</span><span class="n">rolUsuario</span><span class="p">)</span>
+    <span class="n">context</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">&#39;colaboradores&#39;</span><span class="p">:</span><span class="n">colaboradores</span><span class="p">,</span>
+        <span class="s1">&#39;rolesProyecto&#39;</span><span class="p">:</span><span class="n">rolesProyecto</span><span class="p">,</span>
+        <span class="s1">&#39;userSession&#39;</span><span class="p">:</span><span class="n">userSession</span><span class="p">,</span>
+        <span class="s1">&#39;proyecto&#39;</span><span class="p">:</span><span class="n">proyecto</span><span class="p">,</span>
+        <span class="s1">&#39;rolUsuario&#39;</span><span class="p">:</span><span class="n">rolUsuario</span><span class="p">,</span>
+        <span class="s1">&#39;usuarios&#39;</span><span class="p">:</span><span class="n">usuarios</span><span class="p">,</span>
+        <span class="s1">&#39;validacionPermisos&#39;</span><span class="p">:</span><span class="n">validacionPermisos</span>
+        <span class="p">}</span>
+    <span class="n">html_template</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s1">&#39;home/colaboradoresProyecto.html&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">html_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="n">request</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="asignarColaboradorProyecto"><a class="viewcode-back" href="../../modules/webApp.html#webApp.views.asignarColaboradorProyecto">[docs]</a><span class="k">def</span> <span class="nf">asignarColaboradorProyecto</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="nb">id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Se almacena el nuevo rol con el colaborador al proyecto&quot;&quot;&quot;</span>
+    <span class="n">variables</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">variables</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rol&#39;</span><span class="p">,</span><span class="kc">False</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">miembro</span> <span class="o">=</span> <span class="n">MiembroEquipo</span><span class="p">(</span>
+           <span class="n">descripcion</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="p">)</span>
+        <span class="n">miembro</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">miembro</span><span class="o">.</span><span class="n">miembro_rol</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Rol</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">variables</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rol&#39;</span><span class="p">,</span><span class="kc">False</span><span class="p">)))</span>
+        <span class="n">miembro</span><span class="o">.</span><span class="n">miembro_usuario</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Usuario</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">variables</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;usuario&#39;</span><span class="p">,</span><span class="kc">False</span><span class="p">)))</span>
+        <span class="n">proyecto</span> <span class="o">=</span> <span class="n">Proyecto</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+        <span class="n">proyecto</span><span class="o">.</span><span class="n">miembro_proyecto</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">miembro</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Sistema de gestion de proyectos</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Grupo 15.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

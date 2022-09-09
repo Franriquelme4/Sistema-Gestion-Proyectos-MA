@@ -1,0 +1,103 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+  {% if userSession.df_rol.id == 1 %}
+  <div class="d-flex">
+    <div class="card card-stats m-3">
+      <div class="card-header card-header-danger card-header-icon">
+        <div class="card-icon">
+          <i class="material-icons">account_circle</i>
+        </div>
+        <p class="card-category">Usuarios</p>
+        <h3 class="card-title">
+          <small>{{total_usuarios}}</small>
+        </h3>
+  
+      </div>
+      <div class="card-footer">
+        <div class="stats">
+          <i class="material-icons ">developer_board</i>
+          <a href="{% url 'webApp:usuarios' %}">Ver Usuarios</a>
+        </div>
+      </div>
+    </div>
+    <div class="card card-stats m-3">
+      <div class="card-header card-header-warning card-header-icon">
+        <div class="card-icon">
+          <i class="material-icons">content_copy</i>
+        </div>
+        <p class="card-category">Proyectos</p>
+        <h3 class="card-title">
+          <small>{{total_proyectos}}</small>
+        </h3>
+  
+      </div>
+      <div class="card-footer">
+        <div class="stats">
+          <i class="material-icons ">developer_board</i>
+          <a href="{% url 'webApp:proyectos' %}">Ver proyectos</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% else %}
+        {% if userSession.activo %}
+        <div class="d-flex">
+          {% for proyecto in proyectos %}
+          
+          <div class="card card-stats m-3">
+            <div class="card-header card-header-warning card-header-icon">
+              <div class="card-icon">
+                <i class="material-icons">content_copy</i>
+              </div>
+              <p class="card-category">{{proyecto.nombre_proyecto}}</p>
+              <h3 class="card-title">
+                <small>Sprint {{proyecto.sprint_dias}} dias</small>
+              </h3>
+              <h3 class="card-title">
+                <small>Rol {{proyecto.nombre_rol}}</small>
+              </h3>
+            </div>
+            <div class="card-footer">
+              <div class="stats">
+                <i class="material-icons ">developer_board</i>
+                <a href="{% url 'webApp:verProyecto' proyecto.id %}">Ver proyecto</a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+        {% else %}
+          <div class="row">
+            <div class="col">
+              <h1>Rol observador hasta que el admin otorgue permisos </h1>
+            </div>
+          </div>
+        {% endif %}
+  {% endif %}
+
+
+
+  
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <script>
+    $(document).ready(function() {
+      // Javascript method's body can be found in assets/js/demos.js
+      md.initDashboardPageCharts();
+
+    });
+  </script>
+
+{% endblock javascripts %}
