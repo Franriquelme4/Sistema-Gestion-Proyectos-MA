@@ -1,70 +1,74 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} UI Tables {% endblock %} 
+{% block title %} UI Tables {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
 
-        <div class="row">
-            <div class="col-md-12">
-              <div class="card">
-                <div class="card-header card-header-primary">
-                  <h4 class="card-title ">Usuarios</h4>
-                  <p class="card-category">Lista de usuarios</p>
-                </div>
-                <div class="card-body">
-                  <div class="table-responsive">
-                    <table class="table">
-                      <thead class=" text-primary">
-                        <th>
-                          ID
-                        </th>
-                        <th>
-                          Nombre
-                        </th>
-                        <th>
-                          Apellido
-                        </th>
-                        <th>
-                          Email
-                        </th>
-                        <th>
-                          Estado
-                        </th>
-                      </thead>
-                      <tbody>
-                        {% for usuario in usuarios %}
-                        <tr>
-                          <td>
-                            {{forloop.counter}}
-                          </td>
-                          <td>
-                            {{usuario.nombre}}
-                          </td>
-                          <td>
-                            {{usuario.apellido}}
-                          </td>
-                          <td>
-                            {{usuario.email}}
-                          </td>
-                          <td class="text-primary">
-                            {% if usuario.activo %}
-                            Activo
-                          {% else %}
-                          <a href="activar/{{usuario.id}}" class="btn btn-success btnActivar btn-sm">Activar</a>   
-                          {% endif %}
-                          </td>
-                        </tr>
-                        {% endfor %}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header card-header-primary">
+        <h4 class="card-title ">Usuarios</h4>
+        <p class="card-category">Lista de usuarios</p>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead class=" text-primary">
+              <th>
+                ID
+              </th>
+              <th>
+                Nombre
+              </th>
+              <th>
+                Apellido
+              </th>
+              <th>
+                Email
+              </th>
+              <th>
+                Estado
+              </th>
+            </thead>
+            <tbody>
+              {% for usuario in usuarios %}
+              <tr>
+                <td>
+                  {{forloop.counter}}
+                </td>
+                <td>
+                  {{usuario.nombre}}
+                </td>
+                <td>
+                  {{usuario.apellido}}
+                </td>
+                <td>
+                  {{usuario.email}}
+                </td>
+                <td class="text-primary">
+                  {% if usuario.activo %}
+                  Activo
+                  {% else %}
+                  {% if validacionPermisos.act_Usuario %}
+                  <a href="activar/{{usuario.id}}" class="btn btn-success btnActivar btn-sm">Activar</a>
+                  {% else %}
+                  Inactivo
+                  {% endif %}
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock content %}
 

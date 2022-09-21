@@ -1,10 +1,10 @@
-INSERT INTO public.usuario_rol(id, nombre_rol, descripcion_rol)
+INSERT INTO usuario_rol(id, nombre_rol, descripcion_rol)
 VALUES 
 (1,'Administrador','Rol para administrar el sistema'),
 (2,'Observador','Rol por default para todos los usuarios'),
-(3,'Scrum','Rol para gestionar proyecto');
+(3,'Scrum Master','Rol para gestionar proyecto');
 
-INSERT INTO public.usuario_permiso(id, nombre_permiso, descripcion_permiso)
+INSERT INTO usuario_permiso(id, nombre_permiso, descripcion_permiso)
 VALUES 
 (1, 'def'				,'Default'							),
 (2, 'crt_Sprint'		,'Crear Sprint'						),
@@ -32,9 +32,10 @@ VALUES
 (24,'dsp_Velocity'		,'Consultar Velocity Chart'			),
 (25,'dsp_ReporteEsta'	,'Consultar Reporte Estado'			),
 (26,'dct_Usuario'		,'Desactivar Usuarios'				),
-(27,'dsp_Colaborador'	,'Consultar Colaboradores'			);
+(27,'dsp_Colaborador'	,'Consultar Colaboradores'			),
+(28,'dsp_Roles'	        ,'Consultar Roles'			        );
 
-INSERT INTO public.usuario_rol_permiso(id, rol_id, permiso_id)
+INSERT INTO usuario_rol_permiso(id, rol_id, permiso_id)
 VALUES 
 (1,2,1),
 (2,1,1),
@@ -48,7 +49,10 @@ VALUES
 (10,3,6),
 (11,3,7),
 (12,3,8),
-(13,3,18);
+(13,3,18),
+(14,3,15),
+(15,3,27),
+(16,3,28);
 
 
 

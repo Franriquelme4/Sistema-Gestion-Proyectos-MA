@@ -25,6 +25,12 @@ class Rol(models.Model):
         ordering = ['descripcion_rol']
     def __str__(self):
         return self.descripcion_rol
+    def getPermisos(self):
+        return self.permiso.all()
+    def poseePermiso(self,codigo):
+        permiso = self.permiso.filter(nombre_permiso=codigo)
+        return permiso.count() > 0
+
 
 class Usuario(models.Model):
     """Modelo de la tabla usuarios, en la cual se almacenan todos los datos del usuario"""
@@ -93,7 +99,7 @@ class ProyectoRol(models.Model):
     class Meta:
         verbose_name = 'ProyectoRol'
         verbose_name_plural = 'ProyectoRoles'
-
+        
 class TipoUserStory(models.Model):
     """Modelo de la tabla tipo de user story, en la cual se almacenan todos los datos de los tipos de user story"""
         prioridad_tipo_us = models.IntegerField()
@@ -133,4 +139,3 @@ class Sprint(model.Model):
         ordering = ['nombre_sp']
     def __str__(self):
         return self.nombre_sp
-
