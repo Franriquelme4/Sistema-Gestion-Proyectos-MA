@@ -1,4 +1,3 @@
-
 from django.db import models
 import datetime
 # Create your models here.
@@ -25,6 +24,12 @@ class Rol(models.Model):
         ordering = ['descripcion_rol']
     def __str__(self):
         return self.descripcion_rol
+    def getPermisos(self):
+        return self.permiso.all()
+    def poseePermiso(self,codigo):
+        permiso = self.permiso.filter(nombre_permiso=codigo)
+        return permiso.count() > 0
+
 
 class Usuario(models.Model):
     """Modelo de la tabla usuarios, en la cual se almacenan todos los datos del usuario"""
@@ -93,8 +98,43 @@ class ProyectoRol(models.Model):
     class Meta:
         verbose_name = 'ProyectoRol'
         verbose_name_plural = 'ProyectoRoles'
-    
-    
+        
+class TipoUserStory(models.Model):
+    """Modelo de la tabla tipo de user story, en la cual se almacenan todos los datos de los tipos de user story"""
+        prioridad_tipo_us = models.IntegerField()
+        nombre_tipo_us = models.CharField(max_length=50,null=False)
+        descripcion_tipo_us = models.CharField(max_length=100,null=False)
+    class Meta:
+        verbose_name = 'Tipo User Story'
+        verbose_name_plural = 'Tipos de User Story'
+        ordering = ['nombre_tipo_us']
+    def __str__(self):
+        return self.nombre_tipo_us
 
+class UserStory(models.Model):
+    """Modelo de la tabla user story, en la cual se almacenan todos los datos de los user story"""
+        nombre_us = model.CharField(max_length=50,null=False)
+        descripcion_us = model.CharField(max_length=50,null=False)
+        duracion_us = model.IntegerField()
+        tipo_us = model.ForeignKey('TipoUserStory',on_delete=models.CASCADE)
+        fechaIni_us = model.DateField(default=datetime.date.today)
+    class Meta:
+        verbose_name = 'User Story'
+        verbose_name_plural = 'User Stories'
+        ordering = ['nombre_us']
+    def __str__(self):
+        return self.nombre_us
 
-
+class Sprint(model.Model):
+    """Modelo de la tabla sprint, en la cual se almacenan todos los datos del sprint"""
+    nombre_sp = model.CharField(max_length=50,null=False)
+    fechaIni_sp = model.DateField(default=datetime.date.today)
+    fechaFIn_sp = model.DateField()
+    duracion_sp = model.IntegerField(null=False)
+    userStory_sp = model.ForeignKey('UserStory',on_delete=models.CASCADE)
+    class Meta:
+        verbose_name = 'Sprint'
+        verbose_name_plural = 'Sprints'
+        ordering = ['nombre_sp']
+    def __str__(self):
+        return self.nombre_sp

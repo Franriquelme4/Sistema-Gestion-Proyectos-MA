@@ -7,7 +7,7 @@ def getUsuarioSesion(email):
     return usuario
 
 def getIdScrumRol():
-    rol = Rol.objects.get(descripcion = "Scrum")
+    rol = Rol.objects.get(id = "3")
     return rol
 
 def getProyectsByUsuarioID(id):
