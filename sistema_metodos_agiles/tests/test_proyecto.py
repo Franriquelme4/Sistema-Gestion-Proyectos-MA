@@ -1,5 +1,6 @@
 from email.policy import default
-from usuario.models import Cliente, Proyecto, Rol
+from usuario.models import Cliente, Proyecto, Rol, TipoUserStory
+from django.db import models
 import pytest
 
 def test_cliente_creation():
@@ -15,8 +16,8 @@ def test_cliente_creation():
 def test_proyecto_creation():
     proyecto = Proyecto(
         nombre_proyecto = 'proyecto1',
-        cliente_proyecto = '',
-        fecha_ini_proyecto = Cliente.cliente,
+        cliente_proyecto = test_cliente_creation,
+        fecha_ini_proyecto = '',
         fecha_fin_proyecto = '',
         descripcion_proyecto = 'proyecto de prueba',
         estado_proyecto = 'Pendiente',
@@ -25,3 +26,11 @@ def test_proyecto_creation():
         fecha_creacion = ''
     )
     assert proyecto.nombre_proyecto == 'proyecto1'
+
+def test_user_story_creation():
+    user_story = TipoUserStory(
+        prioridad_tipo_us = 1,
+        nombre_tipo_us = 'prueba',
+        descripcion_tipo_us = 'user story de prueba'
+    )
+    assert user_story.prioridad_tipo_us == 1

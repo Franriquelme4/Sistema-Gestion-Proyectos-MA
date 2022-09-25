@@ -1,5 +1,6 @@
 import email
 import pytest
+from django.db import models
 from usuario.models import Usuario
 
 
@@ -8,9 +9,9 @@ def test_user_creation():
         nombre = 'usuario',
         apellido = 'usuario_apellido',
         email = 'usuario@gmail.com',
-        telefono = '123456',
         nombre_usuario = 'nickname',
-        roles = 'observador'
+        activo = False,
+        df_rol = models.ForeignKey('Rol',on_delete=models.CASCADE,default=2)
     )
     assert user.nombre == 'usuario'
 
