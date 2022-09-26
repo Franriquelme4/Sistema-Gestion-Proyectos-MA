@@ -14,6 +14,7 @@ urlpatterns = [
     path('usuarios/activar/<int:id>', views.activarUsuario, name='usuarios'),
     path('proyecto/',views.proyectos, name='proyectos'),
     path('CrearProyecto/',views.CrearProyecto, name='CrearProyecto'),
+    path('GestionProyecto/',views.GestionProyecto, name='GestionProyecto'),
     path('CrearProyecto/guardar',views.crearProyectoGuardar, name='crearProyectoGuardar'),
     path('proyecto/roles/<int:id>',views.rolesProyecto, name='rolesProyecto'),
     path('proyecto/roles/guardar/<int:id>',views.crearRolProyecto, name='crearRolProyecto'),

@@ -87,6 +87,43 @@ def proyectos(request):
     html_template = loader.get_template('home/proyectos.html')
     return HttpResponse(html_template.render(context, request))
 
+def GestionProyecto(request):
+    usuarios = Usuario.objects.all()
+    userSession = getUsuarioSesion(request.user.email)
+    context = {'usuarios':usuarios,'segment': 'GestionProyecto','userSession':userSession}
+    html_template = loader.get_template('home/GestionProyecto.html')
+    return HttpResponse(html_template.render(context, request))
+
+def GestionProyectoAgregar(request):
+    print(request.POST['nombreProyecto'])
+    variables = request.POST
+    if request.method == 'POST':
+        cliente = Cliente(
+           nombre_cliente = variables['nombreCliente'] ,
+           apellido_cliente =variables['apellidoCliente'] ,
+           email_cliente = variables['emailCliente'],
+           telefono_cliente = variables['telefonoCliente'],
+           empresa_cliente = variables['empresaCliente']
+        )
+        cliente.save()
+        miembro = MiembroEquipo(
+           descripcion = ''
+        )
+        miembro.save()
+        miembro.miembro_rol.add(getIdScrumRol())
+        miembro.miembro_usuario.add(Usuario.objects.get(id=variables['scrumMaster']))
+        proyecto = Proyecto(
+           nombre_proyecto = variables['nombreProyecto'],
+           cliente_proyecto = cliente,
+           fecha_ini_proyecto = variables['fechaInicio'],
+           fecha_fin_proyecto = variables['fechaFin'],
+           descripcion_proyecto = variables['descripcion'],
+           sprint_dias = variables['sprintDias']
+        )
+        proyecto.save()
+        proyecto.miembro_proyecto.add(miembro)
+    return redirect('/')
+
 def CrearProyecto(request):
     """
     Redirige a la vista de creacion de proyectos, consiste en un formulario
