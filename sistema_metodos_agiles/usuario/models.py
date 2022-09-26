@@ -99,12 +99,14 @@ class ProyectoRol(models.Model):
     class Meta:
         verbose_name = 'ProyectoRol'
         verbose_name_plural = 'ProyectoRoles'
-        
+    def __str__(self):
+        return self.rol
+
 class TipoUserStory(models.Model):
     """Modelo de la tabla tipo de user story, en la cual se almacenan todos los datos de los tipos de user story"""
-        prioridad_tipo_us = models.IntegerField()
-        nombre_tipo_us = models.CharField(max_length=50,null=False)
-        descripcion_tipo_us = models.CharField(max_length=100,null=False)
+    prioridad_tipo_us = models.IntegerField(null=True, blank=True)
+    nombre_tipo_us = models.CharField(max_length=50,null=False)
+    descripcion_tipo_us = models.CharField(max_length=100,null=False)
     class Meta:
         verbose_name = 'Tipo User Story'
         verbose_name_plural = 'Tipos de User Story'
@@ -114,11 +116,11 @@ class TipoUserStory(models.Model):
 
 class UserStory(models.Model):
     """Modelo de la tabla user story, en la cual se almacenan todos los datos de los user story"""
-        nombre_us = model.CharField(max_length=50,null=False)
-        descripcion_us = model.CharField(max_length=50,null=False)
-        duracion_us = model.IntegerField()
-        tipo_us = model.ForeignKey('TipoUserStory',on_delete=models.CASCADE)
-        fechaIni_us = model.DateField(default=datetime.date.today)
+    nombre_us = models.CharField(max_length=50,null=False)
+    descripcion_us = models.CharField(max_length=50,null=False)
+    duracion_us = models.IntegerField(null=True, blank=True)
+    tipo_us = models.ForeignKey('TipoUserStory',on_delete=models.CASCADE)
+    fechaIni_us = models.DateField(default=datetime.date.today)
     class Meta:
         verbose_name = 'User Story'
         verbose_name_plural = 'User Stories'
@@ -126,16 +128,32 @@ class UserStory(models.Model):
     def __str__(self):
         return self.nombre_us
 
-class Sprint(model.Model):
+class Sprint(models.Model):
     """Modelo de la tabla sprint, en la cual se almacenan todos los datos del sprint"""
-    nombre_sp = model.CharField(max_length=50,null=False)
-    fechaIni_sp = model.DateField(default=datetime.date.today)
-    fechaFIn_sp = model.DateField()
-    duracion_sp = model.IntegerField(null=False)
-    userStory_sp = model.ForeignKey('UserStory',on_delete=models.CASCADE)
+    nombre_sp = models.CharField(max_length=50,null=False)
+    fechaIni_sp = models.DateField(default=datetime.date.today)
+    fechaFIn_sp = models.DateField()
+    duracion_sp = models.IntegerField(null=False)
+    userStory_sp = models.ForeignKey('UserStory',on_delete=models.CASCADE)
     class Meta:
         verbose_name = 'Sprint'
         verbose_name_plural = 'Sprints'
         ordering = ['nombre_sp']
     def __str__(self):
         return self.nombre_sp
+
+class Proyecto_Sprint(models.Model):
+    """Modelo de la tabla Proyecto_Sprint, en la cual se almacenan todos los datos de los sprints de cada proyecto"""
+    PS_proyecto = models.ForeignKey('Proyecto',on_delete=models.CASCADE)
+    PS_sprint =  models.ForeignKey('Sprint',on_delete=models.CASCADE)
+    PS_orden = models.IntegerField(null=False)
+    class Meta:
+        verbose_name = 'Sprint por Proyecto'
+        verbose_name_plural = 'Sprints por Proyecto'
+        ordering = ['PS_orden']
+
+
+class Tablero(models.Model):
+    """Modelo de la tabla Tablero, en la cual se almacenan todos los datos del Tablero"""
+    nombre_tablero = models.CharField(max_length=50,null=False)
+    descripcion_tablero = models.CharField(max_length=100,null=False)
