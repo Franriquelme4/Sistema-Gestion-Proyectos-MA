@@ -133,7 +133,7 @@ class Sprint(models.Model):
     fechaIni_sp = models.DateField(default=datetime.date.today)
     fechaFIn_sp = models.DateField()
     duracion_sp = models.IntegerField(null=False)
-    userStory_sp = models.ForeignKey('UserStory',on_delete=models.CASCADE)
+    userStory_sp = models.ManyToManyField('UserStory',blank=True)
     class Meta:
         verbose_name = 'Sprint'
         verbose_name_plural = 'Sprints'
@@ -141,18 +141,38 @@ class Sprint(models.Model):
     def __str__(self):
         return self.nombre_sp
 
-class Proyecto_Sprint(models.Model):
-    """Modelo de la tabla Proyecto_Sprint, en la cual se almacenan todos los datos de los sprints de cada proyecto"""
-    PS_proyecto = models.ForeignKey('Proyecto',on_delete=models.CASCADE)
-    PS_sprint =  models.ForeignKey('Sprint',on_delete=models.CASCADE)
-    PS_orden = models.IntegerField(null=False)
+class ProyectoSprint(models.Model):
+    """Modelo de la tabla ProyectoSprint, en la cual se almacenan todos los datos de los sprints de cada proyecto"""
+    proyecto_PS = models.ForeignKey('Proyecto',on_delete=models.CASCADE)
+    sprint_PS =  models.ForeignKey('Sprint',on_delete=models.CASCADE)
+    orden_PS = models.IntegerField(null=False)
     class Meta:
         verbose_name = 'Sprint por Proyecto'
         verbose_name_plural = 'Sprints por Proyecto'
-        ordering = ['PS_orden']
+        ordering = ['orden_PS']
+
+Fases_CHOICES=[
+    ('TODO','Por Hacer'),
+    ('DOING','Haciendo'),
+    ('DONE','Hecho'),
+    ('CANC','Cancelado'),
+]
+
+class Fase(models.Model):
+    """Modelo de la tabla Fase, en la cual se almacenan todos los datos del Fase"""
+    nombre_fase = models.CharField(max_length=15,choices=Fases_CHOICES,default='TODO')
+    userStory_fase = models.ForeignKey('UserStory',on_delete=models.CASCADE)
+    descripcion_fase = models.CharField(max_length=100,null=False)
+    class Meta:
+        verbose_name = 'Fase'
+        verbose_name_plural = 'Fases'
+        ordering = ['nombre_fase']
+    def __str__(self):
+        return self.nombre_fase
 
 
 class Tablero(models.Model):
     """Modelo de la tabla Tablero, en la cual se almacenan todos los datos del Tablero"""
     nombre_tablero = models.CharField(max_length=50,null=False)
     descripcion_tablero = models.CharField(max_length=100,null=False)
+    fase_tablero = models.ForeignKey('Fase',on_delete=models.CASCADE,blank=True)
