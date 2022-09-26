@@ -7,6 +7,7 @@
 
 {% block content %}
 
+<<<<<<< HEAD
 {% if validacionPermisos.crt_Proyecto %}
 <a class="btn btn-primary " href="{% url 'webApp:CrearProyecto' %}"><i class="material-icons">add</i>Crear Proyecto</a>
 {% endif %}
@@ -49,6 +50,47 @@
       </table>
   </div>
   </div>
+=======
+<div class="card">
+    <div class="card-header card-header-primary">
+      <h4 class="card-title">Proyectos</h4>
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col"><b>Nombre</b></th>
+          <th scope="col"><b>Descripcion</b></th>
+          <th scope="col"><b>Fecha Inicio</b></th>
+          <th scope="col"><b>Fecha Fin</b></th>
+          <th scope="col"><b>Scrum Master</b></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for proyecto in proyectos %}
+        <tr>
+          <td>
+            {{forloop.counter}}
+          </td>
+          <td>
+            {{proyecto.nombre_proyecto}}
+          </td>
+          <td>
+            {{proyecto.descripcion_proyecto}}
+          </td>
+          <td>
+            {{proyecto.fecha_ini_proyecto}}
+          </td>
+          <td>
+            {{proyecto.fecha_fin_proyecto}}
+          </td>
+          <td>
+            {{proyecto.miembro_proyecto.miembro_usuario}}
+          </td>
+        </tr>
+        {% endfor %}
+    </table>
+>>>>>>> MatiasFranco
 </div>
 
 {% endblock content %}
