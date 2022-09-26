@@ -99,5 +99,101 @@ class ProyectoRol(models.Model):
     class Meta:
         verbose_name = 'ProyectoRol'
         verbose_name_plural = 'ProyectoRoles'
+    def __str__(self):
+        return self.rol
 
-    
+class CampoPersonalizado(models.Model):
+    nombre_cp = models.CharField(max_length=50,null=False)
+    tipoCampo_cp = models.CharField(max_length=50,null=False)
+    value_cp = models.JSONField(null=True)
+
+
+
+class TipoUserStory(models.Model):
+    """Modelo de la tabla tipo de user story, en la cual se almacenan todos los datos de los tipos de user story"""
+    proyecto_tipo_us  = models.ForeignKey('Proyecto',on_delete=models.CASCADE)
+    prioridad_tipo_us = models.IntegerField(null=True, blank=True)
+    nombre_tipo_us = models.CharField(max_length=50,null=False)
+    descripcion_tipo_us = models.CharField(max_length=100,null=False)
+    flujo_tipo_us = models.JSONField(null=True)
+    campoPer_tipo_us = models.ManyToManyField('CampoPersonalizado')
+
+    class Meta:
+        verbose_name = 'Tipo User Story'
+        verbose_name_plural = 'Tipos de User Story'
+        ordering = ['nombre_tipo_us']
+    def __str__(self):
+        return self.nombre_tipo_us
+
+class UserStory(models.Model):
+    """Modelo de la tabla user story, en la cual se almacenan todos los datos de los user story"""
+    proyecto_us = models.ForeignKey('Proyecto',on_delete=models.CASCADE)
+    nombre_us = models.CharField(max_length=50,null=False)
+    descripcion_us = models.CharField(max_length=50,null=False)
+    valorNegocio_us = models.IntegerField()
+    prioridadTec_us = models.IntegerField()
+    tiempoEstimado_us = models.IntegerField()
+    estadoActual_us = models.CharField(max_length=20)
+    duracion_us = models.IntegerField(null=True, blank=True)
+    tipo_us = models.ForeignKey('TipoUserStory',on_delete=models.CASCADE)
+    asignadoUsu_us = models.ForeignKey('MiembroEquipo',on_delete=models.CASCADE)
+    fechaIni_us = models.DateField(auto_now_add=True)
+    fechaMod_us = models.DateField(auto_now=True)
+    class Meta:
+        verbose_name = 'User Story'
+        verbose_name_plural = 'User Stories'
+        ordering = ['nombre_us']
+    def __str__(self):
+        return self.nombre_us
+
+class Sprint(models.Model):
+    """Modelo de la tabla sprint, en la cual se almacenan todos los datos del sprint"""
+    proyecto_sp = models.ForeignKey('Proyecto',on_delete=models.CASCADE)
+    nombre_sp = models.CharField(max_length=50,null=False)
+    fechaIni_sp = models.DateField(default=datetime.date.today)
+    fechaFIn_sp = models.DateField()
+    duracion_sp = models.IntegerField(null=False)
+    userStory_sp = models.ManyToManyField('UserStory',blank=True)
+    class Meta:
+        verbose_name = 'Sprint'
+        verbose_name_plural = 'Sprints'
+        ordering = ['nombre_sp']
+    def __str__(self):
+        return self.nombre_sp
+
+
+#class ProyectoSprint(models.Model):
+#    """Modelo de la tabla ProyectoSprint, en la cual se almacenan todos los datos de los sprints de cada proyecto"""
+#    proyecto_PS = models.ForeignKey('Proyecto',on_delete=models.CASCADE)
+#    sprint_PS =  models.ForeignKey('Sprint',on_delete=models.CASCADE)
+#    orden_PS = models.IntegerField(null=False)
+#    class Meta:
+#        verbose_name = 'Sprint por Proyecto'
+#        verbose_name_plural = 'Sprints por Proyecto'
+#        ordering = ['orden_PS']
+
+Fases_CHOICES=[
+    ('TODO','Por Hacer'),
+    ('DOING','Haciendo'),
+    ('DONE','Hecho'),
+    ('CANC','Cancelado'),
+]
+
+class Fase(models.Model):
+    """Modelo de la tabla Fase, en la cual se almacenan todos los datos del Fase"""
+    nombre_fase = models.CharField(max_length=15,choices=Fases_CHOICES,default='TODO')
+    userStory_fase = models.ForeignKey('UserStory',on_delete=models.CASCADE)
+    descripcion_fase = models.CharField(max_length=100,null=False)
+    class Meta:
+        verbose_name = 'Fase'
+        verbose_name_plural = 'Fases'
+        ordering = ['nombre_fase']
+    def __str__(self):
+        return self.nombre_fase
+
+
+class Tablero(models.Model):
+    """Modelo de la tabla Tablero, en la cual se almacenan todos los datos del Tablero"""
+    nombre_tablero = models.CharField(max_length=50,null=False)
+    descripcion_tablero = models.CharField(max_length=100,null=False)
+    fase_tablero = models.ForeignKey('Fase',on_delete=models.CASCADE,blank=True)
