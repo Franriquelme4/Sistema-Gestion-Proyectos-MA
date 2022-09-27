@@ -72,4 +72,15 @@ VALUES
 (20,3,32),
 (21,3,12);
 
+INSERT INTO public.usuario_prioridadtus
+(id, descripcion, valor)
+VALUES(1, 'Alta', 1);
+INSERT INTO public.usuario_prioridadtus
+(id, descripcion, valor)
+VALUES(2, 'Media', 2);
+INSERT INTO public.usuario_prioridadtus
+(id, descripcion, valor)
+VALUES(3, 'Baja', 3);
+
+
 

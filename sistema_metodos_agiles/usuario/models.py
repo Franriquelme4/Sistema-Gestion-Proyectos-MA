@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 import datetime
 # Create your models here.
@@ -111,7 +112,7 @@ class CampoPersonalizado(models.Model):
 class TipoUserStory(models.Model):
     """Modelo de la tabla tipo de user story, en la cual se almacenan todos los datos de los tipos de user story"""
     proyecto_tipo_us  = models.ForeignKey('Proyecto',on_delete=models.CASCADE,null=True)
-    prioridad_tipo_us = models.IntegerField(null=True, blank=True)
+    prioridad_tipo_us = models.ForeignKey('PrioridadTUs',on_delete=models.CASCADE,null=True)
     nombre_tipo_us = models.CharField(max_length=50,null=False)
     descripcion_tipo_us = models.CharField(max_length=100,null=False)
     flujo_tipo_us = models.JSONField(null=True)
@@ -129,11 +130,9 @@ class UserStory(models.Model):
     proyecto_us = models.ForeignKey('Proyecto',on_delete=models.CASCADE,null=True)
     nombre_us = models.CharField(max_length=50,null=False)
     descripcion_us = models.CharField(max_length=50,null=False)
-    valorNegocio_us = models.IntegerField(null=True)
-    prioridadTec_us = models.IntegerField(null=True)
     tiempoEstimado_us = models.IntegerField(null=True)
     estadoActual_us = models.CharField(max_length=20,null=True)
-    duracion_us = models.IntegerField(null=True, blank=True)
+    duracion_us = models.IntegerField(default=0)
     tipo_us = models.ForeignKey('TipoUserStory',on_delete=models.CASCADE)
     asignadoUsu_us = models.ForeignKey('MiembroEquipo',on_delete=models.CASCADE,null=True)
     fechaIni_us = models.DateField(auto_now_add=True)
@@ -196,3 +195,15 @@ class Tablero(models.Model):
     nombre_tablero = models.CharField(max_length=50,null=False)
     descripcion_tablero = models.CharField(max_length=100,null=False)
     fase_tablero = models.ForeignKey('Fase',on_delete=models.CASCADE,blank=True)
+
+class PrioridadTUs(models.Model):
+    """Listado de prioridades de los tipo de US"""
+    descripcion = models.CharField(max_length=50,null=False)
+    valor = models.IntegerField(null=False)
+    class Meta:
+        verbose_name = 'PrioridadTUs'
+        verbose_name_plural = 'PrioridadTUs'
+        ordering = ['valor']
+    def __str__(self):
+        return self.descripcion
+

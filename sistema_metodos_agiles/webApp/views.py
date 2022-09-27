@@ -5,7 +5,7 @@ from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from usuario.utils import validarPermisos,getUsuarioSesion,getIdScrumRol,getProyectsByUsuarioID,getProyectsByID,getRolByProyectId,getColaboratorsByProyect
-from usuario.models import Usuario,Cliente,Proyecto,MiembroEquipo,Permiso,Rol,ProyectoRol,TipoUserStory
+from usuario.models import Usuario,Cliente,Proyecto,MiembroEquipo,Permiso,Rol,ProyectoRol,TipoUserStory,PrioridadTUs,UserStory
 from django.template import loader
 from django.db.models import Q
 
@@ -289,6 +289,7 @@ def tipoUs(request,id):
     proyecto = getProyectsByID(id,userSession.id)[0]
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
     tipoUs = TipoUserStory.objects.filter(proyecto_tipo_us = id)
+    prioridad = PrioridadTUs.objects.all()
     print(tipoUs)
     rolesProyecto = getRolByProyectId(id)
     permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack']
@@ -300,7 +301,8 @@ def tipoUs(request,id):
         'rolUsuario':rolUsuario,
         'validacionPermisos':validacionPermisos,
         'prueba':rolesProyecto,
-        'tipoUs':tipoUs
+        'tipoUs':tipoUs,
+        'prioridades':prioridad
         }
     html_template = loader.get_template('home/tipoUS.html')
     return HttpResponse(html_template.render(context,request))
@@ -313,7 +315,7 @@ def crearTUSProyecto(request,id):
             proyecto_tipo_us = Proyecto.objects.get(id=id),
             nombre_tipo_us = variables.get('nombre',False),
             descripcion_tipo_us= variables.get('descripcion',False),
-            prioridad_tipo_us=variables.get('prioridad',False),
+            prioridad_tipo_us= PrioridadTUs.objects.get(id=variables.get('prioridad',False)),
         )
         tipoUs.save()
     return redirect(f'/proyecto/{id}')
@@ -324,16 +326,33 @@ def verProductBacklog(request,id):
     proyecto = getProyectsByID(id,userSession.id)[0]
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
     rolesProyecto = getRolByProyectId(id)
+    tipoUs = TipoUserStory.objects.filter(proyecto_tipo_us = id)
     permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack']
     validacionPermisos = validarPermisos(permisosProyecto,rolUsuario)
+    userStorys = UserStory.objects.filter(proyecto_us = id)
     context={
         'rolesProyecto':rolesProyecto,
         'userSession':userSession,
         'proyecto':proyecto,
         'rolUsuario':rolUsuario,
         'validacionPermisos':validacionPermisos,
+        'tipoUs':tipoUs,
         'prueba':rolesProyecto,
-        'userStorys':""
+        'userStorys':userStorys
         }
     html_template = loader.get_template('home/productBacklog.html')
     return HttpResponse(html_template.render(context,request))
+
+def crearUs(request,id):
+    """Se agregan los nuevos Us"""
+    variables = request.POST
+    if request.method == 'POST':
+        userStory = UserStory(
+            proyecto_us = Proyecto.objects.get(id=id),
+            nombre_us = variables.get('nombre',False),
+            descripcion_us= variables.get('descripcion',False),
+            tiempoEstimado_us = variables.get('tiempo',False),
+            tipo_us= TipoUserStory.objects.get(id=variables.get('tipoUs',False))
+        )
+        userStory.save()
+    return redirect(f'/proyecto/{id}')
