@@ -24,4 +24,5 @@ urlpatterns = [
     path('proyecto/tipoUs/<int:id>',views.tipoUs, name='tipoUs'),
     path('proyecto/tipoUs/guardar/<int:id>',views.crearTUSProyecto, name='crearTUSProyecto'),
     path('proyecto/productBacklog/<int:id>',views.verProductBacklog, name='verProductBacklog'),
+    path('proyecto/userStory/guardar/<int:id>',views.crearUs, name='crearUs'),
 ]
