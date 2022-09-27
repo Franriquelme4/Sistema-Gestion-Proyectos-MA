@@ -110,7 +110,7 @@ class CampoPersonalizado(models.Model):
 
 class TipoUserStory(models.Model):
     """Modelo de la tabla tipo de user story, en la cual se almacenan todos los datos de los tipos de user story"""
-    proyecto_tipo_us  = models.ForeignKey('Proyecto',on_delete=models.CASCADE)
+    proyecto_tipo_us  = models.ForeignKey('Proyecto',on_delete=models.CASCADE,null=True)
     prioridad_tipo_us = models.IntegerField(null=True, blank=True)
     nombre_tipo_us = models.CharField(max_length=50,null=False)
     descripcion_tipo_us = models.CharField(max_length=100,null=False)
@@ -126,16 +126,16 @@ class TipoUserStory(models.Model):
 
 class UserStory(models.Model):
     """Modelo de la tabla user story, en la cual se almacenan todos los datos de los user story"""
-    proyecto_us = models.ForeignKey('Proyecto',on_delete=models.CASCADE)
+    proyecto_us = models.ForeignKey('Proyecto',on_delete=models.CASCADE,null=True)
     nombre_us = models.CharField(max_length=50,null=False)
     descripcion_us = models.CharField(max_length=50,null=False)
-    valorNegocio_us = models.IntegerField()
-    prioridadTec_us = models.IntegerField()
-    tiempoEstimado_us = models.IntegerField()
-    estadoActual_us = models.CharField(max_length=20)
+    valorNegocio_us = models.IntegerField(null=True)
+    prioridadTec_us = models.IntegerField(null=True)
+    tiempoEstimado_us = models.IntegerField(null=True)
+    estadoActual_us = models.CharField(max_length=20,null=True)
     duracion_us = models.IntegerField(null=True, blank=True)
     tipo_us = models.ForeignKey('TipoUserStory',on_delete=models.CASCADE)
-    asignadoUsu_us = models.ForeignKey('MiembroEquipo',on_delete=models.CASCADE)
+    asignadoUsu_us = models.ForeignKey('MiembroEquipo',on_delete=models.CASCADE,null=True)
     fechaIni_us = models.DateField(auto_now_add=True)
     fechaMod_us = models.DateField(auto_now=True)
     class Meta:
@@ -147,7 +147,7 @@ class UserStory(models.Model):
 
 class Sprint(models.Model):
     """Modelo de la tabla sprint, en la cual se almacenan todos los datos del sprint"""
-    proyecto_sp = models.ForeignKey('Proyecto',on_delete=models.CASCADE)
+    proyecto_sp = models.ForeignKey('Proyecto',on_delete=models.CASCADE,null=True)
     nombre_sp = models.CharField(max_length=50,null=False)
     fechaIni_sp = models.DateField(default=datetime.date.today)
     fechaFIn_sp = models.DateField()

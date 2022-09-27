@@ -1,55 +1,70 @@
-    <div class="sidebar" data-color="purple" data-background-color="white" data-image="/static/assets/img/sidebar-1.jpg">
-      <div class="logo">
-        <a target="_blank" rel="noopener noreferrer" 
-           href="https://appseed.us/admin-dashboards/django-dashboard-material" class="simple-text logo-normal">
-          SISTEMA DE GESTION
+<div class="sidebar" data-color="purple" data-background-color="white" data-image="/static/assets/img/sidebar-1.jpg">
+  <div class="logo">
+    <a target="_blank" rel="noopener noreferrer" href="https://appseed.us/admin-dashboards/django-dashboard-material"
+      class="simple-text logo-normal">
+      SISTEMA DE GESTION
+    </a>
+  </div>
+  <div class="sidebar-wrapper">
+    <ul class="nav">
+      <li class="nav-item {% if 'index' in segment %} active {% endif %}">
+        <a class="nav-link" href="/">
+          <i class="material-icons">dashboard</i>
+          <p>Inicio</p>
         </a>
-      </div>
-      <div class="sidebar-wrapper">
-        <ul class="nav">
-          
+      </li>
+      {% if validacionPermisos.dsp_Roles %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'webApp:rolesProyecto' proyecto.id %}">
+          <i class="material-icons">block</i>
+          <p>Roles del Proyecto </p>
+        </a>
+      </li>
+      {% endif %}
+      {% if validacionPermisos.dsp_Colaborador %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'webApp:colaboradoresProyecto' proyecto.id %}">
+          <i class="material-icons">account_circle</i>
+          <p>Colaboradores</p>
+        </a>
+      </li>
+      {% endif %}
 
-          <li class="nav-item {% if 'index' in segment %} active {% endif %}">
-            <a class="nav-link" href="/">
-              <i class="material-icons">dashboard</i>
-              <p>Inicio</p>
-            </a>
-          </li>
+      {% if validacionPermisos.dsp_TipoUs %}
+      <li class="class="nav-item"">
+        <a class="nav-link " href="{% url 'webApp:tipoUs' proyecto.id %}"  >
+            <i class="material-icons">apps</i>
+           Tipos de US 
+          </a>
+      </li>
+      {% endif %}
 
-          {% if 'verProyecto' in segment %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'webApp:GestionProyecto' %}">
-              <i class="material-icons">border_color</i>
-              <p>Gestion del proyecto</p>
-            </a>
-          </li>
-          {% endif %}
+      {% if validacionPermisos.dsp_ProductBack %}
+      <li class="class="nav-item"">
+        <a class="nav-link " href="{% url 'webApp:verProductBacklog' proyecto.id %}"  >
+            <i class="material-icons">backup</i>
+           Product Backlog
+          </a>
+      </li>
+      {% endif %}
 
-          {% if prueba %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'webApp:GestionProyecto' %}">
-              <i class="material-icons">border_color</i>
-              <p>Prueba</p>
-            </a>
-          </li>
-          {% endif %}
 
-          {% if userSession.df_rol.id == 1 %}
-          <li class="nav-item {% if 'page-user' in segment %} active {% endif %}">
-            <a class="nav-link" href="{% url 'webApp:proyectos' %}">
-              <i class="material-icons">developer_mode</i>
-              <p>Proyectos</p>
-            </a>
-          </li>
-          <li class="nav-item {% if 'usuarios' in segment %} active {% endif %}">
-            <a class="nav-link" href="{% url 'webApp:usuarios' %}">
-              <i class="material-icons">library_books</i>
-              <p>Usuarios</p>
-            </a>
-          </li>
-          {% endif %}
+      {% if userSession.df_rol.id == 1 %}
+      <li class="nav-item {% if 'page-user' in segment %} active {% endif %}">
+        <a class="nav-link" href="{% url 'webApp:proyectos' %}">
+          <i class="material-icons">developer_mode</i>
+          <p>Proyectos</p>
+        </a>
+      </li>
+      <li class="nav-item {% if 'usuarios' in segment %} active {% endif %}">
+        <a class="nav-link" href="{% url 'webApp:usuarios' %}">
+          <i class="material-icons">library_books</i>
+          <p>Usuarios</p>
+        </a>
+      </li>
+      {% endif %}
 
-        </ul>
-      </div>
+    </ul>
+  </div>
 
-    </div>
+</div>
