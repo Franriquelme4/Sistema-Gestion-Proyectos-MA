@@ -33,7 +33,20 @@ VALUES
 (25,'dsp_ReporteEsta'	,'Consultar Reporte Estado'			),
 (26,'dct_Usuario'		,'Desactivar Usuarios'				),
 (27,'dsp_Colaborador'	,'Consultar Colaboradores'			),
-(28,'dsp_Roles'	        ,'Consultar Roles'			        );
+(28,'dsp_Roles'	        ,'Consultar Roles'			        ),
+(29,'dsp_TipoUs'	    ,'Consultar Tipo US'			    );
+
+
+INSERT INTO public.usuario_permiso
+(id, descripcion_permiso, nombre_permiso)
+VALUES(30, 'Crear Tipo de US', 'ctr_TipoUs');
+INSERT INTO public.usuario_permiso
+(id, descripcion_permiso, nombre_permiso)
+VALUES(31, 'Modificar Tipo de US', 'upd_TipoUs');
+INSERT INTO public.usuario_permiso
+(id, descripcion_permiso, nombre_permiso)
+VALUES(32, 'Eliminar Tipo de Us', 'dlt_TipoUs');
+
 
 INSERT INTO usuario_rol_permiso(id, rol_id, permiso_id)
 VALUES 
@@ -52,10 +65,22 @@ VALUES
 (13,3,18),
 (14,3,15),
 (15,3,27),
-(16,3,28);
+(16,3,28),
+(17,3,29),
+(18,3,30),
+(19,3,31),
+(20,3,32),
+(21,3,12);
 
-
-
+INSERT INTO public.usuario_prioridadtus
+(id, descripcion, valor)
+VALUES(1, 'Alta', 1);
+INSERT INTO public.usuario_prioridadtus
+(id, descripcion, valor)
+VALUES(2, 'Media', 2);
+INSERT INTO public.usuario_prioridadtus
+(id, descripcion, valor)
+VALUES(3, 'Baja', 3);
 
 
 

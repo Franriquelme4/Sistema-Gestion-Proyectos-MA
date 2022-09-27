@@ -1,4 +1,4 @@
-
+from email.policy import default
 from django.db import models
 import datetime
 # Create your models here.
@@ -111,8 +111,8 @@ class CampoPersonalizado(models.Model):
 
 class TipoUserStory(models.Model):
     """Modelo de la tabla tipo de user story, en la cual se almacenan todos los datos de los tipos de user story"""
-    proyecto_tipo_us  = models.ForeignKey('Proyecto',on_delete=models.CASCADE)
-    prioridad_tipo_us = models.IntegerField(null=True, blank=True)
+    proyecto_tipo_us  = models.ForeignKey('Proyecto',on_delete=models.CASCADE,null=True)
+    prioridad_tipo_us = models.ForeignKey('PrioridadTUs',on_delete=models.CASCADE,null=True)
     nombre_tipo_us = models.CharField(max_length=50,null=False)
     descripcion_tipo_us = models.CharField(max_length=100,null=False)
     flujo_tipo_us = models.JSONField(null=True)
@@ -127,16 +127,14 @@ class TipoUserStory(models.Model):
 
 class UserStory(models.Model):
     """Modelo de la tabla user story, en la cual se almacenan todos los datos de los user story"""
-    proyecto_us = models.ForeignKey('Proyecto',on_delete=models.CASCADE)
+    proyecto_us = models.ForeignKey('Proyecto',on_delete=models.CASCADE,null=True)
     nombre_us = models.CharField(max_length=50,null=False)
     descripcion_us = models.CharField(max_length=50,null=False)
-    valorNegocio_us = models.IntegerField()
-    prioridadTec_us = models.IntegerField()
-    tiempoEstimado_us = models.IntegerField()
-    estadoActual_us = models.CharField(max_length=20)
-    duracion_us = models.IntegerField(null=True, blank=True)
+    tiempoEstimado_us = models.IntegerField(null=True)
+    estadoActual_us = models.CharField(max_length=20,null=True)
+    duracion_us = models.IntegerField(default=0)
     tipo_us = models.ForeignKey('TipoUserStory',on_delete=models.CASCADE)
-    asignadoUsu_us = models.ForeignKey('MiembroEquipo',on_delete=models.CASCADE)
+    asignadoUsu_us = models.ForeignKey('MiembroEquipo',on_delete=models.CASCADE,null=True)
     fechaIni_us = models.DateField(auto_now_add=True)
     fechaMod_us = models.DateField(auto_now=True)
     class Meta:
@@ -148,7 +146,7 @@ class UserStory(models.Model):
 
 class Sprint(models.Model):
     """Modelo de la tabla sprint, en la cual se almacenan todos los datos del sprint"""
-    proyecto_sp = models.ForeignKey('Proyecto',on_delete=models.CASCADE)
+    proyecto_sp = models.ForeignKey('Proyecto',on_delete=models.CASCADE,null=True)
     nombre_sp = models.CharField(max_length=50,null=False)
     fechaIni_sp = models.DateField(default=datetime.date.today)
     fechaFIn_sp = models.DateField()
@@ -197,3 +195,15 @@ class Tablero(models.Model):
     nombre_tablero = models.CharField(max_length=50,null=False)
     descripcion_tablero = models.CharField(max_length=100,null=False)
     fase_tablero = models.ForeignKey('Fase',on_delete=models.CASCADE,blank=True)
+
+class PrioridadTUs(models.Model):
+    """Listado de prioridades de los tipo de US"""
+    descripcion = models.CharField(max_length=50,null=False)
+    valor = models.IntegerField(null=False)
+    class Meta:
+        verbose_name = 'PrioridadTUs'
+        verbose_name_plural = 'PrioridadTUs'
+        ordering = ['valor']
+    def __str__(self):
+        return self.descripcion
+

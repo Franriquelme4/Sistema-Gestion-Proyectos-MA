@@ -12,30 +12,31 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Agregar Colaborador</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Nuevo Tipo de User Story</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-            <form method="post" action="{% url 'webApp:asignarColaboradorProyecto' proyecto.id %}">
+            <form method="post" action="{% url 'webApp:crearTUSProyecto' proyecto.id %}">
                 {% csrf_token %}
                 <div class="form-group">
-                  <select class="form-control" aria-label="Default select example" name="usuario">
-                    <option selected>Seleccionar usuario</option>
-                    {% for usuario in usuarios %}
-                    <option value="{{usuario.id}}">{{usuario.nombre}} {{usuario.apellido}}</option>
-                    {% endfor %}
-                  </select>
+                  <label for="recipient-name" class="col-form-label" >Nombre</label>
+                  <input type="text" class="form-control" id="recipient-name" name="nombre">
                 </div>
                 <div class="form-group">
-                  <select class="form-control" aria-label="Default select example" name="rol">
-                    <option selected>Seleccionar rol</option>
-                    {% for rolProyecto in rolesProyecto %}
-                    <option value="{{rolProyecto.id_rol}}">{{rolProyecto.nombre_rol}}</option>
-                    {% endfor %}
-                  </select>
+                  <label for="recipient-name" class="col-form-label" >Descripcion</label>
+                  <input type="text" class="form-control" id="recipient-name" name="descripcion">
                 </div>
+                <div class="form-group">
+                  <select class="form-control" aria-label="Default select example" name="prioridad">
+                      <option selected disabled>Seleccionar la prioridad</option>
+                      {% for prioridad in prioridades %}
+                      <option value="{{prioridad.id}}">{{prioridad.descripcion}}</option>
+                      {% endfor %}
+                    </select>
+              </div>
+              
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 <button type="submit" class="btn btn-primary">Guardar</button>
               </form>
@@ -43,53 +44,46 @@
       </div>
     </div>
   </div>
-{% if validacionPermisos.agr_Colaborador %}
-<button class="btn btn-primary " data-toggle="modal" data-target="#exampleModal"><i class="material-icons">add</i>Agregar colaborador</button>
-{% endif %}  
-<div class="row">
+
+<button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i class="material-icons">add</i>Agregar tipo de US</button>
+
+        <div class="row">
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header card-header-primary">
-                  <h4 class="card-title ">Colaboradores del Proyecto</h4>
-                  <p class="card-category">Listado de los colaboradores del proyecto</p>
+                  <h4 class="card-title ">Tipos de US</h4>
+                  <p class="card-category">Listado de tipos de US del proyecto</p>
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
                     <table class="table">
                       <thead class=" text-primary">
-                        <th>
-                          
+                        <th>                         
                         </th>
                         <th>
-                          Nombre del Colaborador 
+                          Nombre 
                         </th>
                         <th>
-                          Email
+                          Descripcion 
                         </th>
                         <th>
-                          Nombre del Rol 
-                        </th>
-                        <th>
-                          Descripcion del Rol
+                          Prioridad 
                         </th>
                       </thead>
                       <tbody>
-                        {% for colaborador in colaboradores %}
+                        {% for data in tipoUs %}
                         <tr>
                           <td>
                             {{forloop.counter}}
                           </td>
                           <td>
-                            {{colaborador.nombre}} {{colaborador.apellido}}
+                            {{data.nombre_tipo_us}}
                           </td>
                           <td>
-                            {{colaborador.email}}
+                            {{data.descripcion_tipo_us}}
                           </td>
                           <td>
-                            {{colaborador.nombre_rol}}
-                          </td>
-                          <td>
-                            {{colaborador.descripcion_rol}}
+                            {{data.prioridad_tipo_us}}
                           </td>
                         </tr>
                         {% endfor %}

@@ -1,0 +1,131 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Tables {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+{% include 'includes/options.html' %}
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Nuevo US</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form method="post" action="{% url 'webApp:crearUs' proyecto.id %}">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label" >Nombre</label>
+                  <input type="text" class="form-control" id="recipient-name" name="nombre">
+                </div>
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label" >Descripcion</label>
+                  <input type="text" class="form-control" id="recipient-name" name="descripcion">
+                </div>
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label" >Tiempo Estimado (en horas)</label>
+                  <input type="number" class="form-control" id="recipient-name" name="tiempo">
+                </div>
+                <div class="form-group">
+                  <select class="form-control" aria-label="Default select example" name="tipoUs">
+                      <option selected disabled>Seleccionar tipo Us</option>
+                      {% for data in tipoUs %}
+                      <option value="{{data.id}}">{{data.nombre_tipo_us}} ({{data.prioridad_tipo_us}})</option>
+                      {% endfor %}
+                    </select>
+              </div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+              </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<button class="btn btn-primary " data-toggle="modal" data-target="#exampleModal"><i class="material-icons">add</i>Nuevo US</button>
+
+
+        <!-- <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header card-header-primary">
+                  <h4 class="card-title ">Tipos de US</h4>
+                  <p class="card-category">Listado de tipos de US del proyecto</p>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead class=" text-primary">
+                        <th>                         
+                        </th>
+                        <th>
+                          Nombre 
+                        </th>
+                        <th>
+                          Descripcion 
+                        </th>
+                        <th>
+                          Prioridad 
+                        </th>
+                      </thead>
+                      <tbody>
+                        {% for data in tipoUs %}
+                        <tr>
+                          <td>
+                            {{forloop.counter}}
+                          </td>
+                          <td>
+                            {{data.nombre_tipo_us}}
+                          </td>
+                          <td>
+                            {{data.descripcion_tipo_us}}
+                          </td>
+                          <td>
+                            {{data.prioridad_tipo_us}}
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div> -->
+        <div class="d-flex">
+          {% for userStory in userStorys %}
+          
+          <div class="card card-stats m-3">
+            <div class="card-header card-header-warning card-header-icon">
+              <div class="card-icon">
+                <i class="material-icons">content_copy</i>
+              </div>
+              <p class="card-category">{{userStory.nombre_us}}</p>
+              <h3 class="card-title">
+                <!-- <small>Sprint {{proyecto.sprint_dias}} dias</small> -->
+              </h3>
+              <h3 class="card-title">
+                <!-- <small>Rol {{proyecto.nombre_rol}}</small> -->
+              </h3>
+            </div>
+            <div class="card-footer">
+              <div class="stats">
+                <i class="material-icons ">developer_board</i>
+                <a href="{% url 'webApp:verProyecto' proyecto.id %}">Ver proyecto</a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

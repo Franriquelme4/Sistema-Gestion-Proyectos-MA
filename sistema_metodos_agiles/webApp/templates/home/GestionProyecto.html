@@ -1,0 +1,61 @@
+{% extends "layouts/base.html" %}
+{% block title %} UI Typography {% endblock %}
+{% block content %}
+<div class="card">
+  <div class="card-header card-header-primary">
+    <h4 class="card-title">Gestionar Proyecto</h4>
+
+  </div>
+  <form class="m-3" method="post" >
+    {% csrf_token %}
+    <h3>Agregar US</h3>
+    <div class="row">
+      <div class="col-6">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Nombre</label>
+          <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="nombreUS">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Descripcion</label>
+          <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="descripcion">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Duracion</label>
+          <input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="duracion">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Tipo US</label>
+          <select class="form-control" aria-label="Default select example" name="tipo">
+            <option selected>Seleccionar el tipo de US</option>
+            <option value="1">1</option>
+            <option value="2">1</option>
+            <option value="3">1</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Fecha Inicio</label>
+          <input type="date" class="form-control" id="exampleInpu tPassword1" name="fechaInicio">
+        </div>
+        <button type="submit" class="btn btn-primary">Agregar</button>
+    </div>
+    </div>
+  </form>
+  <form class="m-3" method="post" >
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-6">
+          <div class="mb-3">
+            <h3>Importar US</h3>
+            <input type="file" id="fileUS" name="fileUS">
+          </div>
+          <button type="submit" class="btn btn-primary">Importar</button>
+      </div>
+    </div>
+    </div>
+  </form>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
