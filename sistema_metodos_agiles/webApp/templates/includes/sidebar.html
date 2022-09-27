@@ -25,6 +25,15 @@
           </li>
           {% endif %}
 
+          {% if prueba %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'webApp:GestionProyecto' %}">
+              <i class="material-icons">border_color</i>
+              <p>Prueba</p>
+            </a>
+          </li>
+          {% endif %}
+
           {% if userSession.df_rol.id == 1 %}
           <li class="nav-item {% if 'page-user' in segment %} active {% endif %}">
             <a class="nav-link" href="{% url 'webApp:proyectos' %}">

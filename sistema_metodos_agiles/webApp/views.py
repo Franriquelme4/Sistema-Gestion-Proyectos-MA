@@ -285,3 +285,23 @@ def asignarColaboradorProyecto(request,id):
         proyecto = Proyecto.objects.get(id=id)
         proyecto.miembro_proyecto.add(miembro)
     return redirect('/')
+
+def tipoUs(request,id):
+    """Se listan todos los tipos de US"""
+    userSession = getUsuarioSesion(request.user.email)
+    proyecto = getProyectsByID(id,userSession.id)[0]
+    rolUsuario = Rol.objects.get(id=proyecto.id_rol)
+    print(rolUsuario.permiso.all())
+    rolesProyecto = getRolByProyectId(id)
+    permisosProyecto = ['agr_Colaborador']
+    validacionPermisos = validarPermisos(permisosProyecto,rolUsuario)
+    context={
+        'rolesProyecto':rolesProyecto,
+        'userSession':userSession,
+        'proyecto':proyecto,
+        'rolUsuario':rolUsuario,
+        'validacionPermisos':validacionPermisos,
+        'prueba':rolesProyecto
+        }
+    html_template = loader.get_template('home/tipoUS.html')
+    return HttpResponse(html_template.render(context,request))

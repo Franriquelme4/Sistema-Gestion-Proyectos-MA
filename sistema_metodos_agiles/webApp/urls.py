@@ -20,5 +20,6 @@ urlpatterns = [
     path('proyecto/roles/guardar/<int:id>',views.crearRolProyecto, name='crearRolProyecto'),
     path('proyecto/<int:id>',views.verProyecto, name='verProyecto'),
     path('proyecto/colaboradores/<int:id>',views.colaboradoresProyecto, name='colaboradoresProyecto'),
-    path('proyecto/colaboradores/guardar/<int:id>',views.asignarColaboradorProyecto, name='asignarColaboradorProyecto')
+    path('proyecto/colaboradores/guardar/<int:id>',views.asignarColaboradorProyecto, name='asignarColaboradorProyecto'),
+    path('proyecto/tipoUs/<int:id>',views.tipoUs, name='tipoUs'),
 ]
