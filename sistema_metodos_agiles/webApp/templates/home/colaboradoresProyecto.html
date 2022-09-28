@@ -72,6 +72,9 @@
                         <th>
                           Descripcion del Rol
                         </th>
+                        <th>
+                          Acciones
+                        </th>
                       </thead>
                       <tbody>
                         {% for colaborador in colaboradores %}
@@ -90,6 +93,17 @@
                           </td>
                           <td>
                             {{colaborador.descripcion_rol}}
+                          </td>
+                          <td>
+                            <form action="" method="post">
+                              <button type="submit" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></button>
+                            </form>
+                            <form action="{% url 'webApp:eliminarColaboradorProyecto' proyecto.id %}" method="post">
+                              {% csrf_token %}
+                              <input name="idRol" type="text" hidden="true" value="{{rolProyecto.id_rol}}">
+                              <a type="submit" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                              <button type="submit">Enivar</button>
+                            </form>
                           </td>
                         </tr>
                         {% endfor %}

@@ -4,7 +4,7 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
-from usuario.utils import validarPermisos,getUsuarioSesion,getIdScrumRol,getProyectsByUsuarioID,getProyectsByID,getRolByProyectId,getColaboratorsByProyect
+from usuario.utils import validarPermisos,getUsuarioSesion,getIdScrumRol,getProyectsByUsuarioID,getProyectsByID,getRolByProyectId,getColaboratorsByProyect,getRolByID
 from usuario.models import Usuario,Cliente,Proyecto,MiembroEquipo,Permiso,Rol,ProyectoRol,TipoUserStory
 from django.template import loader
 from django.db.models import Q
@@ -244,6 +244,46 @@ def crearRolProyecto(request,id):
         proyecto_rol.proyecto.add(Proyecto.objects.get(id=id))
     return redirect(f'/proyecto/{id}')
 
+def eliminarRolProyecto(request,id):
+    """Se elimina el rol asociado al id"""
+    print("Entra en la funcion")
+    variables = request.POST
+    print(variables.get('idRol',False))
+    validarEliminacion = getRolByID(id)
+    print(validarEliminacion)
+    if(validarEliminacion==None):
+        print("no es")
+    else:
+        rol = Rol(
+            descripcion_rol = variables.get('descripcion',False),
+            nombre_rol = variables.get('nombre_rol',False),
+        )
+        rol.delete()
+    
+    rol = Rol(
+            descripcion_rol = variables.get('descripcion',False),
+            nombre_rol = variables.get('nombre_rol',False),
+        )
+    rol.delete()
+    if request.method == 'POST':
+        rol = Rol(
+            descripcion_rol = variables.get('descripcion',False),
+            nombre_rol = variables.get('nombre_rol',False),
+        )
+        rol.delete()
+        for permiso in variables.getlist('permisos',False):
+            print(permiso)
+            rol.permiso.remove(Permiso.objects.get(id=permiso))
+        proyecto_rol = ProyectoRol(
+            descripcion_proyecto_rol=''
+        )
+        rol.objects.filter(id=id).delete()
+        proyecto_rol.objects.filter(id=id).delete()
+        #$proyecto_rol.delete()
+        proyecto_rol.rol.remove(rol)
+        proyecto_rol.proyecto.remove(Proyecto.objects.get(id=id))
+    return redirect(f'/proyecto/{id}')
+
 def colaboradoresProyecto(request,id):
     """
     Se lista todos colaboradores del proyecto
@@ -270,6 +310,20 @@ def colaboradoresProyecto(request,id):
     return HttpResponse(html_template.render(context,request))
 
 def asignarColaboradorProyecto(request,id):
+    """Se almacena el nuevo rol con el colaborador al proyecto"""
+    variables = request.POST
+    if request.method == 'POST':
+        miembro = MiembroEquipo(
+           descripcion = ''
+        )
+        miembro.save()
+        miembro.miembro_rol.add(Rol.objects.get(id=variables.get('rol',False)))
+        miembro.miembro_usuario.add(Usuario.objects.get(id=variables.get('usuario',False)))
+        proyecto = Proyecto.objects.get(id=id)
+        proyecto.miembro_proyecto.add(miembro)
+    return redirect(f'/proyecto/{id}')
+
+def eliminarColaboradorProyecto(request,id):
     """Se almacena el nuevo rol con el colaborador al proyecto"""
     variables = request.POST
     if request.method == 'POST':
