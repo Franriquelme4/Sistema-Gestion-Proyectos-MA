@@ -88,8 +88,8 @@
                   {{rolProyecto.descripcion_rol}}
                 </td>
                 <td>
-                  <form action="" method="post">
-                    <button type="submit" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></button>
+                  <form action="{% url 'webApp:editarRolProyecto' proyecto.id %}" method="post">
+                    <a type="submit" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
                   </form>
                   <form action="{% url 'webApp:eliminarRolProyecto' proyecto.id %}" method="post">
                     {% csrf_token %}
