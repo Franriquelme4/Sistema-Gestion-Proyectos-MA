@@ -248,8 +248,17 @@ def eliminarRolProyecto(request,id):
     """Se elimina el rol asociado al id"""
     print("Entra en la funcion")
     variables = request.POST
-    print(variables.get('idRol',False))
-    validarEliminacion = getRolByID(id)
+    print("Entra en la funcion 2  = "+variables.get('idRol',False))
+    record = ProyectoRol.objects.filter(id = 3)
+    print("Entra en la funcion 3")
+    record.delete()
+    print("Entra en la funcion 4")
+    proyecto_rol = ProyectoRol(
+        descripcion_proyecto_rol=''
+    )
+
+
+    """validarEliminacion = getRolByID(id)
     print(validarEliminacion)
     if(validarEliminacion==None):
         print("no es")
@@ -281,7 +290,7 @@ def eliminarRolProyecto(request,id):
         proyecto_rol.objects.filter(id=id).delete()
         #$proyecto_rol.delete()
         proyecto_rol.rol.remove(rol)
-        proyecto_rol.proyecto.remove(Proyecto.objects.get(id=id))
+        proyecto_rol.proyecto.remove(Proyecto.objects.get(id=id))"""
     return redirect(f'/proyecto/{id}')
 
 
