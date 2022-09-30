@@ -59,7 +59,7 @@ class TestProyecto(TestCase):
     def test_crear_permiso(self):
 
         """
-            Test para verificar la creacion de un permiso
+            Test para verificar la creacion de un permiso.
         """
         permiso = Permiso(
             id = 20,
