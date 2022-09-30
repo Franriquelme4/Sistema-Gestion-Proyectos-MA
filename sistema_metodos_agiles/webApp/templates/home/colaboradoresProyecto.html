@@ -6,7 +6,7 @@
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-
+{% include 'includes/options.html' %}
   <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -72,6 +72,9 @@
                         <th>
                           Descripcion del Rol
                         </th>
+                        <!-- <th>
+                          Acciones
+                        </th> -->
                       </thead>
                       <tbody>
                         {% for colaborador in colaboradores %}
@@ -91,6 +94,16 @@
                           <td>
                             {{colaborador.descripcion_rol}}
                           </td>
+                          <td>
+                            <!-- <form action="% url 'webApp:editarColaboradorProyecto' proyecto.id %}" method="post">
+                              <button class="btn btn-success btn-sm" type="submit"><i class="material-icons">&#xE254;</i></button>
+                            </form>
+                            <form action="{% url 'webApp:eliminarColaboradorProyecto' proyecto.id %}" method="post">
+                              {% csrf_token %}
+                              <input name="idRol" type="text" hidden="true" value="{{rolProyecto.id_rol}}">
+                              <button class="btn btn-danger btn-sm" type="submit"><i class="material-icons">&#xE872;</i></button>
+                            </form> -->
+                          </td>
                         </tr>
                         {% endfor %}
                       </tbody>
@@ -100,7 +113,6 @@
               </div>
             </div>
         </div>
-
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->

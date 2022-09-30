@@ -1,46 +1,114 @@
-    <div class="sidebar" data-color="purple" data-background-color="white" data-image="/static/assets/img/sidebar-1.jpg">
-      <div class="logo">
-        <a target="_blank" rel="noopener noreferrer" 
-           href="https://appseed.us/admin-dashboards/django-dashboard-material" class="simple-text logo-normal">
-          SISTEMA DE GESTION
+<div class="sidebar" data-color="purple" data-background-color="white" data-image="/static/assets/img/sidebar-1.jpg">
+  <div class="logo">
+    <a target="_blank" rel="noopener noreferrer" href="https://appseed.us/admin-dashboards/django-dashboard-material"
+      class="simple-text logo-normal">
+      SISTEMA DE GESTION
+    </a>
+  </div>
+  <div class="sidebar-wrapper">
+    <ul class="nav">
+      <li class="nav-item {% if 'index' in segment %} active {% endif %}">
+        <a class="nav-link" href="/">
+          <i class="material-icons">dashboard</i>
+          <p>Inicio</p>
         </a>
-      </div>
-      <div class="sidebar-wrapper">
-        <ul class="nav">
+      </li>
+      {% if validacionPermisos.dsp_Roles %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'webApp:rolesProyecto' proyecto.id %}">
+          <i class="material-icons">block</i>
+          <p>Roles del Proyecto </p>
+        </a>
+      </li>
+      {% endif %}
+      {% if validacionPermisos.dsp_Colaborador %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'webApp:colaboradoresProyecto' proyecto.id %}">
+          <i class="material-icons">account_circle</i>
+          <p>Colaboradores</p>
+        </a>
+      </li>
+      {% endif %}
+
+      {% if validacionPermisos.dsp_TipoUs %}
+      <li class="class="nav-item"">
+        <a class="nav-link " href="{% url 'webApp:tipoUs' proyecto.id %}"  >
+            <i class="material-icons">apps</i>
+           Tipos de US 
+          </a>
+      </li>
+      {% endif %}
+
+      {% if validacionPermisos.dsp_ProductBack %}
+      <li class="class="nav-item"">
+        <a class="nav-link " href="{% url 'webApp:verProductBacklog' proyecto.id %}"  >
+            <i class="material-icons">backup</i>
+           Product Backlog
+          </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed text-truncate" href="#submenu1" data-toggle="collapse" data-target="#submenu1"><i class="fa fa-table"></i> <span class="d-none d-sm-inline">Reportes</span></a>
+        <div class="collapse" id="submenu1" aria-expanded="false">
+            <ul class="flex-column pl-2 nav">
+                <li class="nav-item"><a class="nav-link py-0" href="#"><span>Burdon Chart</span></a></li>
+                <li class="nav-item"><a class="nav-link py-0" href="#"><span>Velocity Chart</span></a></li>
+            </ul>
+        </div>
+    </li>
+      {% endif %}
+<!-- 
+          <li class="nav-item">
+                    <a class="nav-link collapsed text-truncate" href="#submenu1" data-toggle="collapse" data-target="#submenu1"><i class="fa fa-table"></i> <span class="d-none d-sm-inline">Reports</span></a>
+                    <div class="collapse" id="submenu1" aria-expanded="false">
+                        <ul class="flex-column pl-2 nav">
+                            <li class="nav-item"><a class="nav-link py-0" href="#"><span>Orders</span></a></li>
+                            <li class="nav-item">
+                                <a class="nav-link  text-truncate collapsed py-1" href="#submenu1sub1" data-toggle="collapse" data-target="#submenu1sub1"><span>Customers</span></a>
+                                <div class="collapse" id="submenu1sub1" aria-expanded="false">
+                                    <ul class="flex-column nav pl-4">
+                                        <li class="nav-item">
+                                            <a class="nav-link p-1 text-truncate" href="#">
+                                                <i class="fa fa-fw fa-clock-o"></i> Daily </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link p-1 text-truncate" href="#">
+                                                <i class="fa fa-fw fa-dashboard"></i> Dashboard </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link p-1 text-truncate" href="#">
+                                                <i class="fa fa-fw fa-bar-chart"></i> Charts </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link p-1 text-truncate" href="#">
+                                                <i class="fa fa-fw fa-compass"></i> Areas </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </li> -->
           
 
-          <li class="nav-item {% if 'index' in segment %} active {% endif %}">
-            <a class="nav-link" href="/">
-              <i class="material-icons">dashboard</i>
-              <p>Inicio</p>
-            </a>
-          </li>
 
-          {% if 'verProyecto' in segment %}
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <i class="material-icons">border_color</i>
-              <p>Gestion del proyecto</p>
-            </a>
-          </li>
-          {% endif %}
 
-          {% if userSession.df_rol.id == 1 %}
-          <li class="nav-item {% if 'page-user' in segment %} active {% endif %}">
-            <a class="nav-link" href="{% url 'webApp:proyectos' %}">
-              <i class="material-icons">developer_mode</i>
-              <p>Proyectos</p>
-            </a>
-          </li>
-          <li class="nav-item {% if 'usuarios' in segment %} active {% endif %}">
-            <a class="nav-link" href="{% url 'webApp:usuarios' %}">
-              <i class="material-icons">library_books</i>
-              <p>Usuarios</p>
-            </a>
-          </li>
-          {% endif %}
+      {% if userSession.df_rol.id == 1 %}
+      <li class="nav-item {% if 'page-user' in segment %} active {% endif %}">
+        <a class="nav-link" href="{% url 'webApp:proyectos' %}">
+          <i class="material-icons">developer_mode</i>
+          <p>Proyectos</p>
+        </a>
+      </li>
+      <li class="nav-item {% if 'usuarios' in segment %} active {% endif %}">
+        <a class="nav-link" href="{% url 'webApp:usuarios' %}">
+          <i class="material-icons">library_books</i>
+          <p>Usuarios</p>
+        </a>
+      </li>
+      {% endif %}
 
-        </ul>
-      </div>
+    </ul>
+  </div>
 
-    </div>
+</div>

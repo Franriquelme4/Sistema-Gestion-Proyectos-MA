@@ -4,23 +4,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
 
- {% if validacionPermisos.dsp_Roles %}
         <li class="class="nav-item">
-          <a class="nav-link " href="{% url 'webApp:rolesProyecto' proyecto.id %}"  >
-              <i class="material-icons">block</i>
-             Roles del Proyecto 
-            </a>
+          <h3 class="px-3 my-1">Proyecto {{proyecto.nombre_proyecto | title }}</h3>
         </li>
-        {% endif %}
 
-        {% if validacionPermisos.dsp_Colaborador %}
-          <li class="class="nav-item"">
-            <a class="nav-link " href="{% url 'webApp:colaboradoresProyecto' proyecto.id %}"  >
-                <i class="material-icons">account_circle</i>
-               Colaboradores 
-              </a>
-          </li>
-          {% endif %}
       </ul>
 
       <p class="my-2 my-lg-0 mr-sm-4">Rol : {{proyecto.nombre_rol}}</p>

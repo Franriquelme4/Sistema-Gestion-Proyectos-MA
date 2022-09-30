@@ -1,4 +1,4 @@
-
+from email.policy import default
 from django.db import models
 import datetime
 # Create your models here.
@@ -99,5 +99,125 @@ class ProyectoRol(models.Model):
     class Meta:
         verbose_name = 'ProyectoRol'
         verbose_name_plural = 'ProyectoRoles'
+    def __str__(self):
+        return self.rol
 
+class CampoPersonalizado(models.Model):
+    nombre_cp = models.CharField(max_length=50,null=False)
+    tipoCampo_cp = models.CharField(max_length=50,null=False)
+    value_cp = models.JSONField(null=True)
+
+
+
+class TipoUserStory(models.Model):
+    """Modelo de la tabla tipo de user story, en la cual se almacenan todos los datos de los tipos de user story"""
+    proyecto_tipo_us  = models.ForeignKey('Proyecto',on_delete=models.CASCADE,null=True)
+    prioridad_tipo_us = models.ForeignKey('PrioridadTUs',on_delete=models.CASCADE,null=True)
+    nombre_tipo_us = models.CharField(max_length=50,null=False)
+    descripcion_tipo_us = models.CharField(max_length=100,null=False)
+    flujo_tipo_us = models.JSONField(null=True)
+    campoPer_tipo_us = models.ManyToManyField('CampoPersonalizado')
+    fecha_creacion = models.DateField(default=datetime.date.today)
+    class Meta:
+        verbose_name = 'Tipo User Story'
+        verbose_name_plural = 'Tipos de User Story'
+        ordering = ['nombre_tipo_us']
+    def __str__(self):
+        return self.nombre_tipo_us
+
+class UserStory(models.Model):
+    """Modelo de la tabla user story, en la cual se almacenan todos los datos de los user story"""
+    proyecto_us = models.ForeignKey('Proyecto',on_delete=models.CASCADE,null=True)
+    nombre_us = models.CharField(max_length=50,null=False)
+    descripcion_us = models.CharField(max_length=50,null=False)
+    tiempoEstimado_us = models.IntegerField(null=True)
+    estadoActual_us = models.CharField(max_length=20,null=True)
+    duracion_us = models.IntegerField(default=0)
+    tipo_us = models.ForeignKey('TipoUserStory',on_delete=models.CASCADE)
+    asignadoUsu_us = models.ForeignKey('MiembroEquipo',on_delete=models.CASCADE,null=True)
+    fechaIni_us = models.DateField(auto_now_add=True)
+    fechaMod_us = models.DateField(auto_now=True)
+    fecha_creacion = models.DateField(default=datetime.date.today)
+    class Meta:
+        verbose_name = 'User Story'
+        verbose_name_plural = 'User Stories'
+        ordering = ['nombre_us']
+    def __str__(self):
+        return self.nombre_us
+
+class Sprint(models.Model):
+    """Modelo de la tabla sprint, en la cual se almacenan todos los datos del sprint"""
+    proyecto_sp = models.ForeignKey('Proyecto',on_delete=models.CASCADE,null=True)
+    nombre_sp = models.CharField(max_length=50,null=False)
+    fechaIni_sp = models.DateField(default=datetime.date.today)
+    fechaFIn_sp = models.DateField()
+    duracion_sp = models.IntegerField(null=False)
+    userStory_sp = models.ManyToManyField('UserStory',blank=True)
+    fecha_creacion = models.DateField(default=datetime.date.today)
+    class Meta:
+        verbose_name = 'Sprint'
+        verbose_name_plural = 'Sprints'
+        ordering = ['nombre_sp']
+    def __str__(self):
+        return self.nombre_sp
+
+
+#class ProyectoSprint(models.Model):
+#    """Modelo de la tabla ProyectoSprint, en la cual se almacenan todos los datos de los sprints de cada proyecto"""
+#    proyecto_PS = models.ForeignKey('Proyecto',on_delete=models.CASCADE)
+#    sprint_PS =  models.ForeignKey('Sprint',on_delete=models.CASCADE)
+#    orden_PS = models.IntegerField(null=False)
+#    class Meta:
+#        verbose_name = 'Sprint por Proyecto'
+#        verbose_name_plural = 'Sprints por Proyecto'
+#        ordering = ['orden_PS']
+
+Fases_CHOICES=[
+    ('TODO','Por Hacer'),
+    ('DOING','Haciendo'),
+    ('DONE','Hecho'),
+    ('CANC','Cancelado'),
+]
+
+class Fase(models.Model):
+    """Modelo de la tabla Fase, en la cual se almacenan todos los datos del Fase"""
+    nombre_fase = models.CharField(max_length=15)
+    cod_fase = models.CharField(max_length=100,null=False)
     
+
+class FaseTUS(models.Model):
+    """Modelo de la tabla Fase por Tipo de User Story, en la cual se almacenan todos los datos de Fase por Tipo de Usuario"""
+    #sprint_fase = models.ForeignKey(Sprint,on_delete=models.CASCADE,null=True)
+    tipo_us_faseTUS = models.ForeignKey('TipoUserStory',on_delete=models.CASCADE,null=True)
+    fase_faseTUS = models.ForeignKey('Fase',on_delete=models.CASCADE,null=True)
+    #userStory_fase = models.ForeignKey('UserStory',on_delete=models.CASCADE)
+    class Meta:
+        verbose_name = 'Fase'
+        verbose_name_plural = 'Fases'
+    def _str_(self):
+        return self.nombre_fase
+
+
+class Tablero(models.Model):
+    """Modelo de la tabla Tablero, en la cual se almacenan todos los datos del Tablero"""
+    sprint_tablero = models.ForeignKey('Sprint',on_delete=models.CASCADE,null=True)
+    tipo_us_fase = models.ForeignKey('TipoUserStory',on_delete=models.CASCADE,null=True)
+    faseTUS_tablero = models.ManyToManyField('FaseTUS')
+    nombre_tablero = models.CharField(max_length=50,null=False)
+    fecha_creacion = models.DateField(default=datetime.date.today)
+    #descripcion_tablero = models.CharField(max_length=100,null=False)
+    def _str_(self):
+        return self.nombre_fase
+
+class PrioridadTUs(models.Model):
+    """Listado de prioridades de los tipo de US"""
+    descripcion = models.CharField(max_length=50,null=False)
+    valor = models.IntegerField(null=False)
+    color = models.CharField(max_length=50,null=False,default='')
+    class Meta:
+        verbose_name = 'PrioridadTUs'
+        verbose_name_plural = 'PrioridadTUs'
+        ordering = ['valor']
+    def __str__(self):
+        return self.descripcion
+
