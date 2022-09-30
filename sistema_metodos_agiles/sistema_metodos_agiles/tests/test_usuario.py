@@ -26,3 +26,4 @@ def test_observador_creation():
         roles = ''
     )
     assert user.roles == 'observador'
+
