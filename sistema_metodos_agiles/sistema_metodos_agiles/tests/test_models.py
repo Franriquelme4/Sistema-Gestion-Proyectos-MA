@@ -35,6 +35,11 @@ class TestProyecto(TestCase):
     
 
     def test_crear_proyecto(self):
+
+        """
+            Test para verificar la creacion de un proyecto
+        """
+
         proyecto = Proyecto(
             id = 1,
             nombre_proyecto = 'proyecto_prueba',
@@ -50,3 +55,18 @@ class TestProyecto(TestCase):
         proyecto.save()
         
         self.assertEqual(proyecto.nombre_proyecto, "proyecto_prueba")
+
+    def test_crear_permiso(self):
+
+        """
+            Test para verificar la creacion de un permiso
+        """
+        permiso = Permiso(
+            id = 20,
+            descripcion_permiso = 'permiso de prueba',
+            nombre_permiso = 'PermisoPrueba'
+        )
+
+        permiso.save()
+
+    
