@@ -70,7 +70,7 @@ def usuarios(request):
                 'validacionPermisos':validacionPermisos}
     html_template = loader.get_template('home/usuarios.html')
     return HttpResponse(html_template.render(context, request))
-
+@login_required(login_url="/login/")
 def proyectos(request):
     """
     Se lista los proyectos actuales del sistema, este metodo se utiliza en el usuario admin
@@ -181,7 +181,7 @@ def crearProyectoGuardar(request):
         proyecto.save()
         proyecto.miembro_proyecto.add(miembro)
     return redirect('/')
-
+@login_required(login_url="/login/")
 def verProyecto(request,id):
     """
     Cuando un usuario ingresa a un proyecto en el cual fue asignado se visualizan 
@@ -200,7 +200,7 @@ def verProyecto(request,id):
                 }
     html_template = loader.get_template('home/vistaProyectos.html')
     return HttpResponse(html_template.render(context,request))
-
+@login_required(login_url="/login/")
 def rolesProyecto(request,id):
     """
     Se lista todos los roles especificos de cada proyecto
@@ -223,7 +223,7 @@ def rolesProyecto(request,id):
                 }
     html_template = loader.get_template('home/rolesProyecto.html')
     return HttpResponse(html_template.render(context,request))
-
+@login_required(login_url="/login/")
 def crearRolProyecto(request,id):
     """Se crea un nuevo rol con todos los permisos asociados"""
     variables = request.POST
@@ -323,7 +323,7 @@ def colaboradoresProyecto(request,id):
         }
     html_template = loader.get_template('home/colaboradoresProyecto.html')
     return HttpResponse(html_template.render(context,request))
-
+@login_required(login_url="/login/")
 def asignarColaboradorProyecto(request,id):
     """Se almacena el nuevo rol con el colaborador al proyecto"""
     variables = request.POST

@@ -14,20 +14,22 @@ class TestProyecto(TestCase):
     
     def setUp(self):
         """
-            Funcion que deja variables listas para pruebas de modelos.
+            Funcion que deja objetos listos para pruebas de modelos.
         """
 
         self.permiso = Permiso.objects.create(descripcion_permiso = 'Permiso para prueba', nombre_permiso = 'prueba')
+        self.permiso.save()
 
         self.cliente = Cliente.objects.create(nombre_cliente= 'nombre_cliente')
+        self.cliente.save()
 
         self.rol = Rol.objects.create(nombre_rol='rol de prueba', descripcion_rol='rol creado para prueba')
         self.rol.save()
         self.rol.permiso.set(Permiso.objects.filter(descripcion_permiso='Permiso para prueba'))
+        self.rol.save()
 
         self.usuario = Usuario.objects.create(nombre='nombre_usuario', df_rol=self.rol)
-
-        self.user = Usuario.objects.filter(nombre='nombre_usuario')
+        self.usuario.save()
 
         self.miembro_equipo = MiembroEquipo.objects.create(descripcion='miembro equipo para prueba')
         self.miembro_equipo.miembro_usuario.set(Usuario.objects.filter(nombre='nombre_usuario'))
@@ -68,6 +70,7 @@ class TestProyecto(TestCase):
         )
 
         permiso.save()
+        self.assertEqual(permiso.descripcion_permiso, 'permiso de prueba')
 
     def test_crear_rol(self):
         
@@ -82,9 +85,13 @@ class TestProyecto(TestCase):
 
         rol.save()
         rol.permiso.set(Permiso.objects.filter(descripcion_permiso='permiso para prueba'))
+        rol.save()
+        self.assertEqual(rol.nombre_rol, 'rol para prueba')
 
     def test_crear_usuario(self):
-
+        """
+            Test para verificar la creacion de un usuario
+        """
         usuario = Usuario(
             nombre = 'usuario2',
             apellido = 'ApellidoPrueba',
@@ -94,5 +101,6 @@ class TestProyecto(TestCase):
         )
 
         usuario.save()
+        self.assertEqual(usuario.nombre, 'usuario2')
 
 
