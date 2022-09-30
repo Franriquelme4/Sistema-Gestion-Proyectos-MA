@@ -123,7 +123,7 @@ def GestionProyectoAgregar(request):
         proyecto.save()
         proyecto.miembro_proyecto.add(miembro)
     return redirect('/')
-
+@login_required(login_url="/login/")
 def CrearProyecto(request):
     """
     Redirige a la vista de creacion de proyectos, consiste en un formulario
