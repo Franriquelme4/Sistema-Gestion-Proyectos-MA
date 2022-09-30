@@ -22,28 +22,28 @@ class TestViews(TestCase):
     """
 
     def setUp(self):
+        
+        """
+            Funcion para inicializar objetos que se utilizan para pruebas de vistas
+        """
+        
+        self.permiso = Permiso.objects.create(descripcion_permiso = 'Permiso para prueba', nombre_permiso = 'prueba')
+        self.permiso.save()
 
-        self.admin = User.objects.create_user(username='admin', email='admin@mail.com', password="admin")
-        self.admin.is_staff = True
-        admin_group = Group.objects.create(name='Administrador')
-        
-        self.permiso = Permiso.objects.filter(id=4)
-        
         self.cliente = Cliente.objects.create(nombre_cliente= 'nombre_cliente')
         self.cliente.save()
 
-        self.rol = Rol(id=1)
-        self.rol.permiso.set(self.permiso)
+        self.rol = Rol.objects.create(nombre_rol='rol de prueba', descripcion_rol='rol creado para prueba')
+        self.rol.save()
+        self.rol.permiso.set(Permiso.objects.filter(descripcion_permiso='Permiso para prueba'))
         self.rol.save()
 
-        self.usuario = Usuario.objects.create(id=40, nombre='nombre_usuario', df_rol=self.rol)
+        self.usuario = Usuario.objects.create(nombre='nombre_usuario', df_rol=self.rol)
         self.usuario.save()
 
-        self.user = Usuario.objects.filter(id=40)
-
-        self.miembro_equipo = MiembroEquipo.objects.create(id=1)
-        self.miembro_equipo.miembro_usuario.set(Usuario.objects.filter(id=40))
-        self.miembro_equipo.miembro_rol.set(Rol.objects.filter(id=1))
+        self.miembro_equipo = MiembroEquipo.objects.create(descripcion='miembro equipo para prueba')
+        self.miembro_equipo.miembro_usuario.set(Usuario.objects.filter(nombre='nombre_usuario'))
+        self.miembro_equipo.miembro_rol.set(Rol.objects.filter(nombre_rol='rol de prueba'))
         self.miembro_equipo.save()
 
 
@@ -51,7 +51,6 @@ class TestViews(TestCase):
         self.client.login(username='admin2', password='admin2')
         
         self.proyecto = Proyecto(
-            id = 1,
             nombre_proyecto = 'proyecto_prueba',
             cliente_proyecto = self.cliente,
             fecha_ini_proyecto = None,
@@ -61,8 +60,8 @@ class TestViews(TestCase):
             sprint_dias = 1,
             fecha_creacion = '2022-09-28'
         )
-        self.proyecto.miembro_proyecto.set(MiembroEquipo.objects.filter(id=1))
         self.proyecto.save()
+        self.proyecto.miembro_proyecto.set(MiembroEquipo.objects.filter(descripcion='miembro equipo para prueba'))
 
     
     def test_crear_proyecto_get(self):
