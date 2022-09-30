@@ -1,4 +1,4 @@
-from .models import Proyecto, Usuario,Rol,ProyectoRol
+from .models import Proyecto, TipoUserStory, Usuario,Rol,ProyectoRol
 
 
 
@@ -65,3 +65,14 @@ def validarPermisos(permisosVista,rolUsuario):
 	for permisoVista in permisosVista:
 		permisos[permisoVista] = rolUsuario.poseePermiso(permisoVista)
 	return permisos
+def getTipoUsbyProyectId(id):
+	tipoUs = TipoUserStory.objects.raw(f"""select ut.*,array_to_string(array_agg(uf2.nombre_fase),', ') as fases  from usuario_tipouserstory ut 
+	full join usuario_fasetus uf on uf."tipo_us_faseTUS_id" = ut.id
+	full join usuario_fase uf2 on uf2.id = uf."fase_faseTUS_id" where ut.proyecto_tipo_us_id = {id} group by ut.id """)
+	return tipoUs
+
+def getTipoUsbyNotProyectId(id):
+	tipoUs = TipoUserStory.objects.raw(f"""select ut.*,array_to_string(array_agg(uf2.nombre_fase),', ') as fases  from usuario_tipouserstory ut 
+	full join usuario_fasetus uf on uf."tipo_us_faseTUS_id" = ut.id
+	full join usuario_fase uf2 on uf2.id = uf."fase_faseTUS_id" where ut.proyecto_tipo_us_id != {id} group by ut.id """)
+	return tipoUs

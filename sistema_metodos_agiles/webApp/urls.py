@@ -23,6 +23,7 @@ urlpatterns = [
     path('proyecto/colaboradores/guardar/<int:id>',views.asignarColaboradorProyecto, name='asignarColaboradorProyecto'),
     path('proyecto/tipoUs/<int:id>',views.tipoUs, name='tipoUs'),
     path('proyecto/tipoUs/guardar/<int:id>',views.crearTUSProyecto, name='crearTUSProyecto'),
+    path('proyecto/tipoUs/importar/<int:id>',views.importarTusDeProyecto, name='importarTusDeProyecto'),
     path('proyecto/productBacklog/<int:id>',views.verProductBacklog, name='verProductBacklog'),
     path('proyecto/userStory/guardar/<int:id>',views.crearUs, name='crearUs'),
 ]

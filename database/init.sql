@@ -46,6 +46,10 @@ VALUES(31, 'Modificar Tipo de US', 'upd_TipoUs');
 INSERT INTO public.usuario_permiso
 (id, descripcion_permiso, nombre_permiso)
 VALUES(32, 'Eliminar Tipo de Us', 'dlt_TipoUs');
+INSERT INTO public.usuario_permiso
+(id, descripcion_permiso, nombre_permiso)
+VALUES(33, 'Importar Tipo de US', 'imp_TipoUs');
+
 
 
 INSERT INTO usuario_rol_permiso(id, rol_id, permiso_id)
@@ -73,14 +77,26 @@ VALUES
 (21,3,12);
 
 INSERT INTO public.usuario_prioridadtus
-(id, descripcion, valor)
-VALUES(1, 'Alta', 1);
+(id, descripcion, valor,color)
+VALUES(1, 'Alta', 1,'danger');
 INSERT INTO public.usuario_prioridadtus
 (id, descripcion, valor)
-VALUES(2, 'Media', 2);
+VALUES(2, 'Media', 2,'warning');
 INSERT INTO public.usuario_prioridadtus
 (id, descripcion, valor)
-VALUES(3, 'Baja', 3);
+VALUES(3, 'Baja', 3,'success');
 
+INSERT INTO public.usuario_fase
+(id, nombre_fase, cod_fase)
+VALUES(1, 'Por Hacer', 'TODO');
+INSERT INTO public.usuario_fase
+(id, nombre_fase, cod_fase)
+VALUES(2, 'Haciendo', 'DOING');
+INSERT INTO public.usuario_fase
+(id, nombre_fase, cod_fase)
+VALUES(3, 'Hecho', 'DONE');
+INSERT INTO public.usuario_fase
+(id, nombre_fase, cod_fase)
+VALUES(4, 'Cancelado', 'CANC');
 
 

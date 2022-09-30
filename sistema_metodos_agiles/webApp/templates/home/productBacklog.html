@@ -98,27 +98,24 @@
               </div>
             </div>
         </div> -->
-        <div class="d-flex">
+        <div class="d-flex my-3">
           {% for userStory in userStorys %}
           
           <div class="card card-stats m-3">
-            <div class="card-header card-header-warning card-header-icon">
+            <div class="card-header card-header-{{userStory.tipo_us.prioridad_tipo_us.color}} card-header-icon">
               <div class="card-icon">
-                <i class="material-icons">content_copy</i>
+                <i class="material-icons">developer_mode</i>
               </div>
-              <p class="card-category">{{userStory.nombre_us}}</p>
-              <h3 class="card-title">
-                <!-- <small>Sprint {{proyecto.sprint_dias}} dias</small> -->
-              </h3>
-              <h3 class="card-title">
-                <!-- <small>Rol {{proyecto.nombre_rol}}</small> -->
-              </h3>
+              
+              <h3 class="card-title">{{userStory.nombre_us}}</h3>
+              <p class="card-category">{{userStory.descripcion_us}}</p>
+              <p class="card-category"><strong>Tiempo Estimado</strong> {{userStory.tiempoEstimado_us}} hs</p>
             </div>
             <div class="card-footer">
-              <div class="stats">
+              <!-- <div class="stats">
                 <i class="material-icons ">developer_board</i>
                 <a href="{% url 'webApp:verProyecto' proyecto.id %}">Ver proyecto</a>
-              </div>
+              </div> -->
             </div>
           </div>
           {% endfor %}

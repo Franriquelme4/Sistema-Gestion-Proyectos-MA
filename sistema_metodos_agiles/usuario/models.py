@@ -117,7 +117,7 @@ class TipoUserStory(models.Model):
     descripcion_tipo_us = models.CharField(max_length=100,null=False)
     flujo_tipo_us = models.JSONField(null=True)
     campoPer_tipo_us = models.ManyToManyField('CampoPersonalizado')
-
+    fecha_creacion = models.DateField(default=datetime.date.today)
     class Meta:
         verbose_name = 'Tipo User Story'
         verbose_name_plural = 'Tipos de User Story'
@@ -137,6 +137,7 @@ class UserStory(models.Model):
     asignadoUsu_us = models.ForeignKey('MiembroEquipo',on_delete=models.CASCADE,null=True)
     fechaIni_us = models.DateField(auto_now_add=True)
     fechaMod_us = models.DateField(auto_now=True)
+    fecha_creacion = models.DateField(default=datetime.date.today)
     class Meta:
         verbose_name = 'User Story'
         verbose_name_plural = 'User Stories'
@@ -152,6 +153,7 @@ class Sprint(models.Model):
     fechaFIn_sp = models.DateField()
     duracion_sp = models.IntegerField(null=False)
     userStory_sp = models.ManyToManyField('UserStory',blank=True)
+    fecha_creacion = models.DateField(default=datetime.date.today)
     class Meta:
         verbose_name = 'Sprint'
         verbose_name_plural = 'Sprints'
@@ -179,27 +181,39 @@ Fases_CHOICES=[
 
 class Fase(models.Model):
     """Modelo de la tabla Fase, en la cual se almacenan todos los datos del Fase"""
-    nombre_fase = models.CharField(max_length=15,choices=Fases_CHOICES,default='TODO')
-    userStory_fase = models.ForeignKey('UserStory',on_delete=models.CASCADE)
-    descripcion_fase = models.CharField(max_length=100,null=False)
+    nombre_fase = models.CharField(max_length=15)
+    cod_fase = models.CharField(max_length=100,null=False)
+    
+
+class FaseTUS(models.Model):
+    """Modelo de la tabla Fase por Tipo de User Story, en la cual se almacenan todos los datos de Fase por Tipo de Usuario"""
+    #sprint_fase = models.ForeignKey(Sprint,on_delete=models.CASCADE,null=True)
+    tipo_us_faseTUS = models.ForeignKey('TipoUserStory',on_delete=models.CASCADE,null=True)
+    fase_faseTUS = models.ForeignKey('Fase',on_delete=models.CASCADE,null=True)
+    #userStory_fase = models.ForeignKey('UserStory',on_delete=models.CASCADE)
     class Meta:
         verbose_name = 'Fase'
         verbose_name_plural = 'Fases'
-        ordering = ['nombre_fase']
-    def __str__(self):
+    def _str_(self):
         return self.nombre_fase
 
 
 class Tablero(models.Model):
     """Modelo de la tabla Tablero, en la cual se almacenan todos los datos del Tablero"""
+    sprint_tablero = models.ForeignKey('Sprint',on_delete=models.CASCADE,null=True)
+    tipo_us_fase = models.ForeignKey('TipoUserStory',on_delete=models.CASCADE,null=True)
+    faseTUS_tablero = models.ManyToManyField('FaseTUS')
     nombre_tablero = models.CharField(max_length=50,null=False)
-    descripcion_tablero = models.CharField(max_length=100,null=False)
-    fase_tablero = models.ForeignKey('Fase',on_delete=models.CASCADE,blank=True)
+    fecha_creacion = models.DateField(default=datetime.date.today)
+    #descripcion_tablero = models.CharField(max_length=100,null=False)
+    def _str_(self):
+        return self.nombre_fase
 
 class PrioridadTUs(models.Model):
     """Listado de prioridades de los tipo de US"""
     descripcion = models.CharField(max_length=50,null=False)
     valor = models.IntegerField(null=False)
+    color = models.CharField(max_length=50,null=False,default='')
     class Meta:
         verbose_name = 'PrioridadTUs'
         verbose_name_plural = 'PrioridadTUs'
