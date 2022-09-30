@@ -89,6 +89,16 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="webApp.views.GestionProyecto">
+<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">GestionProyecto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#GestionProyecto"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.GestionProyecto" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="webApp.views.GestionProyectoAgregar">
+<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">GestionProyectoAgregar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#GestionProyectoAgregar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.GestionProyectoAgregar" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="webApp.views.activarUsuario">
 <span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">activarUsuario</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#activarUsuario"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.activarUsuario" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cuando un usuario nuevo se loguea en el sistema queda en estado pendiente hasta que el admin le de acceso</p>
@@ -119,6 +129,47 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="webApp.views.crearTUSProyecto">
+<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">crearTUSProyecto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#crearTUSProyecto"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.crearTUSProyecto" title="Permalink to this definition">¶</a></dt>
+<dd><p>Se almacena en base de datos el nuevo tipo de US</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="webApp.views.crearUs">
+<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">crearUs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#crearUs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.crearUs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Se agregan los nuevos Us</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="webApp.views.editarColaboradorProyecto">
+<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">editarColaboradorProyecto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#editarColaboradorProyecto"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.editarColaboradorProyecto" title="Permalink to this definition">¶</a></dt>
+<dd><p>Se eliminan los colaboradores de un proyecto especifico</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="webApp.views.editarRolProyecto">
+<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">editarRolProyecto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idd</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#editarRolProyecto"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.editarRolProyecto" title="Permalink to this definition">¶</a></dt>
+<dd><p>Se elimina el rol asociado al id</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="webApp.views.eliminarColaboradorProyecto">
+<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">eliminarColaboradorProyecto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#eliminarColaboradorProyecto"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.eliminarColaboradorProyecto" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="webApp.views.eliminarRolProyecto">
+<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">eliminarRolProyecto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#eliminarRolProyecto"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.eliminarRolProyecto" title="Permalink to this definition">¶</a></dt>
+<dd><p>Se elimina el rol asociado al id</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="webApp.views.importarTusDeProyecto">
+<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">importarTusDeProyecto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#importarTusDeProyecto"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.importarTusDeProyecto" title="Permalink to this definition">¶</a></dt>
+<dd><p>Se importan los tipos de US</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="webApp.views.index">
 <span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.index" title="Permalink to this definition">¶</a></dt>
 <dd><p>Luego de loguease se lleva a la vista principal la cual tiene
@@ -144,9 +195,21 @@ distintas opciones dependiendo el rol que tenga</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="webApp.views.tipoUs">
+<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">tipoUs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#tipoUs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.tipoUs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Se listan todos los tipos de US</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="webApp.views.usuarios">
 <span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">usuarios</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#usuarios"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.usuarios" title="Permalink to this definition">¶</a></dt>
 <dd><p>Se lista los usuarios actuales del sistema, este metodo se utiliza en el usuario admin</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="webApp.views.verProductBacklog">
+<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">verProductBacklog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#verProductBacklog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.verProductBacklog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Se visualiza todos los US</p>
 </dd></dl>
 
 <dl class="py function">
