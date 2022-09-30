@@ -414,7 +414,6 @@ def verProductBacklog(request,id):
     permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','imp_TipoUs','ctr_TipoUs']
     validacionPermisos = validarPermisos(permisosProyecto,rolUsuario)
     userStorys = UserStory.objects.filter(proyecto_us = id)
-    print(userStorys[0].tipo_us.prioridad_tipo_us)
     context={
         'rolesProyecto':rolesProyecto,
         'userSession':userSession,
