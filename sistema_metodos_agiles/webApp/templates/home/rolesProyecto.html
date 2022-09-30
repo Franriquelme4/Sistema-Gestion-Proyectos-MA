@@ -46,6 +46,7 @@
     </div>
   </div>
 </div>
+
 {% if validacionPermisos.crt_rol %}
 <button class="btn btn-primary " data-toggle="modal" data-target="#exampleModal"><i
     class="material-icons">add</i>Agregar rol</button>
@@ -88,18 +89,17 @@
                   {{rolProyecto.descripcion_rol}}
                 </td>
                 <td>
-                  <form action="{% url 'webApp:editarRolProyecto' proyecto.id %}" method="post">
-                    <a type="submit" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                  </form>
+                  <!-- <form action="{% url 'webApp:editarRolProyecto' proyecto.id %}" method="post"></form>
+                      <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#myModal"><i class="material-icons">&#xE254;</i></button>
+                  </form> -->
                   <form action="{% url 'webApp:eliminarRolProyecto' proyecto.id %}" method="post">
                     {% csrf_token %}
                     <input name="idRol" type="text" hidden="true" value="{{rolProyecto.id_rol}}">
-                    <a type="submit" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                    <button type="submit">Enivar</button>
+                    <button class="btn btn-danger btn-sm" type="submit"><i class="material-icons">&#xE872;</i></button>
                   </form>
                 </td>
               </tr>
-              {% endfor %} 
+              {% endfor %}
             </tbody>
           </table>
         </div>

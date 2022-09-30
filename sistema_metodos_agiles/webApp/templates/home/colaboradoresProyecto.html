@@ -72,9 +72,9 @@
                         <th>
                           Descripcion del Rol
                         </th>
-                        <th>
+                        <!-- <th>
                           Acciones
-                        </th>
+                        </th> -->
                       </thead>
                       <tbody>
                         {% for colaborador in colaboradores %}
@@ -95,15 +95,14 @@
                             {{colaborador.descripcion_rol}}
                           </td>
                           <td>
-                            <form action="% url 'webApp:editarColaboradorProyecto' proyecto.id %}" method="post">
-                              <a type="submit" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                            <!-- <form action="% url 'webApp:editarColaboradorProyecto' proyecto.id %}" method="post">
+                              <button class="btn btn-success btn-sm" type="submit"><i class="material-icons">&#xE254;</i></button>
                             </form>
                             <form action="{% url 'webApp:eliminarColaboradorProyecto' proyecto.id %}" method="post">
                               {% csrf_token %}
                               <input name="idRol" type="text" hidden="true" value="{{rolProyecto.id_rol}}">
-                              <a type="submit" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                              <button type="submit">Enivar</button>
-                            </form>
+                              <button class="btn btn-danger btn-sm" type="submit"><i class="material-icons">&#xE872;</i></button>
+                            </form> -->
                           </td>
                         </tr>
                         {% endfor %}
@@ -114,7 +113,6 @@
               </div>
             </div>
         </div>
-
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->

@@ -244,19 +244,13 @@ def crearRolProyecto(request,id):
         proyecto_rol.proyecto.add(Proyecto.objects.get(id=id))
     return redirect(f'/proyecto/{id}')
 
+
+
 def eliminarRolProyecto(request,id):
     """Se elimina el rol asociado al id"""
-    print("Entra en la funcion")
     variables = request.POST
-    print("Entra en la funcion 2  = "+variables.get('idRol',False))
-    record = ProyectoRol.objects.filter(id = 3)
-    print("Entra en la funcion 3")
+    record = Rol.objects.filter(id = variables.get('idRol',False))
     record.delete()
-    print("Entra en la funcion 4")
-    proyecto_rol = ProyectoRol(
-        descripcion_proyecto_rol=''
-    )
-
 
     """validarEliminacion = getRolByID(id)
     print(validarEliminacion)
@@ -291,47 +285,18 @@ def eliminarRolProyecto(request,id):
         #$proyecto_rol.delete()
         proyecto_rol.rol.remove(rol)
         proyecto_rol.proyecto.remove(Proyecto.objects.get(id=id))"""
-    return redirect(f'/proyecto/{id}')
+    return redirect(f'/proyecto/roles/1')
 
 
-def editarRolProyecto(request,id):
+def editarRolProyecto(request,idd):
     """Se elimina el rol asociado al id"""
     print("Entra en la funcion")
     variables = request.POST
-    print(variables.get('idRol',False))
     validarEliminacion = getRolByID(id)
     print(validarEliminacion)
-    if(validarEliminacion==None):
-        print("no es")
-    else:
-        rol = Rol(
-            descripcion_rol = variables.get('descripcion',False),
-            nombre_rol = variables.get('nombre_rol',False),
-        )
-        rol.delete()
+    record = Rol.objects.filter(id = idd).first()
     
-    rol = Rol(
-            descripcion_rol = variables.get('descripcion',False),
-            nombre_rol = variables.get('nombre_rol',False),
-        )
-    rol.delete()
-    if request.method == 'POST':
-        rol = Rol(
-            descripcion_rol = variables.get('descripcion',False),
-            nombre_rol = variables.get('nombre_rol',False),
-        )
-        rol.delete()
-        for permiso in variables.getlist('permisos',False):
-            print(permiso)
-            rol.permiso.remove(Permiso.objects.get(id=permiso))
-        proyecto_rol = ProyectoRol(
-            descripcion_proyecto_rol=''
-        )
-        rol.objects.filter(id=id).delete()
-        proyecto_rol.objects.filter(id=id).delete()
-        #$proyecto_rol.delete()
-        proyecto_rol.rol.remove(rol)
-        proyecto_rol.proyecto.remove(Proyecto.objects.get(id=id))
+
     return redirect(f'/proyecto/{id}')
 
 def colaboradoresProyecto(request,id):
@@ -374,17 +339,9 @@ def asignarColaboradorProyecto(request,id):
     return redirect(f'/proyecto/{id}')
 
 def eliminarColaboradorProyecto(request,id):
-    """Se eliminan los colaboradores de un proyecto especifico"""
     variables = request.POST
-    if request.method == 'POST':
-        miembro = MiembroEquipo(
-           descripcion = ''
-        )
-        miembro.save()
-        miembro.miembro_rol.add(Rol.objects.get(id=variables.get('rol',False)))
-        miembro.miembro_usuario.add(Usuario.objects.get(id=variables.get('usuario',False)))
-        proyecto = Proyecto.objects.get(id=id)
-        proyecto.miembro_proyecto.add(miembro)
+    record = MiembroEquipo.miembro_usuario.objects.filter(id = variables.get('idRol',False))
+    record.delete()
     return redirect(f'/proyecto/{id}')
 
 def editarColaboradorProyecto(request,id):
