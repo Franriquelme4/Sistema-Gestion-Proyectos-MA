@@ -1,99 +1,208 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} UI Tables {% endblock %} 
+{% block title %} UI Tables {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
 {% include 'includes/options.html' %}
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Nuevo Tipo de User Story</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <form method="post" action="{% url 'webApp:crearTUSProyecto' proyecto.id %}">
-                {% csrf_token %}
-                <div class="form-group">
-                  <label for="recipient-name" class="col-form-label" >Nombre</label>
-                  <input type="text" class="form-control" id="recipient-name" name="nombre">
-                </div>
-                <div class="form-group">
-                  <label for="recipient-name" class="col-form-label" >Descripcion</label>
-                  <input type="text" class="form-control" id="recipient-name" name="descripcion">
-                </div>
-                <div class="form-group">
-                  <select class="form-control" aria-label="Default select example" name="prioridad">
-                      <option selected disabled>Seleccionar la prioridad</option>
-                      {% for prioridad in prioridades %}
-                      <option value="{{prioridad.id}}">{{prioridad.descripcion}}</option>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Nuevo Tipo de User Story</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="{% url 'webApp:crearTUSProyecto' proyecto.id %}">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Nombre</label>
+            <input type="text" class="form-control" id="recipient-name" name="nombre">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Descripcion</label>
+            <input type="text" class="form-control" id="recipient-name" name="descripcion">
+          </div>
+          <div class="form-group">
+            <select class="form-control" aria-label="Default select example" name="prioridad">
+              <option selected disabled>Seleccionar la prioridad</option>
+              {% for prioridad in prioridades %}
+              <option value="{{prioridad.id}}">{{prioridad.descripcion}}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalImportar" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Importar Tipo de US </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body pt-0">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead class=" text-primary">
+                      <th>
+                        Nombre de tipo de US
+                      </th>
+                      <th>
+                        Descripcion
+                      </th>
+                      <th>
+                        Fases
+                      </th>
+                      <th>
+                        Nombre del proyecto
+                      </th>
+                      <th>
+                      </th>
+                    </thead>
+                    <tbody>
+                      {% for tipo in todostipoUs %}
+                      <tr>
+
+                        <td>
+                          {{tipo.nombre_tipo_us}}
+                        </td>
+                        <td>
+                          {{tipo.descripcion_tipo_us}}
+                        </td>
+                        <td>
+                          {{tipo.fases}}
+                        </td>
+                        <td>
+                          {{tipo.proyecto_tipo_us}}
+                        </td>
+                        <td>
+                          <form method="post" action="{% url 'webApp:importarTusDeProyecto' proyecto.id %}">
+                            {% csrf_token %}
+                            <input type="text" name="idTipoUs" value="{{tipo.id}}" hidden="true">
+                            <button type="submit" class="btn btn-primary btn-sm">Importar</button>
+                          </form>
+                        </td>
+                      </tr>
                       {% endfor %}
-                    </select>
+                    </tbody>
+                  </table>
+                </div>
               </div>
-              
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Guardar</button>
-              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- <form method="post" action="{% url 'webApp:crearTUSProyecto' proyecto.id %}">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label for="recipient-name" class="col-form-label" >Nombre</label>
+                    <input type="text" class="form-control" id="recipient-name" name="nombre">
+                  </div>
+                  <div class="form-group">
+                    <label for="recipient-name" class="col-form-label" >Descripcion</label>
+                    <input type="text" class="form-control" id="recipient-name" name="descripcion">
+                  </div>
+                  <div class="form-group">
+                    <select class="form-control" aria-label="Default select example" name="prioridad">
+                        <option selected disabled>Seleccionar la prioridad</option>
+                        {% for prioridad in prioridades %}
+                        <option value="{{prioridad.id}}">{{prioridad.descripcion}}</option>
+                        {% endfor %}
+                      </select>
+                </div>
+                
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-primary">Guardar</button>
+                </form> -->
+      </div>
+
+    </div>
+  </div>
+</div>
+{% if validacionPermisos.ctr_TipoUs %}
+<button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i class="material-icons">add</i>Agregar
+  tipo de US</button>
+{% endif %}
+
+{% if validacionPermisos.imp_TipoUs %}
+<button class="btn btn-primary" data-toggle="modal" data-target="#modalImportar"><i
+    class="material-icons">vertical_align_bottom</i>Importar tipo de US</button>
+{% endif %}
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header card-header-primary">
+        <h4 class="card-title ">Tipos de US</h4>
+        <p class="card-category">Listado de tipos de US del proyecto</p>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead class=" text-primary">
+              <th>
+              </th>
+              <th>
+                Nombre
+              </th>
+              <th>
+                Descripcion
+              </th>
+              <th>
+                Fases
+              </th>
+              <th>
+                Prioridad
+              </th>
+            </thead>
+            <tbody>
+              {% for data in tipoUs %}
+              <tr>
+                <td>
+                  {{forloop.counter}}
+                </td>
+                <td>
+                  {{data.nombre_tipo_us}}
+                </td>
+                <td>
+                  {{data.descripcion_tipo_us}}
+                </td>
+                <td>
+                  {{data.fases}}
+                </td>
+                <td>
+                  {{data.prioridad_tipo_us}}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
-
-<button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i class="material-icons">add</i>Agregar tipo de US</button>
-
-        <div class="row">
-            <div class="col-md-12">
-              <div class="card">
-                <div class="card-header card-header-primary">
-                  <h4 class="card-title ">Tipos de US</h4>
-                  <p class="card-category">Listado de tipos de US del proyecto</p>
-                </div>
-                <div class="card-body">
-                  <div class="table-responsive">
-                    <table class="table">
-                      <thead class=" text-primary">
-                        <th>                         
-                        </th>
-                        <th>
-                          Nombre 
-                        </th>
-                        <th>
-                          Descripcion 
-                        </th>
-                        <th>
-                          Prioridad 
-                        </th>
-                      </thead>
-                      <tbody>
-                        {% for data in tipoUs %}
-                        <tr>
-                          <td>
-                            {{forloop.counter}}
-                          </td>
-                          <td>
-                            {{data.nombre_tipo_us}}
-                          </td>
-                          <td>
-                            {{data.descripcion_tipo_us}}
-                          </td>
-                          <td>
-                            {{data.prioridad_tipo_us}}
-                          </td>
-                        </tr>
-                        {% endfor %}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-        </div>
+</div>
 
 {% endblock content %}
 

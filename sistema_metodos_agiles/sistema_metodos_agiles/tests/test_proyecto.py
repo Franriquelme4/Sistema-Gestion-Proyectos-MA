@@ -13,17 +13,18 @@ def test_cliente_creation():
     )
     assert cliente.nombre_cliente  == 'cliente1'
 
-def test_proyecto_creation():
+@pytest.mark.django_db
+def test_proyecto_creation(self):
     proyecto = Proyecto(
         nombre_proyecto = 'proyecto1',
-        cliente_proyecto = test_cliente_creation,
+        cliente_proyecto  = Cliente.objects.create(nombre_cliente='nombre_cliente'),
         fecha_ini_proyecto = '',
         fecha_fin_proyecto = '',
         descripcion_proyecto = 'proyecto de prueba',
         estado_proyecto = 'Pendiente',
         miembro_proyecto = 'MiembroEquipo',
         sprint_dias = 1,
-        fecha_creacion = ''
+        fecha_creacion = '2022-09-28'
     )
     assert proyecto.nombre_proyecto == 'proyecto1'
 

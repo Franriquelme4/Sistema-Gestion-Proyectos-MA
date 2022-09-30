@@ -1,4 +1,4 @@
-from .models import Proyecto, Usuario,Rol,ProyectoRol
+from .models import Proyecto, TipoUserStory, Usuario,Rol,ProyectoRol
 
 
 
@@ -42,6 +42,18 @@ def getProyectsByID(idProyecto,idUsuario):
     """)
     return proyecto
 
+def getRolByID(idProyecto):
+    proyecto = Proyecto.objects.raw(f"""
+	select miembroequipo_id from usuario_miembroequipo_miembro_rol
+	where rol.id = {idProyecto}
+    """)
+    return proyecto
+
+
+def getProyectoRol(id):
+	proyecto_rol = ProyectoRol.objects.raw(f"""select
+	join usuario_rol ur on ur.id = upr.rol_id where up2.id = {id}""")
+
 def getRolByProyectId(id):
 	proyecto_rol = ProyectoRol.objects.raw(f"""select up.*, ur.descripcion_rol ,ur.nombre_rol, ur.id as id_rol from usuario_proyectorol up 
 	join usuario_proyectorol_proyecto upp on upp.proyectorol_id = up.id
@@ -65,3 +77,14 @@ def validarPermisos(permisosVista,rolUsuario):
 	for permisoVista in permisosVista:
 		permisos[permisoVista] = rolUsuario.poseePermiso(permisoVista)
 	return permisos
+def getTipoUsbyProyectId(id):
+	tipoUs = TipoUserStory.objects.raw(f"""select ut.*,array_to_string(array_agg(uf2.nombre_fase),', ') as fases  from usuario_tipouserstory ut 
+	full join usuario_fasetus uf on uf."tipo_us_faseTUS_id" = ut.id
+	full join usuario_fase uf2 on uf2.id = uf."fase_faseTUS_id" where ut.proyecto_tipo_us_id = {id} group by ut.id """)
+	return tipoUs
+
+def getTipoUsbyNotProyectId(id):
+	tipoUs = TipoUserStory.objects.raw(f"""select ut.*,array_to_string(array_agg(uf2.nombre_fase),', ') as fases  from usuario_tipouserstory ut 
+	full join usuario_fasetus uf on uf."tipo_us_faseTUS_id" = ut.id
+	full join usuario_fase uf2 on uf2.id = uf."fase_faseTUS_id" where ut.proyecto_tipo_us_id != {id} group by ut.id """)
+	return tipoUs

@@ -4,8 +4,8 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
-from usuario.utils import validarPermisos,getUsuarioSesion,getIdScrumRol,getProyectsByUsuarioID,getProyectsByID,getRolByProyectId,getColaboratorsByProyect
-from usuario.models import Usuario,Cliente,Proyecto,MiembroEquipo,Permiso,Rol,ProyectoRol,TipoUserStory,PrioridadTUs,UserStory
+from usuario.utils import validarPermisos,getUsuarioSesion,getIdScrumRol,getProyectsByUsuarioID,getProyectsByID,getRolByProyectId,getColaboratorsByProyect,getTipoUsbyProyectId,getTipoUsbyNotProyectId,getRolByID
+from usuario.models import Usuario,Cliente,Proyecto,MiembroEquipo,Permiso,Rol,ProyectoRol,TipoUserStory,PrioridadTUs,UserStory,FaseTUS,Fase
 from django.template import loader
 from django.db.models import Q
 
@@ -244,6 +244,61 @@ def crearRolProyecto(request,id):
         proyecto_rol.proyecto.add(Proyecto.objects.get(id=id))
     return redirect(f'/proyecto/{id}')
 
+
+
+def eliminarRolProyecto(request,id):
+    """Se elimina el rol asociado al id"""
+    variables = request.POST
+    record = Rol.objects.filter(id = variables.get('idRol',False))
+    record.delete()
+
+    """validarEliminacion = getRolByID(id)
+    print(validarEliminacion)
+    if(validarEliminacion==None):
+        print("no es")
+    else:
+        rol = Rol(
+            descripcion_rol = variables.get('descripcion',False),
+            nombre_rol = variables.get('nombre_rol',False),
+        )
+        rol.delete()
+    
+    rol = Rol(
+            descripcion_rol = variables.get('descripcion',False),
+            nombre_rol = variables.get('nombre_rol',False),
+        )
+    rol.delete()
+    if request.method == 'POST':
+        rol = Rol(
+            descripcion_rol = variables.get('descripcion',False),
+            nombre_rol = variables.get('nombre_rol',False),
+        )
+        rol.delete()
+        for permiso in variables.getlist('permisos',False):
+            print(permiso)
+            rol.permiso.remove(Permiso.objects.get(id=permiso))
+        proyecto_rol = ProyectoRol(
+            descripcion_proyecto_rol=''
+        )
+        rol.objects.filter(id=id).delete()
+        proyecto_rol.objects.filter(id=id).delete()
+        #$proyecto_rol.delete()
+        proyecto_rol.rol.remove(rol)
+        proyecto_rol.proyecto.remove(Proyecto.objects.get(id=id))"""
+    return redirect(f'/proyecto/roles/1')
+
+
+def editarRolProyecto(request,idd):
+    """Se elimina el rol asociado al id"""
+    print("Entra en la funcion")
+    variables = request.POST
+    validarEliminacion = getRolByID(id)
+    print(validarEliminacion)
+    record = Rol.objects.filter(id = idd).first()
+    
+
+    return redirect(f'/proyecto/{id}')
+
 def colaboradoresProyecto(request,id):
     """
     Se lista todos colaboradores del proyecto
@@ -283,16 +338,36 @@ def asignarColaboradorProyecto(request,id):
         proyecto.miembro_proyecto.add(miembro)
     return redirect(f'/proyecto/{id}')
 
+def eliminarColaboradorProyecto(request,id):
+    variables = request.POST
+    record = MiembroEquipo.miembro_usuario.objects.filter(id = variables.get('idRol',False))
+    record.delete()
+    return redirect(f'/proyecto/{id}')
+
+def editarColaboradorProyecto(request,id):
+    """Se eliminan los colaboradores de un proyecto especifico"""
+    variables = request.POST
+    if request.method == 'POST':
+        miembro = MiembroEquipo(
+           descripcion = ''
+        )
+        miembro.save()
+        miembro.miembro_rol.add(Rol.objects.get(id=variables.get('rol',False)))
+        miembro.miembro_usuario.add(Usuario.objects.get(id=variables.get('usuario',False)))
+        proyecto = Proyecto.objects.get(id=id)
+        proyecto.miembro_proyecto.add(miembro)
+    return redirect(f'/proyecto/{id}')
+
 def tipoUs(request,id):
     """Se listan todos los tipos de US"""
     userSession = getUsuarioSesion(request.user.email)
     proyecto = getProyectsByID(id,userSession.id)[0]
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
-    tipoUs = TipoUserStory.objects.filter(proyecto_tipo_us = id)
+    tipoUs = getTipoUsbyProyectId(id)
+    todostipoUs = getTipoUsbyNotProyectId(id)
     prioridad = PrioridadTUs.objects.all()
-    print(tipoUs)
     rolesProyecto = getRolByProyectId(id)
-    permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack']
+    permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','imp_TipoUs','ctr_TipoUs']
     validacionPermisos = validarPermisos(permisosProyecto,rolUsuario)
     context={
         'rolesProyecto':rolesProyecto,
@@ -302,7 +377,8 @@ def tipoUs(request,id):
         'validacionPermisos':validacionPermisos,
         'prueba':rolesProyecto,
         'tipoUs':tipoUs,
-        'prioridades':prioridad
+        'prioridades':prioridad,
+        'todostipoUs':todostipoUs
         }
     html_template = loader.get_template('home/tipoUS.html')
     return HttpResponse(html_template.render(context,request))
@@ -318,6 +394,13 @@ def crearTUSProyecto(request,id):
             prioridad_tipo_us= PrioridadTUs.objects.get(id=variables.get('prioridad',False)),
         )
         tipoUs.save()
+        fases = Fase.objects.all()
+        for fase in fases:
+            faseTus = FaseTUS(
+                tipo_us_faseTUS=tipoUs,
+                fase_faseTUS=fase
+            )
+            faseTus.save()
     return redirect(f'/proyecto/{id}')
 
 def verProductBacklog(request,id):
@@ -327,7 +410,8 @@ def verProductBacklog(request,id):
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
     rolesProyecto = getRolByProyectId(id)
     tipoUs = TipoUserStory.objects.filter(proyecto_tipo_us = id)
-    permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack']
+    print()
+    permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','imp_TipoUs','ctr_TipoUs']
     validacionPermisos = validarPermisos(permisosProyecto,rolUsuario)
     userStorys = UserStory.objects.filter(proyecto_us = id)
     context={
@@ -355,4 +439,25 @@ def crearUs(request,id):
             tipo_us= TipoUserStory.objects.get(id=variables.get('tipoUs',False))
         )
         userStory.save()
+    return redirect(f'/proyecto/{id}')
+
+def importarTusDeProyecto(request,id):
+    """Se importan los tipos de US """
+    variables = request.POST
+    if request.method == 'POST':
+        tipoUsSelect = TipoUserStory.objects.get(id=variables.get('idTipoUs',False))
+        tipoUs = TipoUserStory(
+            proyecto_tipo_us = Proyecto.objects.get(id=id),
+            nombre_tipo_us = tipoUsSelect.nombre_tipo_us,
+            descripcion_tipo_us= tipoUsSelect.descripcion_tipo_us,
+            prioridad_tipo_us= tipoUsSelect.prioridad_tipo_us,
+        )
+        tipoUs.save()
+        fases = Fase.objects.all()
+        for fase in fases:
+            faseTus = FaseTUS(
+                tipo_us_faseTUS=tipoUs,
+                fase_faseTUS=fase
+            )
+            faseTus.save()
     return redirect(f'/proyecto/{id}')
