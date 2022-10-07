@@ -339,8 +339,11 @@ def asignarColaboradorProyecto(request,id):
     return redirect(f'/proyecto/{id}')
 
 def eliminarColaboradorProyecto(request,id):
+
+
     variables = request.POST
-    record = MiembroEquipo.miembro_usuario.objects.filter(id = variables.get('idRol',False))
+    print(variables.get('idColaborador',False))
+    record = MiembroEquipo.objects.filter(id = variables.get('idColaborador',False)-4)
     record.delete()
     return redirect(f'/proyecto/{id}')
 
