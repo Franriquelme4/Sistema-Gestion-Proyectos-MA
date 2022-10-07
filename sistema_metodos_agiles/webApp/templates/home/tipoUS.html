@@ -7,46 +7,9 @@
 
 {% block content %}
 {% include 'includes/options.html' %}
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Nuevo Tipo de User Story</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <form method="post" action="{% url 'webApp:crearTUSProyecto' proyecto.id %}">
-                {% csrf_token %}
-                <div class="form-group">
-                  <label for="recipient-name" class="col-form-label" >Nombre</label>
-                  <input type="text" class="form-control" id="recipient-name" name="nombre">
-                </div>
-                <div class="form-group">
-                  <label for="recipient-name" class="col-form-label" >Descripcion</label>
-                  <input type="text" class="form-control" id="recipient-name" name="descripcion">
-                </div>
-                <div class="form-group">
-                  <select class="form-control" aria-label="Default select example" name="prioridad">
-                      <option selected disabled>Seleccionar la prioridad</option>
-                      {% for prioridad in prioridades %}
-                      <option value="{{prioridad.id}}">{{prioridad.descripcion}}</option>
-                      {% endfor %}
-                    </select>
-              </div>
-              
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Guardar</button>
-              </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-<button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i class="material-icons">add</i>Agregar tipo de US</button>
-
+{% if validacionPermisos.ctr_TipoUs %}
+<a class="btn btn-primary " href="{% url 'webApp:tipoUsCrear' proyecto.id %}"><i class="material-icons">add</i>Agregar tipo de US</a>
+{% endif %}
         <div class="row">
             <div class="col-md-12">
               <div class="card">
@@ -56,7 +19,7 @@
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
-                    <table class="table">
+                    <table id="table" class="display" style="width:100%">
                       <thead class=" text-primary">
                         <th>                         
                         </th>

@@ -1,0 +1,110 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+{% include 'includes/options.html' %}
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h3>Crear nuevo tipo de US</h3>
+    </div>
+    <div class="card-body">
+      <form method="post" action="{% url 'webApp:crearTUSProyecto' proyecto.id %}" id="formTus">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="recipient-name" class="col-form-label">Nombre</label>
+          <input type="text" class="form-control" id="recipient-name" name="nombre">
+        </div>
+        <div class="form-group">
+          <label for="recipient-name" class="col-form-label">Descripcion</label>
+          <input type="text" class="form-control" id="recipient-name" name="descripcion">
+        </div>
+        <div class="form-group">
+          <select class="form-control" aria-label="Default select example" name="prioridad">
+            <option selected disabled>Seleccionar la prioridad</option>
+            {% for prioridad in prioridades %}
+            <option value="{{prioridad.id}}">{{prioridad.descripcion}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <h4>Fases</h4>
+        <!-- <div class="form-group">
+          <button id="addRow">Agregar nueva fase</button> 
+          <table id="tabla--fase" class="display" style="width:100%">
+              <thead>
+                  <tr>
+                      <th>Nombre</th>
+                      <th>Orden</th>
+                      <th>Eliminar</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                      <th><input type="text" id="row-1-age" name="row-1-age" value="61"></th>
+                      <th><input type="text" id="row-1-age" name="row-1-age" value="61"></th>
+                      <th><button class="btn btn-danger eliminar">Eliminar</button></th>
+                  </tr>
+              </tbody>
+          </table>
+        </div> -->
+
+        <!-- <a class="btn btn-danger btn-sm" href="{% url 'webApp:tipoUs' proyecto.id %}">Cancelar</a>
+        <button type="submit" class="btn btn-primary btn-sm">Guardar</button> -->
+      </form>
+                <button id="addRow" class="btn btn-info btn-sm"><i class="material-icons">add</i>Agregar nueva fase</button>
+                <table id="tabla--fase" class="display" style="width:100%">
+                  <thead>
+                      <tr>
+                          <th>Nombre</th>
+                          <th>Orden</th>
+                          <th>Eliminar</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <th><input type="text" id="row-1-age" name="row-1-age" value="Por Hacer"></th>
+                          <th><input type="number" id="row-1-age" name="row-1-age" value="1"></th>
+                          <th><button class="btn btn-danger btn-sm eliminar">Eliminar</button></th>
+                      </tr>
+                  </tbody>
+              </table>
+
+              <a class="btn btn-danger btn-sm" href="{% url 'webApp:tipoUs' proyecto.id %}">Cancelar</a>
+              <button type="submit" class="btn btn-primary btn-sm" id="enviar">Guardar</button>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  $(document).ready(function () {
+    const t = $('#tabla--fase').DataTable({
+      "dom": "ltpr"
+    });
+    let counter = 1;
+    const form = $('#formTus');
+ 
+    $('#addRow').on('click', function () {
+        t.row.add(['<input type="text" id="row-1-age" name="row-1-age">' , '<input type="number" id="row-1-age" name="row-1-age">','<button class="btn btn-danger btn-sm eliminar">Eliminar</button>']).draw(true);
+        counter++;
+    });
+   // $('#addRow').click();
+   $('#tabla--fase tbody').on( 'click', 'button.eliminar', function () {
+    t
+        .row( $(this).parents('tr') )
+        .remove()
+        .draw();
+} );
+$( "#enviar" ).click(function() {
+  console.log();
+  $( "#formTus" ).submit();
+});
+});
+</script>
+{% endblock javascripts %}
