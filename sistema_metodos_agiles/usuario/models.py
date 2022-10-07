@@ -220,4 +220,3 @@ class PrioridadTUs(models.Model):
         ordering = ['valor']
     def __str__(self):
         return self.descripcion
-

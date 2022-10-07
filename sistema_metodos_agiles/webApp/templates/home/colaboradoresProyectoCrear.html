@@ -1,0 +1,46 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Tables {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+{% include 'includes/options.html' %}
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h3>Agregar nuevo colaborador</h3>
+    </div>
+    <div class="card-body">
+      <form method="post" action="{% url 'webApp:asignarColaboradorProyecto' proyecto.id %}">
+        {% csrf_token %}
+        <div class="form-group">
+          <select class="form-control" aria-label="Default select example" name="usuario">
+            <option selected>Seleccionar usuario</option>
+            {% for usuario in usuarios %}
+            <option value="{{usuario.id}}">{{usuario.nombre}} {{usuario.apellido}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <select class="form-control" aria-label="Default select example" name="rol">
+            <option selected>Seleccionar rol</option>
+            {% for rolProyecto in rolesProyecto %}
+            <option value="{{rolProyecto.id_rol}}">{{rolProyecto.nombre_rol}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <a class="btn btn-danger btn-sm" href="{% url 'webApp:colaboradoresProyecto' proyecto.id %}">Cancelar</a>
+        <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

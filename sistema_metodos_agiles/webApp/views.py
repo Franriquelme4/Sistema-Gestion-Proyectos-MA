@@ -224,6 +224,29 @@ def rolesProyecto(request,id):
     html_template = loader.get_template('home/rolesProyecto.html')
     return HttpResponse(html_template.render(context,request))
 @login_required(login_url="/login/")
+def rolesProyectoCrear(request,id):
+    """
+    Se lista todos los roles especificos de cada proyecto
+    """
+    userSession = getUsuarioSesion(request.user.email)
+    rolesProyecto = getRolByProyectId(id)
+    permisos = Permiso.objects.all()
+    proyecto = getProyectsByID(id,userSession.id)[0]
+    rolUsuario = Rol.objects.get(id=proyecto.id_rol)
+    print(request.session['userSesion'])
+    permisosProyecto = ['crt_rol','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack']
+    validacionPermisos = validarPermisos(permisosProyecto,rolUsuario)
+    context= {  'userSession':userSession,
+                'proyecto':proyecto,
+                'segment': 'rolesProyecto',
+                'permisos':permisos,
+                'rolesProyecto':rolesProyecto,
+                'rolUsuario':rolUsuario,
+                'validacionPermisos':validacionPermisos
+                }
+    html_template = loader.get_template('home/rolesProyectoCrear.html')
+    return HttpResponse(html_template.render(context,request))
+
 def crearRolProyecto(request,id):
     """Se crea un nuevo rol con todos los permisos asociados"""
     variables = request.POST
@@ -242,7 +265,7 @@ def crearRolProyecto(request,id):
         proyecto_rol.save()
         proyecto_rol.rol.add(rol)
         proyecto_rol.proyecto.add(Proyecto.objects.get(id=id))
-    return redirect(f'/proyecto/{id}')
+    return redirect(f'/proyecto/roles/{id}')
 
 
 
@@ -324,6 +347,32 @@ def colaboradoresProyecto(request,id):
     html_template = loader.get_template('home/colaboradoresProyecto.html')
     return HttpResponse(html_template.render(context,request))
 @login_required(login_url="/login/")
+
+def colaboradoresProyectoCrear(request,id):
+    """
+    Se lista todos colaboradores del proyecto
+    """
+    userSession = getUsuarioSesion(request.user.email)
+    proyecto = getProyectsByID(id,userSession.id)[0]
+    rolUsuario = Rol.objects.get(id=proyecto.id_rol)
+    print(rolUsuario.permiso.all())
+    rolesProyecto = getRolByProyectId(id)
+    colaboradores = getColaboratorsByProyect(id)
+    usuarios = Usuario.objects.filter(~Q(id=userSession.id)).filter(~Q(df_rol=1))
+    permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack']
+    validacionPermisos = validarPermisos(permisosProyecto,rolUsuario)
+    context={
+        'colaboradores':colaboradores,
+        'rolesProyecto':rolesProyecto,
+        'userSession':userSession,
+        'proyecto':proyecto,
+        'rolUsuario':rolUsuario,
+        'usuarios':usuarios,
+        'validacionPermisos':validacionPermisos
+        }
+    html_template = loader.get_template('home/colaboradoresProyectoCrear.html')
+    return HttpResponse(html_template.render(context,request)) 
+
 def asignarColaboradorProyecto(request,id):
     """Se almacena el nuevo rol con el colaborador al proyecto"""
     variables = request.POST
@@ -336,7 +385,7 @@ def asignarColaboradorProyecto(request,id):
         miembro.miembro_usuario.add(Usuario.objects.get(id=variables.get('usuario',False)))
         proyecto = Proyecto.objects.get(id=id)
         proyecto.miembro_proyecto.add(miembro)
-    return redirect(f'/proyecto/{id}')
+    return redirect(f'/proyecto/colaboradores/{id}')
 
 def eliminarColaboradorProyecto(request,id):
     variables = request.POST
@@ -382,6 +431,30 @@ def tipoUs(request,id):
         }
     html_template = loader.get_template('home/tipoUS.html')
     return HttpResponse(html_template.render(context,request))
+def tipoUsCrear(request,id):
+    """Se listan todos los tipos de US"""
+    userSession = getUsuarioSesion(request.user.email)
+    proyecto = getProyectsByID(id,userSession.id)[0]
+    rolUsuario = Rol.objects.get(id=proyecto.id_rol)
+    tipoUs = TipoUserStory.objects.filter(proyecto_tipo_us = id)
+    prioridad = PrioridadTUs.objects.all()
+    print(tipoUs)
+    rolesProyecto = getRolByProyectId(id)
+    permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','ctr_TipoUs']
+    validacionPermisos = validarPermisos(permisosProyecto,rolUsuario)
+    context={
+        'rolesProyecto':rolesProyecto,
+        'userSession':userSession,
+        'proyecto':proyecto,
+        'rolUsuario':rolUsuario,
+        'validacionPermisos':validacionPermisos,
+        'prueba':rolesProyecto,
+        'tipoUs':tipoUs,
+        'prioridades':prioridad
+        }
+    html_template = loader.get_template('home/tipoUSCrear.html')
+    return HttpResponse(html_template.render(context,request))
+
 
 def crearTUSProyecto(request,id):
     """Se almacena en base de datos el nuevo tipo de US"""
@@ -401,7 +474,7 @@ def crearTUSProyecto(request,id):
                 fase_faseTUS=fase
             )
             faseTus.save()
-    return redirect(f'/proyecto/{id}')
+    return redirect(f'/proyecto/tipoUS/{id}')
 
 def verProductBacklog(request,id):
     """Se visualiza todos los US"""
