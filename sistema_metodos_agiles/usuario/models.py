@@ -47,18 +47,6 @@ class Usuario(models.Model):
     def __str__(self):
         return self.nombre_usuario
 
-class MiembroEquipo(models.Model):
-    """Modelo de la tabla miembro, en la cual se almacenan todos los datos del cliente"""
-    miembro_usuario = models.ManyToManyField(Usuario)
-    miembro_rol = models.ManyToManyField(Rol)
-    descripcion = models.CharField(max_length=100,default='')
-    class Meta:
-        verbose_name = 'Miembro'
-        verbose_name_plural = 'Miembros'
-    def __str__(self):
-        return self.descripcion
-
-
 class Cliente(models.Model):
     """Modelo de la tabla clientes, en la cual se almacenan todos los datos del cliente"""
     nombre_cliente = models.CharField(max_length=100)
@@ -81,7 +69,7 @@ class Proyecto(models.Model):
     fecha_fin_proyecto = models.DateField(null=True)
     descripcion_proyecto = models.CharField(max_length=100,default='')
     estado_proyecto = models.CharField(max_length=1,default='1')
-    miembro_proyecto = models.ManyToManyField('MiembroEquipo')
+    #miembro_proyecto = models.ManyToManyField('MiembroEquipo')
     sprint_dias = models.IntegerField(default=0)
     fecha_creacion = models.DateField(default=datetime.date.today)
     class Meta:
@@ -90,6 +78,19 @@ class Proyecto(models.Model):
         ordering = ['nombre_proyecto']
     def __str__(self):
         return self.nombre_proyecto
+
+class MiembroEquipo(models.Model):
+    """Modelo de la tabla miembro, en la cual se almacenan todos los datos del cliente"""
+    miembro_proyecto = models.ForeignKey(Proyecto,on_delete=models.CASCADE,null=True)
+    miembro_usuario = models.ForeignKey(Usuario,on_delete=models.CASCADE,null=True)
+    miembro_rol = models.ManyToManyField(Rol)
+    descripcion = models.CharField(max_length=100,default='')
+    class Meta:
+        verbose_name = 'Miembro'
+        verbose_name_plural = 'Miembros'
+    def __str__(self):
+        return self.descripcion
+
 
 class ProyectoRol(models.Model):
     """Se almacenan los roles por proyecto"""
@@ -145,7 +146,7 @@ class UserStory(models.Model):
         return self.nombre_us
 
 class Sprint(models.Model):
-    """Modelo de la tabla sprint, en la cual se almacenan todos los datos del sprint"""
+    """ModelSprino de la tabla sprint, en la cual se almacenan todos los datos del sprint"""
     proyecto_sp = models.ForeignKey('Proyecto',on_delete=models.CASCADE,null=True)
     nombre_sp = models.CharField(max_length=50,null=False)
     fechaIni_sp = models.DateField(default=datetime.date.today)
@@ -170,18 +171,28 @@ class Sprint(models.Model):
 #        verbose_name_plural = 'Sprints por Proyecto'
 #        ordering = ['orden_PS']
 
-Fases_CHOICES=[
-    ('TODO','Por Hacer'),
-    ('DOING','Haciendo'),
-    ('DONE','Hecho'),
-    ('CANC','Cancelado'),
-]
+
+
+
+#Fases_CHOICES=[
+#    ('TODO','Por Hacer'),
+#    ('DOING','Haciendo'),
+#    ('DONE','Hecho'),
+#    ('CANC','Cancelado'),
+#]
 
 class Fase(models.Model):
     """Modelo de la tabla Fase, en la cual se almacenan todos los datos del Fase"""
-    nombre_fase = models.CharField(max_length=15,choices=Fases_CHOICES,default='TODO')
-    userStory_fase = models.ForeignKey('UserStory',on_delete=models.CASCADE)
+    nombre_fase = models.CharField(max_length=15)
     descripcion_fase = models.CharField(max_length=100,null=False)
+    
+
+class FaseTUS(models.Model):
+    """Modelo de la tabla Fase por Tipo de User Story, en la cual se almacenan todos los datos de Fase por Tipo de Usuario"""
+    #sprint_fase = models.ForeignKey(Sprint,on_delete=models.CASCADE,null=True)
+    tipo_us_faseTUS = ForeignKey(TipoUserStory,on_delete=models.CASCADE,null=True)
+    fase_faseTUS = ForeignKey(Fase,on_delete=models.CASCADE,null=True)
+    #userStory_fase = models.ForeignKey('UserStory',on_delete=models.CASCADE)
     class Meta:
         verbose_name = 'Fase'
         verbose_name_plural = 'Fases'
@@ -192,9 +203,15 @@ class Fase(models.Model):
 
 class Tablero(models.Model):
     """Modelo de la tabla Tablero, en la cual se almacenan todos los datos del Tablero"""
+    sprint_tablero = models.ForeignKey(Sprint,on_delete=models.CASCADE,null=True)
+    tipo_us_fase = ForeignKey(TipoUserStory,on_delete=models.CASCADE)
+    faseTUS_tablero = models.ManyToManyField(FaseTUS,on_delete=models.CASCADE,blank=True)
     nombre_tablero = models.CharField(max_length=50,null=False)
-    descripcion_tablero = models.CharField(max_length=100,null=False)
-    fase_tablero = models.ForeignKey('Fase',on_delete=models.CASCADE,blank=True)
+    #descripcion_tablero = models.CharField(max_length=100,null=False)
+    def __str__(self):
+        return self.nombre_fase
+
+
 
 class PrioridadTUs(models.Model):
     """Listado de prioridades de los tipo de US"""
