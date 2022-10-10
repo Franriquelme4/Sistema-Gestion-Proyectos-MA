@@ -84,20 +84,22 @@ INSERT INTO public.usuario_prioridadtus
 (id, descripcion, valor,color)
 VALUES(2, 'Media', 2,'warning');
 INSERT INTO public.usuario_prioridadtus
-(id, descripcion, valor,color)
-VALUES(3, 'Baja', 3,'success');
+(id, descripcion, valor)
+VALUES(3, 'Baja', 3);
 
-INSERT INTO public.usuario_fase
-(id, nombre_fase, cod_fase)
-VALUES(1, 'Por Hacer', 'TODO');
-INSERT INTO public.usuario_fase
-(id, nombre_fase, cod_fase)
-VALUES(2, 'Haciendo', 'DOING');
-INSERT INTO public.usuario_fase
-(id, nombre_fase, cod_fase)
-VALUES(3, 'Hecho', 'DONE');
-INSERT INTO public.usuario_fase
-(id, nombre_fase, cod_fase)
-VALUES(4, 'Cancelado', 'CANC');
+INSERT INTO public.usuario_estado
+(id, descripcion)
+VALUES(1, 'PENDIENTE');
+INSERT INTO public.usuario_estado
+(id, descripcion)
+VALUES(2, 'EN PROGRESO');
+INSERT INTO public.usuario_estado
+(id, descripcion)
+VALUES(3, 'TERMINADO');
+INSERT INTO public.usuario_estado
+(id, descripcion)
+VALUES(4, 'CANCELADO');
+
+
 
 

@@ -1,6 +1,7 @@
 from email.policy import default
 from django.db import models
 import datetime
+
 # Create your models here.
 
 class Permiso(models.Model):
@@ -107,11 +108,8 @@ class CampoPersonalizado(models.Model):
     tipoCampo_cp = models.CharField(max_length=50,null=False)
     value_cp = models.JSONField(null=True)
 
-
-
 class TipoUserStory(models.Model):
     """Modelo de la tabla tipo de user story, en la cual se almacenan todos los datos de los tipos de user story"""
-    proyecto_tipo_us  = models.ForeignKey('Proyecto',on_delete=models.CASCADE,null=True)
     prioridad_tipo_us = models.ForeignKey('PrioridadTUs',on_delete=models.CASCADE,null=True)
     nombre_tipo_us = models.CharField(max_length=50,null=False)
     descripcion_tipo_us = models.CharField(max_length=100,null=False)
@@ -124,6 +122,10 @@ class TipoUserStory(models.Model):
         ordering = ['nombre_tipo_us']
     def __str__(self):
         return self.nombre_tipo_us
+
+class TipoUs_Proyecto(models.Model):
+    proyecto = models.ForeignKey('Proyecto',on_delete=models.CASCADE,null=True)
+    tipoUs = models.ForeignKey('TipoUserStory',on_delete=models.CASCADE,null=True)
 
 class UserStory(models.Model):
     """Modelo de la tabla user story, en la cual se almacenan todos los datos de los user story"""
@@ -182,9 +184,10 @@ Fases_CHOICES=[
 class Fase(models.Model):
     """Modelo de la tabla Fase, en la cual se almacenan todos los datos del Fase"""
     nombre_fase = models.CharField(max_length=15)
-    cod_fase = models.CharField(max_length=100,null=False)
-    
+    orden_fase = models.CharField(max_length=100,null=False)
+    tipoUs = models.ForeignKey('TipoUserStory',on_delete=models.CASCADE,null=True)
 
+    
 class FaseTUS(models.Model):
     """Modelo de la tabla Fase por Tipo de User Story, en la cual se almacenan todos los datos de Fase por Tipo de Usuario"""
     #sprint_fase = models.ForeignKey(Sprint,on_delete=models.CASCADE,null=True)
@@ -218,5 +221,15 @@ class PrioridadTUs(models.Model):
         verbose_name = 'PrioridadTUs'
         verbose_name_plural = 'PrioridadTUs'
         ordering = ['valor']
+    def __str__(self):
+        return self.descripcion
+
+class Estado(models.Model):
+    """Tabla en la cual se almacenan todos los estados del proyecto"""
+    descripcion = models.CharField(max_length=50,null=False)
+    class Meta:
+        verbose_name = 'Estado'
+        verbose_name_plural = 'Estados'
+        ordering = ['descripcion']
     def __str__(self):
         return self.descripcion
