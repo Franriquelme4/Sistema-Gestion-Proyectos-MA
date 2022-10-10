@@ -83,5 +83,19 @@ INSERT INTO public.usuario_prioridadtus
 (id, descripcion, valor)
 VALUES(3, 'Baja', 3);
 
+INSERT INTO public.usuario_estado
+(id, descripcion)
+VALUES(1, 'PENDIENTE');
+INSERT INTO public.usuario_estado
+(id, descripcion)
+VALUES(2, 'EN PROGRESO');
+INSERT INTO public.usuario_estado
+(id, descripcion)
+VALUES(3, 'TERMINADO');
+INSERT INTO public.usuario_estado
+(id, descripcion)
+VALUES(4, 'CANCELADO');
+
+
 
 
