@@ -1,0 +1,53 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+{% include 'includes/options.html' %}
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h3>Crear nuevo tipo de US</h3>
+    </div>
+    <div class="card-body">
+      <form method="post" action="{% url 'webApp:crearUsGuardar' proyecto.id %}">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="recipient-name" class="col-form-label" >Nombre</label>
+          <input type="text" class="form-control" id="recipient-name" name="nombre">
+        </div>
+        <div class="form-group">
+          <label for="recipient-name" class="col-form-label" >Descripcion</label>
+          <input type="text" class="form-control" id="recipient-name" name="descripcion">
+        </div>
+        <div class="form-group">
+          <label for="recipient-name" class="col-form-label" >Tiempo Estimado (en horas)</label>
+          <input type="number" class="form-control" id="recipient-name" name="tiempo">
+        </div>
+        <div class="form-group">
+          <label for="recipient-name" class="col-form-label" >Prioridad de negocio</label>
+          <input type="number" class="form-control" id="recipient-name" name="prioridad">
+        </div>
+        <div class="form-group">
+          <select class="form-control" aria-label="Default select example" name="tipoUs">
+              <option selected disabled>Seleccionar tipo Us</option>
+              {% for data in tipoUs %}
+              <option value="{{data.tipoUs.id}}">{{data.tipoUs.nombre_tipo_us}}</option>
+              {% endfor %}
+            </select>
+      </div>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+{% endblock javascripts %}

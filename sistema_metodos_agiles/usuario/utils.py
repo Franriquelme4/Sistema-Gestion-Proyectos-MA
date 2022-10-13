@@ -1,5 +1,6 @@
 from .models import MiembroEquipo, Permiso, Proyecto, Usuario, Rol, ProyectoRol, TipoUserStory
-
+import datetime
+import calendar
 
 def getUsuarioSesion(email):
     usuario = Usuario.objects.get(email=email)
@@ -13,17 +14,15 @@ def getIdScrumRol():
 
 def getProyectsByUsuarioID(id):
     proyectos = Proyecto.objects.raw(f"""
-	select up.* as proyecto,
-		uu.id as id_usuario,
-		ur.id as id_rol, ur.descripcion_rol  as descripcion_rol,
-		ur.nombre_rol  as nombre_rol 
+	select up.*,uu.id as id_usuario, 
+	array_to_string(array_agg(ur.nombre_rol),', ') as roles
 	from usuario_proyecto up 
 	join usuario_proyecto_miembro_proyecto upmp on upmp.proyecto_id = up.id 
 	join usuario_miembroequipo_miembro_usuario ummu on ummu.miembroequipo_id = upmp.miembroequipo_id
 	join usuario_miembroequipo_miembro_rol ummr on ummr.miembroequipo_id = upmp.miembroequipo_id 
 	join usuario_usuario uu on uu.id = ummu.usuario_id 
 	join usuario_rol ur on ur.id = ummr.rol_id 
-	where ummu.usuario_id = {id} order by up.fecha_creacion 
+	where ummu.usuario_id = {id} group by up.id,uu.id order by up.fecha_creacion 
     """)
     return proyectos
 
@@ -91,6 +90,7 @@ def getPermisos(id_usuario,id_proyecto):
 	join usuario_rol_permiso urp on urp.rol_id = ummr.rol_id 
 	where ummu.usuario_id = {id_usuario} group by um.id""")
 	permisos = permisos[0].permisos
+	print(permisos,'listado de permisos')
 	aux = [];
 	for permiso in permisos:
 		aux.append(Permiso.objects.get(id=permiso).nombre_permiso)
@@ -124,11 +124,19 @@ def validarPermisos(permisosVista,idUsuario,idProyecto=None):
 	return permisos
 
 
+# def getTipoUsbyProyectId(id):
+#     tipoUs = TipoUserStory.objects.raw(f"""select ut.*,array_to_string(array_agg(uf.nombre_fase),', ') as fases from usuario_tipouserstory ut
+# 	full join usuario_tipous_proyecto utp on utp."tipoUs_id" = ut.id 
+# 	full join usuario_fase uf on uf."tipoUs_id" = ut.id where utp.proyecto_id = {id} group by ut.id""")
+#     return tipoUs
+
 def getTipoUsbyProyectId(id):
     tipoUs = TipoUserStory.objects.raw(f"""select ut.*,array_to_string(array_agg(uf.nombre_fase),', ') as fases from usuario_tipouserstory ut
 	full join usuario_tipous_proyecto utp on utp."tipoUs_id" = ut.id 
 	full join usuario_fase uf on uf."tipoUs_id" = ut.id where utp.proyecto_id = {id} group by ut.id""")
-    return tipoUs
+    return tipoUs	
+
+
 
 
 def getTipoUsbyNotProyectId(id):
@@ -136,3 +144,10 @@ def getTipoUsbyNotProyectId(id):
 	full join usuario_tipous_proyecto utp on utp."tipoUs_id" = ut.id 
 	full join usuario_fase uf on uf."tipoUs_id" = ut.id where utp.proyecto_id != {id} group by ut.id""")
     return tipoUs
+
+def calcularFechaFin(sourcedate, months):
+    month = sourcedate.month - 1 + months
+    year = sourcedate.year + month // 12
+    month = month % 12 + 1
+    day = min(sourcedate.day, calendar.monthrange(year,month)[1])
+    return datetime.date(year, month, day)

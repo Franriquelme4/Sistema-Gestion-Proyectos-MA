@@ -1,12 +1,12 @@
 
 
-
+import datetime
 import json
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from usuario.utils import validarPermisos,getUsuarioSesion,getIdScrumRol,getProyectsByUsuarioID,getProyectsByID,getRolByProyectId,getColaboratorsByProyect,getTipoUsbyProyectId,getTipoUsbyNotProyectId,getPermisos
-from usuario.models import Usuario,TipoUs_Proyecto,Cliente,Proyecto,MiembroEquipo,Permiso,Rol,ProyectoRol,TipoUserStory,PrioridadTUs,UserStory,Fase
+from usuario.utils import validarPermisos,getUsuarioSesion,getIdScrumRol,getProyectsByUsuarioID,getProyectsByID,getRolByProyectId,getColaboratorsByProyect,calcularFechaFin,getTipoUsbyProyectId,getTipoUsbyNotProyectId,getPermisos
+from usuario.models import Usuario,TipoUs_Proyecto,Cliente,Proyecto,MiembroEquipo,Permiso,Rol,ProyectoRol,TipoUserStory,PrioridadTUs,UserStory,Fase,Estado
 from django.template import loader
 from django.db.models import Q
 
@@ -116,8 +116,6 @@ def GestionProyectoAgregar(request):
         proyecto = Proyecto(
            nombre_proyecto = variables['nombreProyecto'],
            cliente_proyecto = cliente,
-           fecha_ini_proyecto = variables['fechaInicio'],
-           fecha_fin_proyecto = variables['fechaFin'],
            descripcion_proyecto = variables['descripcion'],
            sprint_dias = variables['sprintDias']
         )
@@ -174,8 +172,10 @@ def crearProyectoGuardar(request):
         proyecto = Proyecto(
            nombre_proyecto = variables['nombreProyecto'],
            cliente_proyecto = cliente,
-           fecha_ini_proyecto = variables['fechaInicio'],
-           fecha_fin_proyecto = variables['fechaFin'],
+           fecha_ini_proyecto = None,
+           fecha_fin_proyecto = None,
+           duracion = variables['duracion'],
+           estado = Estado.objects.get(descripcion="PENDIENTE"),
            descripcion_proyecto = variables['descripcion'],
            sprint_dias = variables['sprintDias']
         )
@@ -192,7 +192,6 @@ def verProyecto(request,id):
     proyecto = getProyectsByID(id,userSession.id)[0]
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
     print(getPermisos(userSession.id,id),'Permisos')
-
     permisosProyecto = ['dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack']
     validacionPermisos = validarPermisos(permisosProyecto,userSession.id,id)
     context= {  'userSession':userSession,
@@ -430,8 +429,8 @@ def tipoUs(request,id):
         'rolUsuario':rolUsuario,
         'validacionPermisos':validacionPermisos,
         'prueba':rolesProyecto,
-        'tipoUs':tipoUs,
-        'prioridades':prioridad,
+        'tipoUs':"tipoUs",
+        'prioridades':"prioridad",
         }
     html_template = loader.get_template('home/tipoUS.html')
     return HttpResponse(html_template.render(context,request))
@@ -466,7 +465,6 @@ def crearTUSProyecto(request,id):
         tipoUs = TipoUserStory(
             nombre_tipo_us = variables.get('nombre',False),
             descripcion_tipo_us= variables.get('descripcion',False),
-            prioridad_tipo_us= PrioridadTUs.objects.get(id=variables.get('prioridad',False)),
         )
         tipoUs.save()
         print(jsonFase)
@@ -502,7 +500,6 @@ def tipoUsImportar(request,id):
         'validacionPermisos':validacionPermisos,
         'prueba':rolesProyecto,
         'todostipoUs':todostipoUs,
-        
         'prioridades':prioridad
         }
     html_template = loader.get_template('home/tipoUSImportar.html')
@@ -520,8 +517,8 @@ def verProductBacklog(request,id):
     proyecto = getProyectsByID(id,userSession.id)[0]
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
     rolesProyecto = getRolByProyectId(id)
-    tipoUs = TipoUserStory.objects.filter(proyecto_tipo_us = id)
-    permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack']
+    # tipoUs = TipoUserStory.objects.filter(proyecto_tipo_us = id)
+    permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','crt_US']
     validacionPermisos = validarPermisos(permisosProyecto,userSession.id,id)
     userStorys = UserStory.objects.filter(proyecto_us = id)
     context={
@@ -538,6 +535,30 @@ def verProductBacklog(request,id):
     return HttpResponse(html_template.render(context,request))
 
 def crearUs(request,id):
+    """Se listan todos los tipos de US"""
+    userSession = getUsuarioSesion(request.user.email)
+    proyecto = getProyectsByID(id,userSession.id)[0]
+    rolUsuario = Rol.objects.get(id=proyecto.id_rol)
+    prioridad = PrioridadTUs.objects.all()
+    tipoUs = TipoUs_Proyecto.objects.filter(proyecto = id)
+    print(tipoUs)
+    rolesProyecto = getRolByProyectId(id)
+    permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','ctr_TipoUs','crt_US']
+    validacionPermisos = validarPermisos(permisosProyecto,userSession.id,id)
+    context={
+        'rolesProyecto':rolesProyecto,
+        'userSession':userSession,
+        'proyecto':proyecto,
+        'rolUsuario':rolUsuario,
+        'validacionPermisos':validacionPermisos,
+        'prueba':rolesProyecto,
+        'prioridades':prioridad,
+        'tipoUs':tipoUs,
+        }
+    html_template = loader.get_template('home/usCrear.html')
+    return HttpResponse(html_template.render(context,request))
+
+def crearUsGuardar(request,id):
     """Se agregan los nuevos Us"""
     variables = request.POST
     if request.method == 'POST':
@@ -546,7 +567,82 @@ def crearUs(request,id):
             nombre_us = variables.get('nombre',False),
             descripcion_us= variables.get('descripcion',False),
             tiempoEstimado_us = variables.get('tiempo',False),
-            tipo_us= TipoUserStory.objects.get(id=variables.get('tipoUs',False))
+            tipo_us= TipoUserStory.objects.get(id=1),
+            prioridad_negocio=variables.get('prioridad',False)
         )
         userStory.save()
     return redirect(f'/proyecto/{id}')
+
+def editarProyecto(request,id):
+    """
+    Cuando un usuario ingresa a un proyecto en el cual fue asignado se visualizan 
+    todos los datos de la misma 
+    """
+    userSession = getUsuarioSesion(request.user.email)
+    proyecto = getProyectsByID(id,userSession.id)[0]
+    rolUsuario = Rol.objects.get(id=proyecto.id_rol)
+    print(getPermisos(userSession.id,id),'Permisos')
+    permisosProyecto = ['dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack']
+    validacionPermisos = validarPermisos(permisosProyecto,userSession.id,id)
+    context= {  'userSession':userSession,
+                'proyecto':proyecto,
+                'segment': 'verProyecto',
+                'rolUsuario':rolUsuario,
+                'validacionPermisos':validacionPermisos
+                }
+    html_template = loader.get_template('home/editarProyecto.html')
+    return HttpResponse(html_template.render(context,request))
+
+def editarProyectoGuardar(request,id):
+    """
+    Metodo en el se crea el proyecto, realizando todos los inserts requeridos
+    """
+    print(request.POST['nombreProyecto'])
+    variables = request.POST
+    if request.method == 'POST':
+        Cliente.objects.filter(id=variables['idCliente']).update(
+            nombre_cliente = variables['nombreCliente'] ,
+            apellido_cliente =variables['apellidoCliente'] ,
+            email_cliente = variables['emailCliente'],
+            telefono_cliente = variables['telefonoCliente'],
+            empresa_cliente = variables['empresaCliente']
+        )
+        Proyecto.objects.filter(id=id).update(
+           nombre_proyecto = variables['nombreProyecto'],
+           duracion = variables['duracion'],
+           descripcion_proyecto = variables['descripcion'],
+           sprint_dias = variables['sprintDias']
+        )
+    return redirect(f'/proyecto/{id}')
+
+def iniciarProyecto(request,id):
+    proyectoActual = Proyecto.objects.get(id=id)
+    Proyecto.objects.filter(id=id).update(
+            fecha_ini_proyecto = datetime.date.today(),
+            fecha_fin_proyecto = calcularFechaFin(datetime.date.today(),proyectoActual.duracion),
+           estado = Estado.objects.get(descripcion="EN PROGRESO"), 
+    )
+    return redirect(f'/proyecto/{id}')
+
+def sprintCrear(request,id):
+    """
+    Cuando un usuario ingresa a un proyecto en el cual fue asignado se visualizan 
+    todos los datos de la misma 
+    """
+    userSession = getUsuarioSesion(request.user.email)
+    proyecto = getProyectsByID(id,userSession.id)[0]
+    rolUsuario = Rol.objects.get(id=proyecto.id_rol)
+    userStorys = UserStory.objects.filter(proyecto_us = id)
+    colaboradores = getColaboratorsByProyect(id)
+    permisosProyecto = ['dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack']
+    validacionPermisos = validarPermisos(permisosProyecto,userSession.id,id)
+    context= {  'userSession':userSession,
+                'proyecto':proyecto,
+                'segment': 'verProyecto',
+                'rolUsuario':rolUsuario,
+                'validacionPermisos':validacionPermisos,
+                'userStorys':userStorys,
+                'colaboradores':colaboradores
+                }
+    html_template = loader.get_template('home/sprintCrear.html')
+    return HttpResponse(html_template.render(context,request))

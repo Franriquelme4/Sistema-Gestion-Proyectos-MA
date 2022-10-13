@@ -23,14 +23,6 @@
           <label for="recipient-name" class="col-form-label">Descripcion</label>
           <input type="text" class="form-control" id="recipient-name" name="descripcion">
         </div>
-        <div class="form-group">
-          <select class="form-control" aria-label="Default select example" name="prioridad">
-            <option selected disabled>Seleccionar la prioridad</option>
-            {% for prioridad in prioridades %}
-            <option value="{{prioridad.id}}">{{prioridad.descripcion}}</option>
-            {% endfor %}
-          </select>
-        </div>
           <input hidden="true" type="text" name="jsonFase" id="jsonFase">
         <h4>Fases</h4>
         <!-- <div class="form-group">

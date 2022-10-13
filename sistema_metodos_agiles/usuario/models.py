@@ -74,17 +74,28 @@ class Cliente(models.Model):
     def __str__(self):
         return self.nombre_cliente
 
+class Estado(models.Model):
+    """Tabla en la cual se almacenan todos los estados del proyecto"""
+    descripcion = models.CharField(max_length=50,null=False)
+    class Meta:
+        verbose_name = 'Estado'
+        verbose_name_plural = 'Estados'
+        ordering = ['descripcion']
+    def __str__(self):
+        return self.descripcion
+
 class Proyecto(models.Model):
     """Modelo de la tabla proyectos, en la cual se almacenan todos los datos del proyecto"""
     nombre_proyecto = models.CharField(max_length=100)
-    cliente_proyecto = models.ForeignKey('Cliente',on_delete=models.CASCADE,)
+    cliente_proyecto = models.ForeignKey('Cliente',on_delete=models.CASCADE)
     fecha_ini_proyecto = models.DateField(null=True)
     fecha_fin_proyecto = models.DateField(null=True)
+    duracion = models.IntegerField(default=0,null=True)
     descripcion_proyecto = models.CharField(max_length=100,default='')
-    estado_proyecto = models.CharField(max_length=1,default='1')
     miembro_proyecto = models.ManyToManyField('MiembroEquipo')
     sprint_dias = models.IntegerField(default=0)
     fecha_creacion = models.DateField(default=datetime.date.today)
+    estado = models.ForeignKey('Estado',on_delete=models.CASCADE)
     class Meta:
         verbose_name = 'Proyecto'
         verbose_name_plural = 'Proyectos'
@@ -110,7 +121,6 @@ class CampoPersonalizado(models.Model):
 
 class TipoUserStory(models.Model):
     """Modelo de la tabla tipo de user story, en la cual se almacenan todos los datos de los tipos de user story"""
-    prioridad_tipo_us = models.ForeignKey('PrioridadTUs',on_delete=models.CASCADE,null=True)
     nombre_tipo_us = models.CharField(max_length=50,null=False)
     descripcion_tipo_us = models.CharField(max_length=100,null=False)
     flujo_tipo_us = models.JSONField(null=True)
@@ -133,6 +143,7 @@ class UserStory(models.Model):
     nombre_us = models.CharField(max_length=50,null=False)
     descripcion_us = models.CharField(max_length=50,null=False)
     tiempoEstimado_us = models.IntegerField(null=True)
+    disponible = models.BooleanField(default=True)
     estadoActual_us = models.CharField(max_length=20,null=True)
     duracion_us = models.IntegerField(default=0)
     tipo_us = models.ForeignKey('TipoUserStory',on_delete=models.CASCADE)
@@ -140,6 +151,7 @@ class UserStory(models.Model):
     fechaIni_us = models.DateField(auto_now_add=True)
     fechaMod_us = models.DateField(auto_now=True)
     fecha_creacion = models.DateField(default=datetime.date.today)
+    prioridad_negocio = models.IntegerField(default=0)
     class Meta:
         verbose_name = 'User Story'
         verbose_name_plural = 'User Stories'
@@ -224,12 +236,3 @@ class PrioridadTUs(models.Model):
     def __str__(self):
         return self.descripcion
 
-class Estado(models.Model):
-    """Tabla en la cual se almacenan todos los estados del proyecto"""
-    descripcion = models.CharField(max_length=50,null=False)
-    class Meta:
-        verbose_name = 'Estado'
-        verbose_name_plural = 'Estados'
-        ordering = ['descripcion']
-    def __str__(self):
-        return self.descripcion
