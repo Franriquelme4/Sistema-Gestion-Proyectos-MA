@@ -246,32 +246,6 @@ def rolesProyectoCrear(request,id):
                 }
     html_template = loader.get_template('home/rolesProyectoCrear.html')
     return HttpResponse(html_template.render(context,request))
-
-def rolesProyectoEditar(request,idProyecto,idRol):
-    """
-    Se lista todos los roles especificos de cada proyecto
-    """
-    userSession = getUsuarioSesion(request.user.email)
-    permisos = Permiso.objects.all()
-    proyecto = getProyectsByID(idProyecto,userSession.id)[0]
-    rolUsuario = Rol.objects.get(id=proyecto.id_rol)
-    rolEditar = Rol.objects.get(id=idRol)
-
-    for i in rolEditar.permiso.all():
-       permisos = permisos.filter(~Q(id=i.id))
-    print(request.session['userSesion'])
-    permisosProyecto = ['crt_rol','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack']
-    validacionPermisos = validarPermisos(permisosProyecto,rolUsuario)
-    context= {  'userSession':userSession,
-                'proyecto':proyecto,
-                'segment': 'rolesProyecto',
-                'permisos':permisos,
-                'rolUsuario':rolUsuario,
-                'validacionPermisos':validacionPermisos,
-                'rolEditar':rolEditar
-                }
-    html_template = loader.get_template('home/rolesProyectoEditar.html')
-    return HttpResponse(html_template.render(context,request))
     
 
 def crearRolProyecto(request,id):
@@ -404,11 +378,13 @@ def colaboradoresProyectoEditar(request,idProyecto,idColaborador):
     print(f"ID PROYECTO = {idProyecto}")
     print(f"ID COLABORADOR = {idColaborador}")
     userSession = getUsuarioSesion(request.user.email)
-    print(f"GET PROYECTS = {getProyectsByID(id,userSession.id)}")
-    proyecto = getProyectsByID(id,userSession.id)[0]
+    proyecto = getProyectsByID(idProyecto,userSession.id)[0]
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
-    rolesProyecto = getRolByProyectId(id)
+    rolesProyecto = getRolByProyectId(idProyecto)
     colaboradores = getColaboratorsByProyect(idProyecto)
+    print(f"GET COLABORADORES = {colaboradores}")
+    print(f"GET COLABORADORES = {rolesProyecto}")
+
     usuarios = Usuario.objects.filter(~Q(id=userSession.id)).filter(~Q(df_rol=1))
     permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack']
     validacionPermisos = validarPermisos(permisosProyecto,rolUsuario)
@@ -424,6 +400,31 @@ def colaboradoresProyectoEditar(request,idProyecto,idColaborador):
     html_template = loader.get_template('home/colaboradoresProyectoEditar.html')
     return HttpResponse(html_template.render(context,request))
 
+def rolesProyectoEditar(request,idProyecto,idRol):
+    """
+    Se lista todos los roles especificos de cada proyecto
+    """
+    userSession = getUsuarioSesion(request.user.email)
+    permisos = Permiso.objects.all()
+    proyecto = getProyectsByID(idProyecto,userSession.id)[0]
+    rolUsuario = Rol.objects.get(id=proyecto.id_rol)
+    rolEditar = Rol.objects.get(id=idRol)
+
+    for i in rolEditar.permiso.all():
+       permisos = permisos.filter(~Q(id=i.id))
+    print(request.session['userSesion'])
+    permisosProyecto = ['crt_rol','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack']
+    validacionPermisos = validarPermisos(permisosProyecto,rolUsuario)
+    context= {  'userSession':userSession,
+                'proyecto':proyecto,
+                'segment': 'rolesProyecto',
+                'permisos':permisos,
+                'rolUsuario':rolUsuario,
+                'validacionPermisos':validacionPermisos,
+                'rolEditar':rolEditar
+                }
+    html_template = loader.get_template('home/rolesProyectoEditar.html')
+    return HttpResponse(html_template.render(context,request))
 
 def asignarColaboradorProyecto(request,id):
     """Se almacena el nuevo rol con el colaborador al proyecto"""
