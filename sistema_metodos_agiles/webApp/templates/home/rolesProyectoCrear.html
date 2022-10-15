@@ -1,0 +1,47 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+{% include 'includes/options.html' %}
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h3>Crear Nuevo Rol</h3>
+      
+    </div>
+    <div class="card-body">
+      <form method="post" action="{% url 'webApp:crearRolProyecto' proyecto.id %}">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="recipient-name" class="col-form-label">Nombre del Rol</label>
+          <input type="text" class="form-control" id="recipient-name" name="nombre_rol">
+        </div>
+        <div class="form-group">
+          <label for="recipient-name" class="col-form-label">Descripcion de rol</label>
+          <input type="text" class="form-control" id="recipient-name" name="descripcion">
+        </div>
+        <div class="form-group">
+          <select class="form-select" multiple aria-label="multiple select example" name="permisos">
+            <option selected disabled>Seleccionar los permisos</option>
+            {% for permiso in permisos %}
+            <option value="{{permiso.id}}">{{permiso.descripcion_permiso}}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <a class="btn btn-danger btn-sm" href="{% url 'webApp:rolesProyecto' proyecto.id %}">Cancelar</a>
+        <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

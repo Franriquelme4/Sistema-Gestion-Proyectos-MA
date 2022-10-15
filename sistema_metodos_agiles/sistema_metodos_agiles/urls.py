@@ -25,4 +25,10 @@ urlpatterns = [
     path('logout/',auth_views.LogoutView.as_view(),name='logout'),
     path('social-auth/',include('social_django.urls'),name='social'),
     path('',include('webApp.urls')),
+    path('CrearProyecto/',views.CrearProyecto, name='CrearProyecto'),
+    path('proyecto/',views.proyectos, name='proyectos'),
+    path('usuarios/activar/<int:id>', views.activarUsuario, name='usuarios'),
+    path('proyecto/roles/<int:id>',views.rolesProyecto, name='rolesProyecto'),
+    path('proyecto/roles/guardar/<int:id>',views.crearRolProyecto, name='crearRolProyecto'),
+    path('proyecto/colaboradores/guardar/<int:id>',views.asignarColaboradorProyecto, name='asignarColaboradorProyecto'),
 ]
