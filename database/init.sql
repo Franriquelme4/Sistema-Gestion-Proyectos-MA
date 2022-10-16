@@ -46,6 +46,10 @@ VALUES(31, 'Modificar Tipo de US', 'upd_TipoUs');
 INSERT INTO public.usuario_permiso
 (id, descripcion_permiso, nombre_permiso)
 VALUES(32, 'Eliminar Tipo de Us', 'dlt_TipoUs');
+INSERT INTO public.usuario_permiso
+(id, descripcion_permiso, nombre_permiso)
+VALUES(33, 'Importar Tipo de US', 'imp_TipoUs');
+
 
 
 INSERT INTO usuario_rol_permiso(id, rol_id, permiso_id)
@@ -70,17 +74,26 @@ VALUES
 (18,3,30),
 (19,3,31),
 (20,3,32),
-(21,3,12);
+(21,3,12),
+(22,3,33),
+(23,3,11);
 
-INSERT INTO public.usuario_prioridadtus
-(id, descripcion, valor)
-VALUES(1, 'Alta', 1);
-INSERT INTO public.usuario_prioridadtus
-(id, descripcion, valor)
-VALUES(2, 'Media', 2);
-INSERT INTO public.usuario_prioridadtus
-(id, descripcion, valor)
-VALUES(3, 'Baja', 3);
+INSERT INTO public.usuario_estado
+(id, descripcion)
+VALUES(1, 'PENDIENTE');
+INSERT INTO public.usuario_estado
+(id, descripcion)
+VALUES(2, 'EN PROGRESO');
+INSERT INTO public.usuario_estado
+(id, descripcion)
+VALUES(3, 'TERMINADO');
+INSERT INTO public.usuario_estado
+(id, descripcion)
+VALUES(4, 'CANCELADO');
 
+
+INSERT INTO public.usuario_usuario
+(id, nombre, apellido, email, nombre_usuario, activo, df_rol_id)
+VALUES(1, 'admin', 'sistema', 'as.is2.g15@gmail.com', 'as.is2.g15', true, 1);
 
 

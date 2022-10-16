@@ -7,44 +7,8 @@
 
 {% block content %}
 {% include 'includes/options.html' %}
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Agregar Colaborador</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <form method="post" action="{% url 'webApp:asignarColaboradorProyecto' proyecto.id %}">
-                {% csrf_token %}
-                <div class="form-group">
-                  <select class="form-control" aria-label="Default select example" name="usuario">
-                    <option selected>Seleccionar usuario</option>
-                    {% for usuario in usuarios %}
-                    <option value="{{usuario.id}}">{{usuario.nombre}} {{usuario.apellido}}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-                <div class="form-group">
-                  <select class="form-control" aria-label="Default select example" name="rol">
-                    <option selected>Seleccionar rol</option>
-                    {% for rolProyecto in rolesProyecto %}
-                    <option value="{{rolProyecto.id_rol}}">{{rolProyecto.nombre_rol}}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Guardar</button>
-              </form>
-        </div>
-      </div>
-    </div>
-  </div>
 {% if validacionPermisos.agr_Colaborador %}
-<button class="btn btn-primary " data-toggle="modal" data-target="#exampleModal"><i class="material-icons">add</i>Agregar colaborador</button>
+<a class="btn btn-primary " href="{% url 'webApp:colaboradoresProyectoCrear' proyecto.id %}"><i class="material-icons">add</i>Agregar colaborador</a>
 {% endif %}  
 <div class="row">
             <div class="col-md-12">
@@ -55,7 +19,7 @@
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
-                    <table class="table">
+                    <table id="table" class="display" style="width:100%">
                       <thead class=" text-primary">
                         <th>
                           
@@ -72,6 +36,9 @@
                         <th>
                           Descripcion del Rol
                         </th>
+                        <!-- <th>
+                          Acciones
+                        </th> -->
                       </thead>
                       <tbody>
                         {% for colaborador in colaboradores %}
@@ -91,6 +58,16 @@
                           <td>
                             {{colaborador.descripcion_rol}}
                           </td>
+                          <td>
+                            <!-- <form action="% url 'webApp:editarColaboradorProyecto' proyecto.id %}" method="post">
+                              <button class="btn btn-success btn-sm" type="submit"><i class="material-icons">&#xE254;</i></button>
+                            </form>
+                            <form action="{% url 'webApp:eliminarColaboradorProyecto' proyecto.id %}" method="post">
+                              {% csrf_token %}
+                              <input name="idRol" type="text" hidden="true" value="{{rolProyecto.id_rol}}">
+                              <button class="btn btn-danger btn-sm" type="submit"><i class="material-icons">&#xE872;</i></button>
+                            </form> -->
+                          </td>
                         </tr>
                         {% endfor %}
                       </tbody>
@@ -100,7 +77,6 @@
               </div>
             </div>
         </div>
-
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
