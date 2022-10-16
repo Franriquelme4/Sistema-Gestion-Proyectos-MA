@@ -16,20 +16,18 @@
           {% for userStory in userStorys %}
           
           <div class="card card-stats m-3">
-            <div class="card-header card-header-{{userStory.tipo_us.prioridad_tipo_us.color}} card-header-icon">
+            <div class="card-header card-header-info card-header-icon">
               <div class="card-icon">
                 <i class="material-icons">developer_mode</i>
               </div>
               
-              <h3 class="card-title">{{userStory.nombre_us}}</h3>
-              <p class="card-category">{{userStory.descripcion_us}}</p>
-              <p class="card-category"><strong>Tiempo Estimado</strong> {{userStory.tiempoEstimado_us}} hs</p>
+              <h3 class="card-title">{{userStory.us.nombre_us}}</h3>
+              <p class="card-category">{{userStory.us.descripcion_us}}</p>
+              <p class="card-category"><strong>Tiempo Estimado</strong> {{userStory.us.tiempoEstimado_us}} hs</p>
             </div>
-            <div class="card-footer">
-              <!-- <div class="stats">
-                <i class="material-icons ">developer_board</i>
-                <a href="{% url 'webApp:verProyecto' proyecto.id %}">Ver proyecto</a>
-              </div> -->
+            <div class="card-body">
+             
+              <p class="card-text">Colaborador: {{userStory.colaborador}}</p>
             </div>
           </div>
           {% endfor %}

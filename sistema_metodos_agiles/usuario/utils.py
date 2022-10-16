@@ -1,6 +1,7 @@
 from .models import MiembroEquipo, Permiso, Proyecto, Usuario, Rol, ProyectoRol, TipoUserStory
-import datetime
 import calendar
+from datetime import date, datetime, timedelta
+import numpy as np
 
 def getUsuarioSesion(email):
     usuario = Usuario.objects.get(email=email)
@@ -65,13 +66,27 @@ def getRolByProyectId(id):
 
 
 def getColaboratorsByProyect(id):
-    colaboradores = Usuario.objects.raw(f"""
-		select uu.*, ur.id as id_rol, ur.nombre_rol as nombre_rol,ur.descripcion_rol as descripcion_rol from usuario_usuario uu 
-		join usuario_miembroequipo_miembro_usuario ummu on ummu.usuario_id = uu.id 
-		join usuario_miembroequipo_miembro_rol ummr on ummr.miembroequipo_id = ummu.miembroequipo_id 
-		join usuario_proyecto_miembro_proyecto upmp on upmp.miembroequipo_id = ummu.miembroequipo_id 
-		join usuario_rol ur on ur.id = ummr.rol_id 
-		join usuario_proyecto up on up.id = upmp.proyecto_id where up.id = {id}
+    colaboradores = Usuario.objects.raw(f"""select
+	uu.*,
+	array_to_string(array_agg(ur.nombre_rol), ', ') as nombre_rol,
+	array_to_string(array_agg(ur.descripcion_rol), ', ') as descripcion_rol,
+	array_to_string(array_agg(ur.id), ', ') as id_rol
+from
+	usuario_usuario uu
+join usuario_miembroequipo_miembro_usuario ummu on
+	ummu.usuario_id = uu.id
+join usuario_miembroequipo_miembro_rol ummr on
+	ummr.miembroequipo_id = ummu.miembroequipo_id
+join usuario_proyecto_miembro_proyecto upmp on
+	upmp.miembroequipo_id = ummu.miembroequipo_id
+join usuario_rol ur on
+	ur.id = ummr.rol_id
+join usuario_proyecto up on
+	up.id = upmp.proyecto_id
+where
+	up.id = {id}
+group by
+	uu.id
 		""")
     return colaboradores
 
@@ -108,7 +123,7 @@ def validarPermisos(permisosVista,idUsuario,idProyecto=None):
 		permisosUsuario = getPermisos(idUsuario,idProyecto)
 	else:
 		usuarioPer = Usuario.objects.get(id=idUsuario).df_rol.permiso.all()
-		print(usuarioPer)
+
 		for per in usuarioPer:
 			permisosUsuario.append(per.nombre_permiso)
 	permisos = {}
@@ -118,7 +133,7 @@ def validarPermisos(permisosVista,idUsuario,idProyecto=None):
 			permisos[permisoVista] =  True
 		except:
 			permisos[permisoVista] = False
-	print(permisos)
+
 	# for permisoVista in permisosVista:
 	# 	permisos[permisoVista] = rolUsuario.poseePermiso(permisoVista)
 	return permisos
@@ -151,3 +166,44 @@ def calcularFechaFin(sourcedate, months):
     month = month % 12 + 1
     day = min(sourcedate.day, calendar.monthrange(year,month)[1])
     return datetime.date(year, month, day)
+
+def getTipoUsBySprint(userStory):
+	tipoUsId = []
+	for us in userStory:
+		# print(us.us.tipo_us.id)
+		tipoUsId.append(us.us.tipo_us.id)
+	result = []
+	tipoUs = []
+	for item in tipoUsId:
+		if item not in result:
+			result.append(item)
+			tipoUs.append(TipoUserStory.objects.get(id=item))
+	print(result)
+	return tipoUs
+
+def is_busy_day(date):
+  res = np.is_busday(date)
+  return(res)
+
+def busy_end_date(start_date,busy_days):
+  res = 0
+  contador = 0
+  aux_days = busy_days
+  aux_date = start_date
+  while True:
+    contador = contador + 1
+    aux_days = aux_days - res
+    td = int(aux_days)
+    aux_date = aux_date + timedelta(days = td)
+    res = np.busday_count(start_date.strftime('%Y-%m-%d'), aux_date.strftime('%Y-%m-%d'))
+    if busy_days == res:
+      break
+    if res > busy_days:
+      print("Error mas dias del enviado")
+      break
+    if contador > 99:
+      print("Error break por Contador")
+      break
+    if res == 1:
+      aux_days = aux_days + 1
+  return(aux_date)
