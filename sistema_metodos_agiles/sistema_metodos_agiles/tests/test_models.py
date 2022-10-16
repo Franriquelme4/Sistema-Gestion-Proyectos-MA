@@ -42,6 +42,68 @@ class TestProyecto(TestCase):
         self.campo_personalizado = CampoPersonalizado.objects.create(nombre_cp = 'nombre campo personalizado de prueba', tipoCampo_cp = 'tipo campo de prueba')
         self.campo_personalizado.save()
 
+        self.fase_prueba = Fase.objects.create(nombre_fase = 'probando fase', cod_fase = '30')
+        self.fase_prueba.save()
+
+        self.cliente = Cliente.objects.create(
+            nombre_cliente = 'cliente inicial',
+            apellido_cliente = 'cliente apellido',
+            email_cliente = 'cliente@inicial.com',
+            telefono_cliente = '1234',
+            empresa_cliente = 'empresa inicial',
+        )
+        self.cliente.save()
+
+        self.proyecto = Proyecto.objects.create(
+            nombre_proyecto = 'proyecto inicial',
+            cliente_proyecto = Cliente.objects.get(nombre_cliente = 'cliente inicial'),
+            descripcion_proyecto = 'descripcion inicial',
+            estado_proyecto = '1',
+            sprint_dias = 0,
+            fecha_creacion = '2022-10-15',
+        )
+        self.proyecto.save()
+        self.proyecto.miembro_proyecto.set(MiembroEquipo.objects.filter(descripcion='miembro equipo para prueba'))
+        self.proyecto.save()
+
+        self.prioridad_tus = PrioridadTUs.objects.create(
+            descripcion = 'prioridadTUS inicial',
+            valor = 4,
+            color = 'green',
+        )    
+        self.prioridad_tus.save()
+
+        self.campo_personalizado = CampoPersonalizado.objects.create(
+            nombre_cp = 'campo personalizado inicial',
+            tipoCampo_cp = 'inicial',
+        )
+        self.campo_personalizado.save()
+
+        self.tipo_user_story = TipoUserStory.objects.create(
+            proyecto_tipo_us = Proyecto.objects.get(nombre_proyecto = 'proyecto inicial'),
+            prioridad_tipo_us = PrioridadTUs.objects.get(descripcion = 'prioridadTUS inicial'),
+            nombre_tipo_us = 'tipoUS inicial',
+            descripcion_tipo_us = 'descripcion TUS inicial',
+        )
+        self.tipo_user_story.campoPer_tipo_us.set(CampoPersonalizado.objects.filter(tipoCampo_cp = 'inicial'))
+        self.tipo_user_story.save()
+
+        self.sprint = Sprint.objects.create(
+            proyecto_sp = Proyecto.objects.get(nombre_proyecto = 'proyecto inicial'),
+            nombre_sp = 'sprint inicial',
+            duracion_sp = 5,
+            fecha_creacion = '2022-10-15',
+            fechaFIn_sp = '2022-10-16',
+        )
+        self.sprint.userStory_sp.set('')
+        self.sprint.save()
+
+        self.fase_tus = FaseTUS.objects.create(
+            tipo_us_faseTUS = TipoUserStory.objects.get(nombre_tipo_us = 'tipoUS inicial'),
+            fase_faseTUS = Fase.objects.get(nombre_fase = 'probando fase'),
+        )
+        self.fase_tus.save()
+
     def test_crear_proyecto(self):
 
         """
@@ -145,9 +207,9 @@ class TestProyecto(TestCase):
         )
         
         proyecto_rol.save()
-        proyecto_rol.set(Rol.objects.filter(nombre_rol='rol de prueba'))
+        proyecto_rol.rol.set(Rol.objects.filter(nombre_rol='rol de prueba'))
         proyecto_rol.save()
-        proyecto_rol.set(Proyecto.objects.filter(nombre_proyecto = 'proyecto_prueba'))
+        proyecto_rol.proyecto.set(Proyecto.objects.filter(nombre_proyecto = 'proyecto_prueba'))
         proyecto_rol.save()
         self.assertEqual(proyecto_rol.descripcion_proyecto_rol, 'proyecto rol de prueba')
 
@@ -156,14 +218,14 @@ class TestProyecto(TestCase):
             Test para verificar la creacion de un nuevo tipo de User Story.
         """
         tipo_user_story = TipoUserStory(
-            proyecto_tipo_us = Proyecto.objects.filter(nombre_proyecto = 'proyecto_prueba'),
-            prioridad_tipo_us = PrioridadTUs.objects.filter(descripcion = 'Descripcion T.US de prueba'),
+            proyecto_tipo_us = Proyecto.objects.get(nombre_proyecto = 'proyecto inicial'),
+            prioridad_tipo_us = PrioridadTUs.objects.get(descripcion = 'prioridadTUS inicial'),
             nombre_tipo_us = 'nombre TUS de prueba',
             descripcion_tipo_us = 'descripcion TUS de prueba',
         )
 
         tipo_user_story.save()
-        tipo_user_story.campoPer_tipo_us.set(CampoPersonalizado.objects.filter(nombre_cp = 'nombre campo personalizado de prueba'))
+        tipo_user_story.campoPer_tipo_us.set(CampoPersonalizado.objects.filter(nombre_cp = 'campo personalizado inicial'))
         tipo_user_story.save()
         self.assertEqual(tipo_user_story.descripcion_tipo_us, 'descripcion TUS de prueba')
 
@@ -173,16 +235,16 @@ class TestProyecto(TestCase):
         """
 
         user_story = UserStory(
-            nomnbre_us = 'nombre US de prueba',
+            proyecto_us = Proyecto.objects.get(descripcion_proyecto = 'descripcion inicial'),
+            nombre_us = 'nombre US de prueba',
             descripcion_us = 'descripcion US de prueba',
-            tiempoEstimado_us = '',
+            tiempoEstimado_us = None,
             estadoActual_us = 'TODO',
+            tipo_us = TipoUserStory.objects.get(descripcion_tipo_us = 'descripcion TUS inicial'),
+            asignadoUsu_us = MiembroEquipo.objects.get(descripcion = 'miembro equipo para prueba'),
         )
         
         user_story.save()
-        user_story.proyecto_us.set(Proyecto.objects.filter(nombre_proyecto = 'proyecto_prueba'))
-        user_story.tipo_us.set(TipoUserStory.objects.filter(nombre_tipo_us = 'nombre TUS de prueba'))
-        user_story.asignadoUsu_us.set(MiembroEquipo.objects.filter(descripcion = 'MiembroEquipo de prueba'))
         user_story.save()
         self.assertEqual(user_story.descripcion_us, 'descripcion US de prueba')
 
@@ -193,12 +255,11 @@ class TestProyecto(TestCase):
 
         sprint = Sprint(
             nombre_sp = 'nombre Sprint de prueba',
-            fechaFIn_sp = '10-12-2022',
+            fechaFIn_sp = '2022-10-15',
             duracion_sp = 10,
         )
 
         sprint.save()
-        sprint.proyecto_sp.set(Proyecto.objects.filter(noombre_proyecto = 'proyecto_prueba'))
         sprint.userStory_sp.set(UserStory.objects.filter(nombre_us = 'nombre US de prueba'))
         sprint.save()
         self.assertEqual(sprint.nombre_sp, 'nombre Sprint de prueba')
@@ -209,12 +270,12 @@ class TestProyecto(TestCase):
         """
 
         fase = Fase(
-            nombre_fase = 'fase de prueba',
-            cod_fase = '20'
+            nombre_fase = 'fase prueba',
+            cod_fase = '20',
         )
 
         fase.save()
-        self.assertEqual(fase.nombre_fase, 'fase de prueba')
+        self.assertEqual(fase.nombre_fase, 'fase prueba')
 
     def test_fase_tus(self):
         """
@@ -222,12 +283,14 @@ class TestProyecto(TestCase):
         """
 
         fase_tus = FaseTUS(
+            tipo_us_faseTUS = TipoUserStory.objects.get(nombre_tipo_us = 'tipoUS inicial'),
+            #fase_faseTUS = Fase.objects.get(nombre_fase = 'probando fase'),
         )
         fase_tus.save()
-        fase_tus.tipo_us_faseTUS.set(TipoUserStory.objects.filter(descripcion_tipo_us = 'descripcion TUS de prueba'))
-        fase_tus.fase_faseTUS.set(Fase.objects.filter(nombre_fase = 'fase de prueba'))
-        fase_tus.save()
-        self.assertEqual(fase_tus.tipo_us_faseTUS, Fase.objects.filter(nombre_fase = 'fase de prueba'))
+        #fase_tus.tipo_us_faseTUS.set(TipoUserStory.objects.filter(descripcion_tipo_us = 'descripcion TUS de prueba'))
+        #fase_tus.fase_faseTUS.set(Fase.objects.filter(nombre_fase = 'fase de prueba'))
+        #fase_tus.save()
+        self.assertEqual(fase_tus.tipo_us_faseTUS, TipoUserStory.objects.get(nombre_tipo_us = 'tipoUS inicial'))
 
     def test_tablero(self):
         """
@@ -235,13 +298,13 @@ class TestProyecto(TestCase):
         """
 
         tablero = Tablero(
+            sprint_tablero = Sprint.objects.get(nombre_sp = 'sprint inicial'),
+            tipo_us_fase = TipoUserStory.objects.get(nombre_tipo_us = 'tipoUS inicial'),
             nombre_tablero = 'tablero de prueba',
         )
 
         tablero.save()
-        tablero.sprint_tablero.set(Sprint.objects.filter(nombre_sp = 'nombre Sprint de prueba'))
-        tablero.tipo_us_fase.set(TipoUserStory.objects.filter(nombre_tipo_us = 'nombre TUS de prueba'))
-        tablero.faseTUS_tablero.set(FaseTUS.objects.filter(fase_faseTUS = Fase.objects.filter(nombre_fase = 'fase de prueba')))
+        tablero.faseTUS_tablero.set(FaseTUS.objects.filter(fase_faseTUS = Fase.objects.get(nombre_fase = 'probando fase')))
         tablero.save()
         self.assertEqual(tablero.nombre_tablero, 'tablero de prueba')
     
