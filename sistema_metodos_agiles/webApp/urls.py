@@ -48,7 +48,8 @@ urlpatterns = [
     path('proyecto/sprint/us/guardar/<int:id>',views.sprintUsAgregarGuardar, name='sprintUsAgregarGuardar'),
     path('proyecto/sprint/backlog/<int:idProyecto>/<int:idSprint>',views.sprintBacklog, name='sprintBacklog'),
     path('proyecto/sprint/tablero/<int:idProyecto>/<int:idSprint>/<int:idTipoUs>',views.sprintTablero, name='sprintTablero'),
-    path('proyecto/sprint/tablero/<int:idProyecto>/<int:idSprint>',views.sprintTablero, name='sprintTablero2')
+    path('proyecto/sprint/tablero/<int:idProyecto>/<int:idSprint>',views.sprintTablero, name='sprintTablero2'),
+    path('proyecto/sprint/tablero/actualizar/<int:idProyecto>/<int:idSprint>',views.sprintTableroActualizarEstado, name='sprintTableroActualizarEstado'),
 
     
 
