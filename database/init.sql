@@ -75,17 +75,8 @@ VALUES
 (19,3,31),
 (20,3,32),
 (21,3,12),
-(22,3,33);
-
-INSERT INTO public.usuario_prioridadtus
-(id, descripcion, valor,color)
-VALUES(1, 'Alta', 1,'danger');
-INSERT INTO public.usuario_prioridadtus
-(id, descripcion, valor,color)
-VALUES(2, 'Media', 2,'warning');
-INSERT INTO public.usuario_prioridadtus
-(id, descripcion, valor)
-VALUES(3, 'Baja', 3);
+(22,3,33),
+(23,3,11);
 
 INSERT INTO public.usuario_estado
 (id, descripcion)
@@ -101,5 +92,8 @@ INSERT INTO public.usuario_estado
 VALUES(4, 'CANCELADO');
 
 
+INSERT INTO public.usuario_usuario
+(id, nombre, apellido, email, nombre_usuario, activo, df_rol_id)
+VALUES(1, 'admin', 'sistema', 'as.is2.g15@gmail.com', 'as.is2.g15', true, 1);
 
 

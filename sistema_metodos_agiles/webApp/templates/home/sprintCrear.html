@@ -10,104 +10,34 @@
 <div class="container">
   <div class="card">
     <div class="card-header">
-      <h3>Crear Sprint</h3>
+      <h3>Crear Nuevo Sprint</h3>
+      
     </div>
     <div class="card-body">
-      <form method="post" action="{% url 'webApp:crearTUSProyecto' proyecto.id %}" id="formTus">
+      <form method="post" action="{% url 'webApp:sprintCrearGuardar' proyecto.id %}">
         {% csrf_token %}
-        <input hidden="true" type="text" name="jsonFase" id="jsonFase">
-      </form>
-      <button id="addRow" class="btn btn-info btn-sm"><i class="material-icons">add</i>Agregar User Story</button>
-      <table id="tabla--fase" class="display" style="width:100%">
-        <thead>
-          <tr>
-            <th>User Story</th>
-            <th>Encargado</th>
-            <th>Eliminar</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th>
-              <select class="form-control" aria-label="Default select example" name="usuario">
-                <option selected>Seleccionar User Story</option>
-                {% for userStory in userStorys %}
-                <option value="{{userStory.id}}">{{userStory.nombre_us}}</option>
-                {% endfor %}
-              </select>
-            </th>
-            <th>
-              <select class="form-control" aria-label="Default select example" name="usuario">
-                <option selected>Seleccionar Colaborador</option>
-                {% for colaborador in colaboradores %}
-                <option value="{{colaborador.id}}">{{colaborador.nombre}} {{colaborador.apellido}}</option>
-                {% endfor %}
-              </select>
-            </th>
-            <th><button class="btn btn-danger btn-sm eliminar">Eliminar</button></th>
-          </tr>
-        </tbody>
-      </table>
+        <div class="form-group">
+          <label for="recipient-name" class="col-form-label">Nombre Sprint</label>
+          <input type="text" class="form-control" id="recipient-name" name="nombre">
+        </div>
+        <div class="form-group">
+          <label for="recipient-name" class="col-form-label">Descripcion Sprint</label>
+          <input type="text" class="form-control" id="recipient-name" name="descripcion">
+        </div>
+        <div class="form-group">
+          <label for="recipient-name" class="col-form-label">Fecha de inicio</label>
+          <input type="date" class="form-control" id="recipient-name" name="fecha_inicio">
+        </div>
 
-      <a class="btn btn-danger btn-sm" href="{% url 'webApp:tipoUs' proyecto.id %}">Cancelar</a>
-      <button type="submit" class="btn btn-primary btn-sm" id="enviar">Guardar</button>
+        <a class="btn btn-danger btn-sm" href="{% url 'webApp:rolesProyecto' proyecto.id %}">Cancelar</a>
+        <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+      </form>
     </div>
   </div>
 </div>
 
+
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}
-<script>
-  $(document).ready(function () {
-    const t = $('#tabla--fase').DataTable({
-      "dom": "ltpr"
-    });
-    let counter = 1;
-    const form = $('#formTus');
-
-    $('#addRow').on('click', function () {
-      t.row.add([
-        `<select class="form-control" aria-label="Default select example" name="usuario">
-                <option selected>Seleccionar User Story</option>
-                {% for userStory in userStorys %}
-                <option value="{{userStory.id}}">{{userStory.nombre_us}}</option>
-                {% endfor %}
-              </select>`,
-        `<select class="form-control" aria-label="Default select example" name="usuario">
-                <option selected>Seleccionar Colaborador</option>
-                {% for colaborador in colaboradores %}
-                <option value="{{colaborador.id}}">{{colaborador.nombre}} {{colaborador.apellido}}</option>
-                {% endfor %}
-              </select>`,
-        '<button class="btn btn-danger btn-sm eliminar">Eliminar</button>'])
-        .draw(true);
-      counter++;
-    });
-    // $('#addRow').click();
-    $('#tabla--fase tbody').on('click', 'button.eliminar', function () {
-      t
-        .row($(this).parents('tr'))
-        .remove()
-        .draw();
-    });
-    $("#enviar").click(function () {
-      var data = t.$('input.fase');
-      //console.log(data);
-      let arrayFase = [];
-      for (let index = 0; index < data.length; index = index + 2) {
-        arrayFase = [...arrayFase, {
-          us: data[index].value,
-          colaborador: data[index + 1].value
-        }]
-      }
-      console.log(arrayFase);
-      $('#jsonFase').val(JSON.stringify(arrayFase))
-      //alert(data);
-      //return false;
-      $("#formTus").submit();
-    });
-  });
-</script>
-{% endblock javascripts %}
+{% block javascripts %}{% endblock javascripts %}
