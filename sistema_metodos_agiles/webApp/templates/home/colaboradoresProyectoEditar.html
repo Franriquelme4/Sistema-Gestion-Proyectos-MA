@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} UI Tables {% endblock %} 
+{% block title %} UI Tables {% endblock %}  
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -16,9 +16,9 @@
       <form method="post" action="{% url 'webApp:editarColaboradorProyecto' proyecto.id %}">
         {% csrf_token %}
         <select class="form-select" multiple aria-label="multiple select example" name="permisos" value="{{rolesProyecto.nombre_rol}}">
-          <option selected disabled>Seleccionar los permisos</option>
-          {% for permiso in rolesProyecto %}
-          <option value="{{permiso.id}}">{{permiso.nombre_rol}}</option>
+          <option selected disabled>Seleccionar los Roles</option>
+          {% for rol in rolesProyecto %}
+          <option value="{{rol.id}}">{{rol.nombre_rol}}</option>
           {% endfor %}
         </select>
         <a class="btn btn-danger btn-sm" href="{% url 'webApp:colaboradoresProyecto' proyecto.id %}">Cancelar</a>

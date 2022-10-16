@@ -2,7 +2,89 @@
 {% block title %} UI Typography {% endblock %}
 {% block content %}
 {% include 'includes/options.html' %}
-<div class="container-fluid">
+<div class="container">
+        <div class="card card-stats my-3 m-3 p-3">
+          <div class="card-header card-header-warning card-header-icon">
+            <div class="card-icon">
+              <i class="material-icons">build</i>
+            </div>
+            <p class="card-category"></p>
+            <h3 class="card-title">
+              <small>Configuracion de proyecto</small>
+            </h3>
+            <h3 class="card-title">
+                <small>Estado: {{proyecto.estado}}</small>
+            </h3>
+
+            {% if proyecto.estado.descripcion == "PENDIENTE" %}
+            <h3 class="card-title">
+                <small><a class="btn btn-sm btn-success" href="{% url 'webApp:iniciarProyecto' proyecto.id %}">Iniciar Proyecto</a></small>
+                <small><a class="btn btn-sm btn-info" href="{% url 'webApp:editarProyecto' proyecto.id %}">Editar</a></small>
+            </h3>
+            {% endif %}
+
+          </div>
+        </div>
+        {% if proyecto.estado.descripcion == "EN PROGRESO" %}
+        <div class="row">
+            <div class="col-md-12 mx-3 p-3">
+              <div class="card">
+                <div class="card-header">
+                    <a class="btn btn-primary btn-sm" href="{% url 'webApp:sprintCrear' proyecto.id %}"><i class="material-icons">add</i>Crear Sprint</a>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="display" style="width:100%">
+                      <thead class=" text-primary">
+                        <th>                         
+                        </th>
+                        <th>
+                          Nombre 
+                        </th>
+                        <th>
+                          Descripcion 
+                        </th>
+                        <th>
+                          Fase 
+                        </th>
+                        <th>
+                          Prioridad 
+                        </th>
+                      </thead>
+                      <tbody>
+                        {% for data in tipoUs %}
+                        <tr>
+                          <td>
+                            {{forloop.counter}}
+                          </td>
+                          <td>
+                            {{data.nombre_tipo_us}}
+                          </td>
+                          <td>
+                            {{data.descripcion_tipo_us}}
+                          </td>
+                          <td>
+                            {{data.fases}}
+                          </td>
+                          <td>
+                            {{data.prioridad_tipo_us}}
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+          {% endif %}
+    
+
+</div>
+
+<!-- <div class="container-fluid">
     <h3 class=" ">Tabla Kamban</h3>
     <div class="row flex-row flex-sm-nowrap py-3">
         <div class="col-sm-6 col-md-4 col-xl-3">
@@ -146,7 +228,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->

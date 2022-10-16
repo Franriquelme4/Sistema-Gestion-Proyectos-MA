@@ -10,6 +10,10 @@
 {% if validacionPermisos.ctr_TipoUs %}
 <a class="btn btn-primary " href="{% url 'webApp:tipoUsCrear' proyecto.id %}"><i class="material-icons">add</i>Agregar tipo de US</a>
 {% endif %}
+{% if validacionPermisos.imp_TipoUs %}
+<a class="btn btn-primary " href="{% url 'webApp:tipoUsImportar' proyecto.id %}"><i class="material-icons">add</i>Importar tipo de US</a>
+
+{% endif %}
         <div class="row">
             <div class="col-md-12">
               <div class="card">
@@ -30,6 +34,9 @@
                           Descripcion 
                         </th>
                         <th>
+                          Fase 
+                        </th>
+                        <th>
                           Prioridad 
                         </th>
                       </thead>
@@ -44,6 +51,9 @@
                           </td>
                           <td>
                             {{data.descripcion_tipo_us}}
+                          </td>
+                          <td>
+                            {{data.fases}}
                           </td>
                           <td>
                             {{data.prioridad_tipo_us}}

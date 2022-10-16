@@ -31,8 +31,16 @@ urlpatterns = [
     path('proyecto/colaboradores/guardar/<int:id>',views.asignarColaboradorProyecto, name='asignarColaboradorProyecto'),
     path('proyecto/tipoUs/<int:id>',views.tipoUs, name='tipoUs'),
     path('proyecto/tipoUs/crear/<int:id>',views.tipoUsCrear, name='tipoUsCrear'),
+    path('proyecto/tipoUs/importar/<int:id>',views.tipoUsImportar, name='tipoUsImportar'),
+    path('proyecto/tipoUs/importar/guardar/<int:id>',views.importarTusDeProyecto, name='importarTusDeProyecto'),
     path('proyecto/tipoUs/guardar/<int:id>',views.crearTUSProyecto, name='crearTUSProyecto'),
     path('proyecto/tipoUs/importar/<int:id>',views.importarTusDeProyecto, name='importarTusDeProyecto'),
     path('proyecto/productBacklog/<int:id>',views.verProductBacklog, name='verProductBacklog'),
-    path('proyecto/userStory/guardar/<int:id>',views.crearUs, name='crearUs'),
+    path('proyecto/userStory/crear/<int:id>',views.crearUs, name='crearUs'),
+    path('proyecto/userStory/guardar/<int:id>',views.crearUsGuardar, name='crearUsGuardar'),
+    path('proyecto/proyecto/editar/<int:id>',views.editarProyecto, name='editarProyecto'),
+    path('proyecto/proyecto/editar/guardar/<int:id>',views.editarProyectoGuardar, name='editarProyectoGuardar'),
+    path('proyecto/iniciar/<int:id>',views.iniciarProyecto, name='iniciarProyecto'),
+    path('proyecto/sprint/crear/<int:id>',views.sprintCrear, name='sprintCrear')
+    
 ]
