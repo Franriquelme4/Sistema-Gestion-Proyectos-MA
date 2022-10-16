@@ -680,15 +680,14 @@ def sprintCrearGuardar(request,id):
     variables = request.POST
     print(variables.get('fecha_inicio',False),proyecto.sprint_dias)
     print(busy_end_date(variables.get('fecha_inicio',False),proyecto.sprint_dias))
-    # if request.method == 'POST':
-    #     Sprint.objects.create(
-    #         descripcion_sp = variables.get('descripcion',False),
-    #         nombre_sp = variables.get('nombre',False),
-    #         fechaIni_sp = variables.get('fecha_inicio',False),
-    #         fechaFIn_sp = ,
-    #         proyecto_sp = Proyecto.objects.get(id=id),
-    #         estado = Estado.objects.get(descripcion="PENDIENTE"),
-    #     )
+    if request.method == 'POST':
+        Sprint.objects.create(
+            descripcion_sp = variables.get('descripcion',False),
+            nombre_sp = variables.get('nombre',False),
+            fechaIni_sp = variables.get('fecha_inicio',False),
+            proyecto_sp = Proyecto.objects.get(id=id),
+            estado = Estado.objects.get(descripcion="PENDIENTE"),
+        )
     return redirect(f'/proyecto/sprint/{id}')
 
 def sprintColaboradorAgregar(request,idProyecto,idSprint):
@@ -806,14 +805,17 @@ def sprintTablero(request,idProyecto,idSprint,idTipoUs=None):
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
     userStorys = Sprint.objects.get(id=idSprint).userStory_sp.all()
     tipoUs = getTipoUsBySprint(userStorys)
-    if idTipoUs == 0:
-        tipoUsTablero = tipoUs[0]
+    tipoUsTablero = ''
+    if idTipoUs or idTipoUs == 0:
+        if idTipoUs == 0:
+            tipoUsTablero = tipoUs[0]
+        else:
+            tipoUsTablero = TipoUserStory.objects.get(id=idTipoUs)
     else:
         variables = request.POST
-    if request.method == 'POST':
-        idTp=json.loads(variables.get('tipoUsId',False))
-        tipoUsTablero = TipoUserStory.objects.get(id=idTp)
-    
+        if request.method == 'POST':
+            idTp=json.loads(variables.get('tipoUsId',False))
+            tipoUsTablero = TipoUserStory.objects.get(id=idTp)
     fases = Fase.objects.filter(tipoUs=tipoUsTablero)
     permisosProyecto = ['dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','dsp_SprinBack']
     validacionPermisos = validarPermisos(permisosProyecto,userSession.id,idProyecto)
@@ -830,3 +832,18 @@ def sprintTablero(request,idProyecto,idSprint,idTipoUs=None):
                 }
     html_template = loader.get_template('home/sprintTablero.html')
     return HttpResponse(html_template.render(context,request))
+
+def pruebaAjax(request):
+    print('llegue')
+    return redirect(f'/proyecto/sprint/2')
+
+def sprintTableroActualizarEstado(request,idProyecto,idSprint):
+    variables = request.POST
+    if request.method == 'POST':
+        idUserStory = variables.get('userStory',False)
+        idNuevaFase = variables.get('nuevaFase',False)
+        idTipoUs = variables.get('tipoUsId',False)
+        UserStory.objects.filter(id=idUserStory).update(
+            fase = Fase.objects.get(id=idNuevaFase)
+        )
+    return redirect(f'/proyecto/sprint/tablero/{idProyecto}/{idSprint}/{idTipoUs}')
