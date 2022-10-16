@@ -48,6 +48,18 @@ class Usuario(models.Model):
     def __str__(self):
         return self.nombre_usuario
 
+class MiembroEquipo(models.Model):
+    """Modelo de la tabla miembro, en la cual se almacenan todos los datos del cliente"""
+    miembro_usuario = models.ManyToManyField(Usuario)
+    miembro_rol = models.ManyToManyField(Rol)
+    descripcion = models.CharField(max_length=100,default='')
+    class Meta:
+        verbose_name = 'Miembro'
+        verbose_name_plural = 'Miembros'
+    def __str__(self):
+        return self.descripcion
+
+
 class Cliente(models.Model):
     """Modelo de la tabla clientes, en la cual se almacenan todos los datos del cliente"""
     nombre_cliente = models.CharField(max_length=100)
@@ -90,19 +102,6 @@ class Proyecto(models.Model):
         ordering = ['nombre_proyecto']
     def __str__(self):
         return self.nombre_proyecto
-
-class MiembroEquipo(models.Model):
-    """Modelo de la tabla miembro, en la cual se almacenan todos los datos del cliente"""
-    miembro_proyecto = models.ForeignKey(Proyecto,on_delete=models.CASCADE,null=True)
-    miembro_usuario = models.ForeignKey(Usuario,on_delete=models.CASCADE,null=True)
-    miembro_rol = models.ManyToManyField(Rol)
-    descripcion = models.CharField(max_length=100,default='')
-    class Meta:
-        verbose_name = 'Miembro'
-        verbose_name_plural = 'Miembros'
-    def __str__(self):
-        return self.descripcion
-
 
 class ProyectoRol(models.Model):
     """Se almacenan los roles por proyecto"""
@@ -172,7 +171,7 @@ class SprintUserStory(models.Model):
     us = models.ForeignKey('UserStory',on_delete=models.CASCADE)
 
 class Sprint(models.Model):
-    """ModelSprino de la tabla sprint, en la cual se almacenan todos los datos del sprint"""
+    """Modelo de la tabla sprint, en la cual se almacenan todos los datos del sprint"""
     proyecto_sp = models.ForeignKey('Proyecto',on_delete=models.CASCADE,null=True)
     nombre_sp = models.CharField(max_length=50,null=False)
     descripcion_sp = models.CharField(max_length=50,null=False)

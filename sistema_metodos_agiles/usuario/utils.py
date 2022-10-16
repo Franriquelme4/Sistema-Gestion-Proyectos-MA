@@ -1,6 +1,7 @@
 from .models import MiembroEquipo, Permiso, Proyecto, Usuario, Rol, ProyectoRol, TipoUserStory
 import calendar
 from datetime import date, datetime, timedelta
+import datetime
 import numpy as np
 
 def getUsuarioSesion(email):
@@ -208,7 +209,7 @@ def busy_end_date(start_date,busy_days):
   aux_date = start_date
   while True:
     contador = contador + 1
-    aux_days = aux_days - res
+    aux_days = busy_days - res
     td = int(aux_days)
     aux_date = aux_date + timedelta(days = td)
     res = np.busday_count(start_date.strftime('%Y-%m-%d'), aux_date.strftime('%Y-%m-%d'))
