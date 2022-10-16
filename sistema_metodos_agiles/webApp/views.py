@@ -9,6 +9,7 @@ from usuario.utils import validarPermisos,busy_end_date,getUsuarioSesion,getTipo
 from usuario.models import Usuario,FaseTUS,TipoUs_Proyecto,SprintUserStory,SprintColaborador,Sprint,Cliente,Proyecto,MiembroEquipo,Permiso,Rol,ProyectoRol,TipoUserStory,PrioridadTUs,UserStory,Fase,Estado
 from django.template import loader
 from django.db.models import Q
+from datetime import datetime
 
 # Create your views here.
 def login(request):
@@ -618,8 +619,8 @@ def editarProyectoGuardar(request,id):
 def iniciarProyecto(request,id):
     proyectoActual = Proyecto.objects.get(id=id)
     Proyecto.objects.filter(id=id).update(
-            fecha_ini_proyecto = datetime.date.today(),
-            fecha_fin_proyecto = calcularFechaFin(datetime.date.today(),proyectoActual.duracion),
+            fecha_ini_proyecto = datetime.today(),
+            fecha_fin_proyecto = calcularFechaFin(datetime.today(),proyectoActual.duracion),
            estado = Estado.objects.get(descripcion="EN PROGRESO"), 
     )
     return redirect(f'/proyecto/{id}')
@@ -678,16 +679,17 @@ def sprintCrearGuardar(request,id):
     userSession = getUsuarioSesion(request.user.email)
     proyecto = getProyectsByID(id,userSession.id)[0]
     variables = request.POST
-    print(variables.get('fecha_inicio',False),proyecto.sprint_dias)
-    print(busy_end_date(variables.get('fecha_inicio',False),proyecto.sprint_dias))
+    #print(variables.get('fecha_inicio',False),proyecto.sprint_dias)
+    #print(str(busy_end_date(datetime. strptime(variables.get('fecha_inicio',False),'%Y-%m-%d'),proyecto.sprint_dias)))
     if request.method == 'POST':
-        Sprint.objects.create(
-            descripcion_sp = variables.get('descripcion',False),
-            nombre_sp = variables.get('nombre',False),
-            fechaIni_sp = variables.get('fecha_inicio',False),
-            proyecto_sp = Proyecto.objects.get(id=id),
-            estado = Estado.objects.get(descripcion="PENDIENTE"),
-        )
+         Sprint.objects.create(
+             descripcion_sp = variables.get('descripcion',False),
+             nombre_sp = variables.get('nombre',False),
+             fechaIni_sp = variables.get('fecha_inicio',False),
+             fechaFIn_sp = busy_end_date(datetime. strptime(variables.get('fecha_inicio',False),'%Y-%m-%d'),proyecto.sprint_dias),
+             proyecto_sp = Proyecto.objects.get(id=id),
+             estado = Estado.objects.get(descripcion="PENDIENTE"),
+         )
     return redirect(f'/proyecto/sprint/{id}')
 
 def sprintColaboradorAgregar(request,idProyecto,idSprint):
