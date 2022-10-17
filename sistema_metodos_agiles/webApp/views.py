@@ -510,7 +510,6 @@ def importarTusDeProyecto(request,id):
     variables = request.POST
     print("idTipoUs")
     if request.method == 'POST':
-        
         tipoUs = TipoUserStory.objects.get(id=variables.get('idTipoUs',False))
         proyecto = Proyecto.objects.get(id=id)
         TipoUs_Proyecto.objects.create(proyecto=proyecto,tipoUs=tipoUs)
