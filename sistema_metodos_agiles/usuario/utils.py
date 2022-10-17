@@ -64,6 +64,14 @@ def getRolByProyectId(id):
 	join usuario_rol ur on ur.id = upr.rol_id where up2.id = {id}""")
     return proyecto_rol
 
+def getRolByProyectIdByUsuario(id,idUsuario):
+    proyecto_rol = ProyectoRol.objects.raw(f"""select up.*, ur.descripcion_rol ,ur.nombre_rol, ur.id as id_rol from usuario_proyectorol up 
+	join usuario_proyectorol_proyecto upp on upp.proyectorol_id = up.id
+	join usuario_proyectorol_rol upr on upr.proyectorol_id  = up.id 
+	join usuario_proyecto up2 on up2.id = upp.proyecto_id 
+	join usuario_rol ur on ur.id = upr.rol_id where up2.id = {id} """)
+    return proyecto_rol
+
 
 def getColaboratorsByProyect(id):
     colaboradores = Usuario.objects.raw(f"""select

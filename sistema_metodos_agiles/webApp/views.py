@@ -344,10 +344,10 @@ def rolesProyectoEditar(request,idProyecto,idRol):
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
     rolEditar = Rol.objects.get(id=idRol)
     print(userSession.id)
-    permisos2 = Rol.objects.get(id=idRol).permiso.all()
+    permisosSelect = Rol.objects.get(id=idRol).permiso.all()
     permisosaux=None;
-    for i in permisos2:
-        permisosaux = permisos.filter(~Q(id=i.id))
+    for i in permisosSelect:
+        permisos = permisos.filter(~Q(id=i.id))
     print(request.session['userSesion'])
     permisosProyecto = ['crt_rol','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack']
     validacionPermisos = validarPermisos(permisosProyecto,userSession.id,idProyecto)
@@ -358,7 +358,7 @@ def rolesProyectoEditar(request,idProyecto,idRol):
                 'rolUsuario':rolUsuario,
                 'validacionPermisos':validacionPermisos,
                 'rolEditar':rolEditar,
-                'permisosaux':permisosaux
+                'permisosSelect':permisosSelect
                 }
     html_template = loader.get_template('home/rolesProyectoEditar.html')
     return HttpResponse(html_template.render(context,request))
