@@ -1,6 +1,7 @@
 from .models import MiembroEquipo, Permiso, Proyecto, Usuario, Rol, ProyectoRol, TipoUserStory
 import calendar
 from datetime import date, datetime, timedelta
+import datetime
 import numpy as np
 
 def getUsuarioSesion(email):
@@ -11,6 +12,22 @@ def getUsuarioSesion(email):
 def getIdScrumRol():
     rol = Rol.objects.get(id=3)
     return rol
+#def getProyectsByUsuarioID(id):
+#    proyectos = Proyecto.objects.raw(f"""
+#	select up.* as proyecto,
+#		uu.id as id_usuario,
+#		ur.id as id_rol, ur.descripcion_rol  as descripcion_rol,
+#		ur.nombre_rol  as nombre_rol 
+#	from usuario_proyecto up 
+#	join usuario_proyecto_miembro_proyecto upmp on upmp.proyecto_id = up.id 
+#	join usuario_miembroequipo_miembro_usuario ummu on ummu.miembroequipo_id = upmp.miembroequipo_id
+#	join usuario_miembroequipo_miembro_rol ummr on ummr.miembroequipo_id = upmp.miembroequipo_id 
+#	join usuario_usuario uu on uu.id = ummu.usuario_id 
+#	join usuario_rol ur on ur.id = ummr.rol_id 
+#	where ummu.usuario_id = {id} order by up.fecha_creacion 
+#   """)
+#   return proyectos
+
 
 
 def getProyectsByUsuarioID(id):
@@ -144,29 +161,23 @@ def validarPermisos(permisosVista,idUsuario,idProyecto=None):
 
 	# for permisoVista in permisosVista:
 	# 	permisos[permisoVista] = rolUsuario.poseePermiso(permisoVista)
+	print(permisos)
 	return permisos
 
 
-# def getTipoUsbyProyectId(id):
-#     tipoUs = TipoUserStory.objects.raw(f"""select ut.*,array_to_string(array_agg(uf.nombre_fase),', ') as fases from usuario_tipouserstory ut
-# 	full join usuario_tipous_proyecto utp on utp."tipoUs_id" = ut.id 
-# 	full join usuario_fase uf on uf."tipoUs_id" = ut.id where utp.proyecto_id = {id} group by ut.id""")
-#     return tipoUs
-
 def getTipoUsbyProyectId(id):
-    tipoUs = TipoUserStory.objects.raw(f"""select ut.*,array_to_string(array_agg(uf.nombre_fase),', ') as fases from usuario_tipouserstory ut
+	print("Llegue Id proyecto", id)
+	tipoUs = TipoUserStory.objects.raw(f"""select ut.*,array_to_string(array_agg(uf.nombre_fase),', ') as fases from usuario_tipouserstory ut 
 	full join usuario_tipous_proyecto utp on utp."tipoUs_id" = ut.id 
 	full join usuario_fase uf on uf."tipoUs_id" = ut.id where utp.proyecto_id = {id} group by ut.id""")
-    return tipoUs	
-
-
-
+	return tipoUs
 
 def getTipoUsbyNotProyectId(id):
-    tipoUs = TipoUserStory.objects.raw(f"""select ut.*,array_to_string(array_agg(uf.nombre_fase),', ') as fases from usuario_tipouserstory ut
+	print("Llegue Id proyecto", id)
+	tipoUs = TipoUserStory.objects.raw(f"""select ut.*,array_to_string(array_agg(uf.nombre_fase),', ') as fases from usuario_tipouserstory ut 
 	full join usuario_tipous_proyecto utp on utp."tipoUs_id" = ut.id 
 	full join usuario_fase uf on uf."tipoUs_id" = ut.id where utp.proyecto_id != {id} group by ut.id""")
-    return tipoUs
+	return tipoUs
 
 def calcularFechaFin(sourcedate, months):
     month = sourcedate.month - 1 + months
@@ -200,7 +211,7 @@ def busy_end_date(start_date,busy_days):
   aux_date = start_date
   while True:
     contador = contador + 1
-    aux_days = aux_days - res
+    aux_days = busy_days - res
     td = int(aux_days)
     aux_date = aux_date + timedelta(days = td)
     res = np.busday_count(start_date.strftime('%Y-%m-%d'), aux_date.strftime('%Y-%m-%d'))

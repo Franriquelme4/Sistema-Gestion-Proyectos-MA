@@ -34,7 +34,7 @@ urlpatterns = [
     path('proyecto/tipoUs/importar/<int:id>',views.tipoUsImportar, name='tipoUsImportar'),
     path('proyecto/tipoUs/importar/guardar/<int:id>',views.importarTusDeProyecto, name='importarTusDeProyecto'),
     path('proyecto/tipoUs/guardar/<int:id>',views.crearTUSProyecto, name='crearTUSProyecto'),
-    path('proyecto/tipoUs/importar/<int:id>',views.importarTusDeProyecto, name='importarTusDeProyecto'),
+    #path('proyecto/tipoUs/importar/<int:id>',views.importarTusDeProyecto, name='importarTusDeProyecto'),
     path('proyecto/productBacklog/<int:id>',views.verProductBacklog, name='verProductBacklog'),
     path('proyecto/userStory/crear/<int:id>',views.crearUs, name='crearUs'),
     path('proyecto/userStory/guardar/<int:id>',views.crearUsGuardar, name='crearUsGuardar'),
@@ -44,13 +44,15 @@ urlpatterns = [
     path('proyecto/sprint/<int:id>',views.sprintProyecto, name='sprintProyecto'),
     path('proyecto/sprint/crear/<int:id>',views.sprintCrear, name='sprintCrear'),
     path('proyecto/sprint/guardar/<int:id>',views.sprintCrearGuardar, name='sprintCrearGuardar'),
-    path('proyecto/sprint/colaborador/<int:idProyecto>/<int:idSprint>',views.sprintColaboradorAgregar, name='sprintColaboradorAgregar'),
+    path('proyecto/sprint/colaborador/<int:idProyecto>/<int:idSprint>',views.sprintColaboradores, name='sprintColaboradores'),
+    path('proyecto/sprint/colaborador/agregar/<int:idProyecto>/<int:idSprint>',views.sprintColaboradorAgregar, name='sprintColaboradorAgregar'),
     path('proyecto/sprint/colaborador/guardar/<int:id>',views.sprintColaboradorAgregarGuardar, name='sprintColaboradorAgregarGuardar'),
     path('proyecto/sprint/us/<int:idProyecto>/<int:idSprint>',views.sprintUsAgregar, name='sprintUsAgregar'),
     path('proyecto/sprint/us/guardar/<int:id>',views.sprintUsAgregarGuardar, name='sprintUsAgregarGuardar'),
     path('proyecto/sprint/backlog/<int:idProyecto>/<int:idSprint>',views.sprintBacklog, name='sprintBacklog'),
     path('proyecto/sprint/tablero/<int:idProyecto>/<int:idSprint>/<int:idTipoUs>',views.sprintTablero, name='sprintTablero'),
-    path('proyecto/sprint/tablero/<int:idProyecto>/<int:idSprint>',views.sprintTablero, name='sprintTablero2')
+    path('proyecto/sprint/tablero/<int:idProyecto>/<int:idSprint>',views.sprintTablero, name='sprintTablero2'),
+    path('proyecto/sprint/tablero/actualizar/<int:idProyecto>/<int:idSprint>',views.sprintTableroActualizarEstado, name='sprintTableroActualizarEstado'),
 
     
 

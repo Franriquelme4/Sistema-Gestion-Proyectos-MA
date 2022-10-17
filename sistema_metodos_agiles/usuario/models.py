@@ -7,7 +7,7 @@ import datetime
 class Permiso(models.Model):
     """Los permisos se tienen previamente cargados, cada permiso se asiganan a los distintos roles"""
     descripcion_permiso = models.CharField(max_length=100,blank=False,null=False)
-    nombre_permiso = models.CharField(max_length=15,blank=False,null=False)
+    nombre_permiso = models.CharField(max_length=100,blank=False,null=False)
     class Meta:
         verbose_name = 'Permiso'
         verbose_name_plural = 'Permisos'
@@ -166,6 +166,8 @@ class SprintColaborador(models.Model):
     """Almacena todos los colaboradores"""
     colaborador = models.ForeignKey('Usuario',on_delete=models.CASCADE)
     horas = models.IntegerField(default=0)
+    horasDisponibles = models.IntegerField(default=0)
+        
 
 class SprintUserStory(models.Model):
     """Almacena todos los colaboradores"""
