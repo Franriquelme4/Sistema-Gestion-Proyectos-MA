@@ -121,6 +121,8 @@ class CampoPersonalizado(models.Model):
 
 class TipoUserStory(models.Model):
     """Modelo de la tabla tipo de user story, en la cual se almacenan todos los datos de los tipos de user story"""
+    proyecto_tipo_us  = models.ForeignKey('Proyecto',on_delete=models.CASCADE,null=True)
+    prioridad_tipo_us = models.ForeignKey('PrioridadTUs',on_delete=models.CASCADE,null=True)
     nombre_tipo_us = models.CharField(max_length=50,null=False)
     descripcion_tipo_us = models.CharField(max_length=100,null=False)
     flujo_tipo_us = models.JSONField(null=True)

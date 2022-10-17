@@ -36,9 +36,9 @@
                         <th>
                           Descripcion del Rol
                         </th>
-                        <!-- <th>
+                        <th>
                           Acciones
-                        </th> -->
+                        </th>
                       </thead>
                       <tbody>
                         {% for colaborador in colaboradores %}
@@ -59,14 +59,16 @@
                             {{colaborador.descripcion_rol}}
                           </td>
                           <td>
-                            <!-- <form action="% url 'webApp:editarColaboradorProyecto' proyecto.id %}" method="post">
-                              <button class="btn btn-success btn-sm" type="submit"><i class="material-icons">&#xE254;</i></button>
-                            </form>
+                            <a class="btn btn-success btn-sm"
+                              href="{% url 'webApp:colaboradoresProyectoEditar' proyecto.id colaborador.id %}"><i
+                                class="material-icons">&#xE254;</i>
+                            </a>
                             <form action="{% url 'webApp:eliminarColaboradorProyecto' proyecto.id %}" method="post">
                               {% csrf_token %}
-                              <input name="idRol" type="text" hidden="true" value="{{rolProyecto.id_rol}}">
+                              <input name="idColaborador" type="text" hidden="true" value="{{colaborador.id}}">
+                              <input name="idProyecto" type="text" hidden="true" value="{{proyecto.id}}">
                               <button class="btn btn-danger btn-sm" type="submit"><i class="material-icons">&#xE872;</i></button>
-                            </form> -->
+                            </form>
                           </td>
                         </tr>
                         {% endfor %}

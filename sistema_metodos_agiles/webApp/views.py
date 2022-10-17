@@ -376,7 +376,163 @@ def colaboradoresProyectoCrear(request,id):
         'validacionPermisos':validacionPermisos
         }
     html_template = loader.get_template('home/colaboradoresProyectoCrear.html')
-    return HttpResponse(html_template.render(context,request)) 
+    return HttpResponse(html_template.render(context,request))
+
+def colaboradoresProyectoEditar(request,idProyecto,idColaborador):
+    print(f"ID PROYECTO = {idProyecto}")
+    print(f"ID COLABORADOR = {idColaborador}")
+    userSession = getUsuarioSesion(request.user.email)
+    proyecto = getProyectsByID(idProyecto,userSession.id)[0]
+    rolUsuario = Rol.objects.get(id=proyecto.id_rol)
+    rolesProyecto = getRolByProyectId(idProyecto)
+    #colaboradores = getColaboratorsByProyect(idProyecto)
+    print(f"GET COLABORADORES = {rolesProyecto}")
+
+    usuarios = Usuario.objects.filter(~Q(id=userSession.id)).filter(~Q(df_rol=1))
+    colaboradores = Usuario.objects.get(id=idColaborador)
+
+    permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack']
+    validacionPermisos = validarPermisos(permisosProyecto,userSession.id,idProyecto)
+    context={
+        'colaboradores':colaboradores,
+        'rolesProyecto':rolesProyecto,
+        'userSession':userSession,
+        'proyecto':proyecto,
+        'rolUsuario':rolUsuario,
+        'usuarios':usuarios,
+       'validacionPermisos':validacionPermisos
+        }
+    html_template = loader.get_template('home/colaboradoresProyectoEditar.html')
+    return HttpResponse(html_template.render(context,request))
+
+def rolesProyectoEditar(request,idProyecto,idRol):
+    """
+    Se lista todos los roles especificos de cada proyecto
+    """
+    print(f"IDROL DE ROLESPROYECTOEDITAR = {idRol}")
+    print(f"IDproyecto DE ROLESPROYECTOEDITAR = {idProyecto }")
+    userSession = getUsuarioSesion(request.user.email)
+    permisos = Permiso.objects.all()
+    print(f"PERMISOS = {permisos }")
+    rolesProyecto = getRolByProyectId(idProyecto)
+    proyecto = getProyectsByID(idProyecto,userSession.id)[0]
+    rolUsuario = Rol.objects.get(id=proyecto.id_rol)
+    rolEditar = Rol.objects.get(id=idRol)
+    print(userSession.id)
+    permisosSelect = Rol.objects.get(id=idRol).permiso.all()
+    permisosaux=None;
+    for i in permisosSelect:
+        permisos = permisos.filter(~Q(id=i.id))
+    print(request.session['userSesion'])
+    permisosProyecto = ['crt_rol','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack']
+    validacionPermisos = validarPermisos(permisosProyecto,userSession.id,idProyecto)
+    context= {  'userSession':userSession,
+                'proyecto':proyecto,
+                'rolesProyecto': rolesProyecto,
+                'permisos':permisos,
+                'rolUsuario':rolUsuario,
+                'validacionPermisos':validacionPermisos,
+                'rolEditar':rolEditar,
+                'permisosSelect':permisosSelect
+                }
+    html_template = loader.get_template('home/rolesProyectoEditar.html')
+    return HttpResponse(html_template.render(context,request))
+
+
+def eliminarColaboradorProyecto(request,id):
+    variables = request.POST
+    print(f"ID COLABORADOR ELIMINAR = {variables.get('idColaborador',False)}")
+    record = MiembroEquipo.objects.filter(miembro_usuario = variables.get('idColaborador',False))
+    record.delete()
+    return redirect(f'/proyecto/{id}')
+
+def eliminarColaboradorProyecto2(request,idColaborador,idProyecto):
+    variables = request.POST
+    print(f"ID COLABORADOR ELIMINAR = {idColaborador}")
+    record = MiembroEquipo.objects.filter(miembro_usuario = idColaborador)
+    record.delete()
+    return redirect(f'/proyecto/{idProyecto}')
+
+def eliminarRolProyecto(request,id):
+    """Se elimina el rol asociado al id"""
+    variables = request.POST
+    record = Rol.objects.filter(id = variables.get('idRol',False))
+    record.delete()
+
+    """validarEliminacion = getRolByID(id)
+    print(validarEliminacion)
+    if(validarEliminacion==None):
+        print("no es")
+    else:
+        rol = Rol(
+            descripcion_rol = variables.get('descripcion',False),
+            nombre_rol = variables.get('nombre_rol',False),
+        )
+        rol.delete()
+    
+    rol = Rol(
+            descripcion_rol = variables.get('descripcion',False),
+            nombre_rol = variables.get('nombre_rol',False),
+        )
+    rol.delete()
+    if request.method == 'POST':
+        rol = Rol(
+            descripcion_rol = variables.get('descripcion',False),
+            nombre_rol = variables.get('nombre_rol',False),
+        )
+        rol.delete()
+        for permiso in variables.getlist('permisos',False):
+            print(permiso)
+            rol.permiso.remove(Permiso.objects.get(id=permiso))
+        proyecto_rol = ProyectoRol(
+            descripcion_proyecto_rol=''
+        )
+        rol.objects.filter(id=id).delete()
+        proyecto_rol.objects.filter(id=id).delete()
+        #$proyecto_rol.delete()
+        proyecto_rol.rol.remove(rol)
+        proyecto_rol.proyecto.remove(Proyecto.objects.get(id=id))"""
+    return redirect(f'/proyecto/roles/1')
+
+def editarRolProyecto(request,id):
+    variables = request.POST
+    if request.method == 'POST':
+        eliminarRolProyecto(request,id)
+        crearRolProyecto(request,id)
+    return redirect(f'/proyecto/roles/{id}')
+
+def crearRolProyecto(request,id):
+    """Se crea un nuevo rol con todos los permisos asociados"""
+    variables = request.POST
+    if request.method == 'POST':
+        rol = Rol(
+            descripcion_rol = variables.get('descripcion',False),
+            nombre_rol = variables.get('nombre_rol',False),
+        )
+        rol.save()
+        for permiso in variables.getlist('permisos',False):
+            print(permiso)
+            rol.permiso.add(Permiso.objects.get(id=permiso))
+        proyecto_rol = ProyectoRol(
+            descripcion_proyecto_rol=''
+        )
+        proyecto_rol.save()
+        proyecto_rol.rol.add(rol)
+        proyecto_rol.proyecto.add(Proyecto.objects.get(id=id))
+    return redirect(f'/proyecto/roles/{id}')
+    
+
+def editarColaboradorProyecto(request,idProyecto):
+    """Se eliminan los colaboradores de un proyecto especifico"""
+    
+    variables = request.POST
+    idColaborador=variables.get('idColaborador',False)
+    print(f"ID COLABORADOR EDITAR = {idColaborador}")
+    print(f"ID PROYECTO EDITAR= {idProyecto}")
+    eliminarColaboradorProyecto2(request,idColaborador,idProyecto)
+    asignarColaboradorProyecto(request,idProyecto)
+    
+    return redirect(f'/proyecto/colaboradores/{idProyecto}')
 
 @login_required
 def asignarColaboradorProyecto(request,id):
