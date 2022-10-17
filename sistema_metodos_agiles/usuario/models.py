@@ -164,6 +164,8 @@ class SprintColaborador(models.Model):
     """Almacena todos los colaboradores"""
     colaborador = models.ForeignKey('Usuario',on_delete=models.CASCADE)
     horas = models.IntegerField(default=0)
+    horasDisponibles = models.IntegerField(default=0)
+        
 
 class SprintUserStory(models.Model):
     """Almacena todos los colaboradores"""

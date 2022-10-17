@@ -7,27 +7,22 @@
 
 {% block content %}
 {% include 'includes/options.html' %}
+<h2>Sprint BackLog</h2>
+<a class="btn btn-danger btn-sm" href="{% url 'webApp:sprintProyecto' proyecto.id %}">Volver</a>
 
-{% if validacionPermisos.crt_US %}
-<a class="btn btn-primary " href="{% url 'webApp:crearUs' proyecto.id %}"><i class="material-icons">add</i>Agregar Us</a>
-{% endif %}
-
-        <div class="d-flex my-3">
+        <div class="row my-3">
           {% for userStory in userStorys %}
           
-          <div class="card card-stats m-3">
+          <div class="col-3 card card-stats m-3">
             <div class="card-header card-header-info card-header-icon">
-              <div class="card-icon">
-                <i class="material-icons">developer_mode</i>
-              </div>
-              
               <h3 class="card-title">{{userStory.us.nombre_us}}</h3>
               <p class="card-category">{{userStory.us.descripcion_us}}</p>
+              <p class="card-category"><strong>Tipo de US</strong> {{userStory.us.tipo_us}}</p>
               <p class="card-category"><strong>Tiempo Estimado</strong> {{userStory.us.tiempoEstimado_us}} hs</p>
             </div>
             <div class="card-body">
              
-              <p class="card-text">Colaborador: {{userStory.colaborador}}</p>
+              <p class="card-text">Responsable: {{userStory.colaborador}}</p>
             </div>
           </div>
           {% endfor %}

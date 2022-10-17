@@ -572,7 +572,7 @@ def crearUsGuardar(request,id):
             prioridad_negocio=variables.get('prioridad',False)
         )
         userStory.save()
-    return redirect(f'/proyecto/{id}')
+    return redirect(f'/proyecto/productBacklog/{id}')
 
 def editarProyecto(request,id):
     """
@@ -692,6 +692,34 @@ def sprintCrearGuardar(request,id):
          )
     return redirect(f'/proyecto/sprint/{id}')
 
+
+def sprintColaboradores(request,idProyecto,idSprint):
+    """
+    Cuando un usuario ingresa a un proyecto en el cual fue asignado se visualizan 
+    todos los datos de la misma 
+    """
+    aux = Sprint.objects.get(id=idSprint).colaborador_sp.all()
+    for i in aux:
+        print(i.colaborador,'col')
+    userSession = getUsuarioSesion(request.user.email)
+    proyecto = getProyectsByID(idProyecto,userSession.id)[0]
+    rolUsuario = Rol.objects.get(id=proyecto.id_rol)
+    colaboradores = Sprint.objects.get(id=idSprint).colaborador_sp.all()
+    print(colaboradores)
+    permisosProyecto = ['dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','dsp_SprinBack']
+    validacionPermisos = validarPermisos(permisosProyecto,userSession.id,idProyecto)
+    context= {  'userSession':userSession,
+                'proyecto':proyecto,
+                'segment': 'verProyecto',
+                'rolUsuario':rolUsuario,
+                'validacionPermisos':validacionPermisos,
+                'colaboradores':colaboradores,
+                'sprint':Sprint.objects.get(id=idSprint)
+                }
+    html_template = loader.get_template('home/sprintColaboradores.html')
+    return HttpResponse(html_template.render(context,request))
+
+
 def sprintColaboradorAgregar(request,idProyecto,idSprint):
     """
     Cuando un usuario ingresa a un proyecto en el cual fue asignado se visualizan 
@@ -720,15 +748,19 @@ def sprintColaboradorAgregar(request,idProyecto,idSprint):
 
 def sprintColaboradorAgregarGuardar(request,id):
     """Se almacenan los colaboradores del Sprint"""
+    userSession = getUsuarioSesion(request.user.email)
     variables = request.POST
+    proyecto = getProyectsByID(id,userSession.id)[0]
     if request.method == 'POST':
         jsonColaborador=json.loads(variables.get('jsonColaborador',False))
         sprint = Sprint.objects.get(id=variables.get('idSprint',False))
         print(jsonColaborador)
         for colJson in jsonColaborador:
+            print(int(colJson['horas'])*proyecto.sprint_dias)
             spColaborador = SprintColaborador.objects.create(
                 colaborador=Usuario.objects.get(id=colJson['colaborador']),
                 horas=colJson['horas'],
+                horasDisponibles=int(colJson['horas'])*proyecto.sprint_dias
             )
             sprint.colaborador_sp.add(spColaborador)
     return redirect(f'/proyecto/sprint/{id}')
@@ -772,6 +804,9 @@ def sprintUsAgregarGuardar(request,id):
                 colaborador=Usuario.objects.get(id=colJson['colaborador']),
                 us=UserStory.objects.get(id = colJson['us']),
             )
+            sColaboradorGet = sprint.colaborador_sp.get(colaborador=int(colJson['colaborador']))
+            sColaborador = sprint.colaborador_sp.filter(colaborador=int(colJson['colaborador']))
+            sColaborador.update(horasDisponibles=sColaboradorGet.horasDisponibles-UserStory.objects.get(id = colJson['us']).tiempoEstimado_us)
             TipoUsEditar=UserStory.objects.get(id = colJson['us']).tipo_us
             UserStory.objects.filter(id = colJson['us']).update(disponible=False,fase=Fase.objects.get(tipoUs=TipoUsEditar,orden_fase=1))
             sprint.userStory_sp.add(spUs)
