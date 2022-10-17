@@ -1,0 +1,75 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+{% include 'includes/options.html' %}
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h3>Crear nuevo tipo de US</h3>
+    </div>
+    <div class="card-body">
+      <table id="table" class="display" style="width:100%">
+        <thead class=" text-primary">
+          <th>
+            
+          </th>
+          <th>
+            Nombre de tipo de US
+          </th>
+          <th>
+            Descripcion
+          </th>
+          <th>
+            Fases
+          </th>
+          <th>
+            Nombre del proyecto
+          </th>
+          <th>
+          </th>
+        </thead>
+        <tbody>
+          {% for tipo in todostipoUs %}
+          <tr>
+            <td>
+              {{forloop.counter}}
+            </td>  
+            <td>
+              {{tipo.nombre_tipo_us}}
+            </td>
+            <td>
+              {{tipo.descripcion_tipo_us}}
+            </td>
+            <td>
+              {{tipo.fases}}
+            </td>
+            <td>
+              <!--{{tipo.proyecto_tipo_us}}-->
+              {{proyecto}}
+            </td>
+            <td>
+              <form action="{% url 'webApp:importarTusDeProyecto' proyecto.id %}" method="POST">
+                {% csrf_token %}
+                <input type="text" name="idTipoUs" value="{{tipo.id}}" hidden="true">
+                <button type="submit" class="btn btn-primary btn-sm">Importar</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <a class="btn btn-danger btn-sm" href="{% url 'webApp:tipoUs' proyecto.id %}">Cancelar</a>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+{% endblock javascripts %}

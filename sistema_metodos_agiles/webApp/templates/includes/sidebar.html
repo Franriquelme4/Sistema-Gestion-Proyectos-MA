@@ -9,11 +9,31 @@
     <ul class="nav">
       <li class="nav-item {% if 'index' in segment %} active {% endif %}">
         <a class="nav-link" href="/">
+          <i class="material-icons">assignment</i>
+          <p>Proyectos</p>
+        </a>
+      </li>
+
+      {% if validacionPermisos.dsp_Roles %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'webApp:verProyecto' proyecto.id %}">
           <i class="material-icons">dashboard</i>
           <p>Inicio</p>
         </a>
       </li>
-      {% if validacionPermisos.dsp_Roles %}
+      {% endif %}
+
+      {% if validacionPermisos.dsp_SprinBack and proyecto.estado.descripcion == "EN PROGRESO" %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'webApp:sprintProyecto' proyecto.id %}">
+          <i class="material-icons">schedule</i>
+          <p>Sprint</p>
+        </a>
+      </li>
+      {% endif %}
+
+
+      {% if validacionPermisos.dsp_Roles and proyecto.estado.descripcion == "EN PROGRESO" %}
       <li class="nav-item">
         <a class="nav-link" href="{% url 'webApp:rolesProyecto' proyecto.id %}">
           <i class="material-icons">block</i>
@@ -21,7 +41,7 @@
         </a>
       </li>
       {% endif %}
-      {% if validacionPermisos.dsp_Colaborador %}
+      {% if validacionPermisos.dsp_Colaborador and proyecto.estado.descripcion == "EN PROGRESO" %}
       <li class="nav-item">
         <a class="nav-link" href="{% url 'webApp:colaboradoresProyecto' proyecto.id %}">
           <i class="material-icons">account_circle</i>
@@ -30,7 +50,7 @@
       </li>
       {% endif %}
 
-      {% if validacionPermisos.dsp_TipoUs %}
+      {% if validacionPermisos.dsp_TipoUs and proyecto.estado.descripcion == "EN PROGRESO" %}
       <li class="class="nav-item"">
         <a class="nav-link " href="{% url 'webApp:tipoUs' proyecto.id %}"  >
             <i class="material-icons">apps</i>
@@ -39,7 +59,7 @@
       </li>
       {% endif %}
 
-      {% if validacionPermisos.dsp_ProductBack %}
+      {% if validacionPermisos.dsp_ProductBack and proyecto.estado.descripcion == "EN PROGRESO" %}
       <li class="class="nav-item"">
         <a class="nav-link " href="{% url 'webApp:verProductBacklog' proyecto.id %}"  >
             <i class="material-icons">backup</i>
@@ -47,7 +67,7 @@
           </a>
       </li>
 
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link collapsed text-truncate" href="#submenu1" data-toggle="collapse" data-target="#submenu1"><i class="fa fa-table"></i> <span class="d-none d-sm-inline">Reportes</span></a>
         <div class="collapse" id="submenu1" aria-expanded="false">
             <ul class="flex-column pl-2 nav">
@@ -55,7 +75,7 @@
                 <li class="nav-item"><a class="nav-link py-0" href="#"><span>Velocity Chart</span></a></li>
             </ul>
         </div>
-    </li>
+    </li> -->
       {% endif %}
 <!-- 
           <li class="nav-item">

@@ -1,0 +1,36 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Tables {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+{% include 'includes/options.html' %}
+<h2>Sprint BackLog</h2>
+<a class="btn btn-danger btn-sm" href="{% url 'webApp:sprintProyecto' proyecto.id %}">Volver</a>
+
+        <div class="row my-3">
+          {% for userStory in userStorys %}
+          
+          <div class="col-3 card card-stats m-3">
+            <div class="card-header card-header-info card-header-icon">
+              <h3 class="card-title">{{userStory.us.nombre_us}}</h3>
+              <p class="card-category">{{userStory.us.descripcion_us}}</p>
+              <p class="card-category"><strong>Tipo de US</strong> {{userStory.us.tipo_us}}</p>
+              <p class="card-category"><strong>Fase</strong> {{userStory.us.fase.nombre_fase}}</p>
+              <p class="card-category"><strong>Tiempo Estimado</strong> {{userStory.us.tiempoEstimado_us}} hs</p>
+            </div>
+            <div class="card-body">
+             
+              <p class="card-text">Responsable: {{userStory.colaborador}}</p>
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

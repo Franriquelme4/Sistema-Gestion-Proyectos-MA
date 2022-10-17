@@ -14,6 +14,7 @@ VALUES
 (6, 'crt_US'			,'Crear User Stories'				),
 (7, 'upd_US'			,'Modificar User Stories'			),
 (8, 'dlt_US'			,'Eliminar User Stories'			),
+(34,'dsp_US'            ,'Consultar User Stories'           ),
 (9, 'adm_Burndown'		,'Administrar BurnDown Chart'		),
 (10,'crt_Dailys'		,'Crear Dailys'						),
 (11,'dsp_SprinBack'	 	,'Consultar Sprint Backlog'			),
@@ -23,9 +24,11 @@ VALUES
 (15,'crt_rol'			,'Crear Roles'						),
 (16,'asg_rol'			,'Asignar Roles'					),
 (17,'dlt_rol'			,'Eliminar Roles'					),
+(28,'dsp_Roles'	        ,'Consultar Roles'			        ),
 (18,'agr_Colaborador'	,'Agregar Colaboradores'			),
 (19,'dlt_Colaborador'	,'Eliminar Colaboradores'			),
-(20,'upd_EstaKannban'	,'Modificar Estado Kanban'			),
+(33,'upd_Colaborador'   ,'Modificar Colaborador'            ),
+(20,'upd_EstaKanban'	,'Modificar Estado Kanban'			),
 (21,'asg_Proyecto'		,'Asignar Proyecto'					),
 (22,'upd_PrioriNegoc'	,'Modificar Prioridad Negocio'		),
 (23,'dsp_Burndown'		,'Consultar BurnDown Chart'			),
@@ -33,22 +36,44 @@ VALUES
 (25,'dsp_ReporteEsta'	,'Consultar Reporte Estado'			),
 (26,'dct_Usuario'		,'Desactivar Usuarios'				),
 (27,'dsp_Colaborador'	,'Consultar Colaboradores'			),
-(28,'dsp_Roles'	        ,'Consultar Roles'			        ),
-(29,'dsp_TipoUs'	    ,'Consultar Tipo US'			    );
+(29,'dsp_TipoUs'	    ,'Consultar Tipo US'			    ),
+(30,'ctr_TipoUs'        ,'Crear Tipo US'                    ),
+(31,'upd_TipoUs'        ,'Modificar Tipo US'                ),
+(32,'dlt_TipoUs'        ,'Eliminar Tipo US'                 ),
+(39,'imp_TipoUs'        ,'Importar Tipo US'                 ),
+(35,'dsp_Tablero'       ,'Consultar Tablero'                ),
+(36,'crt_Tablero'       ,'Crear Tablero'                    ),
+(37,'dlt_Tablero'       ,'Eliminar Tablero'                 ),
+(38,'upd_Tablero'       ,'Modificar Tablero'                );
 
 
 INSERT INTO public.usuario_permiso
 (id, descripcion_permiso, nombre_permiso)
-VALUES(30, 'Crear Tipo de US', 'ctr_TipoUs');
+VALUES(40, 'Modificar Rol', 'upd_rol');
 INSERT INTO public.usuario_permiso
 (id, descripcion_permiso, nombre_permiso)
-VALUES(31, 'Modificar Tipo de US', 'upd_TipoUs');
+VALUES(41, 'Iniciar Proyecto', 'ini_Proyecto');
+
 INSERT INTO public.usuario_permiso
 (id, descripcion_permiso, nombre_permiso)
-VALUES(32, 'Eliminar Tipo de Us', 'dlt_TipoUs');
+VALUES(42, 'Editar Proyecto', 'upd_Proyecto');
+
 INSERT INTO public.usuario_permiso
 (id, descripcion_permiso, nombre_permiso)
-VALUES(33, 'Importar Tipo de US', 'imp_TipoUs');
+VALUES(44, 'Agregar Colaborador Sprint', 'agr_Colaborador_Sprint');
+
+INSERT INTO public.usuario_permiso
+(id, descripcion_permiso, nombre_permiso)
+VALUES(45, 'Consultar Colaborador Sprint', 'dsp_Colaborador_Sprint');
+
+INSERT INTO public.usuario_permiso
+(id, descripcion_permiso, nombre_permiso)
+VALUES(45, 'Agregar US - Colaborador Sprint', 'agr_Colaborador_US');
+
+
+--INSERT INTO public.usuario_permiso
+--(id, descripcion_permiso, nombre_permiso)
+--VALUES(33, 'Importar Tipo de US', 'imp_TipoUs');
 
 
 
@@ -66,38 +91,75 @@ VALUES
 (10,3,6),
 (11,3,7),
 (12,3,8),
-(13,3,18),
+(25,3,9),
+(26,3,10),
+(23,3,11),
+(21,3,12),
+(29,3,13),
+(30,3,14),
 (14,3,15),
+(32,3,16),
+(33,3,17),
+(13,3,18),
+(37,3,19),
+(36,3,20),
+(31,3,21),
+(34,3,22),
+(27,3,23),
+(38,3,24),
+(28,3,25),
+(39,3,26),
 (15,3,27),
 (16,3,28),
 (17,3,29),
 (18,3,30),
 (19,3,31),
 (20,3,32),
-(21,3,12),
-(22,3,33);
+(22,3,33),
+(24,3,34),
+(35,3,35),
+(40,3,36),
+(41,3,37),
+(42,3,38),
+(43,3,39);
 
-INSERT INTO public.usuario_prioridadtus
-(id, descripcion, valor,color)
-VALUES(1, 'Alta', 1,'danger');
-INSERT INTO public.usuario_prioridadtus
-(id, descripcion, valor,color)
-VALUES(2, 'Media', 2,'warning');
-INSERT INTO public.usuario_prioridadtus
-(id, descripcion, valor,color)
-VALUES(3, 'Baja', 3,'success');
+INSERT INTO public.usuario_rol_permiso
+(id, rol_id, permiso_id)
+VALUES(44, 3, 40);
+INSERT INTO public.usuario_rol_permiso
+(id, rol_id, permiso_id)
+VALUES(45, 3, 41);
+INSERT INTO public.usuario_rol_permiso
+(id, rol_id, permiso_id)
+VALUES(46, 3, 42);
+INSERT INTO public.usuario_rol_permiso
+(id, rol_id, permiso_id)
+VALUES(47, 3, 44);
+INSERT INTO public.usuario_rol_permiso
+(id, rol_id, permiso_id)
+VALUES(48, 3, 45);
 
-INSERT INTO public.usuario_fase
-(id, nombre_fase, cod_fase)
-VALUES(1, 'Por Hacer', 'TODO');
-INSERT INTO public.usuario_fase
-(id, nombre_fase, cod_fase)
-VALUES(2, 'Haciendo', 'DOING');
-INSERT INTO public.usuario_fase
-(id, nombre_fase, cod_fase)
-VALUES(3, 'Hecho', 'DONE');
-INSERT INTO public.usuario_fase
-(id, nombre_fase, cod_fase)
-VALUES(4, 'Cancelado', 'CANC');
+
+
+
+
+
+INSERT INTO public.usuario_estado
+(id, descripcion)
+VALUES(1, 'PENDIENTE');
+INSERT INTO public.usuario_estado
+(id, descripcion)
+VALUES(2, 'EN PROGRESO');
+INSERT INTO public.usuario_estado
+(id, descripcion)
+VALUES(3, 'TERMINADO');
+INSERT INTO public.usuario_estado
+(id, descripcion)
+VALUES(4, 'CANCELADO');
+
+
+INSERT INTO public.usuario_usuario
+(id, nombre, apellido, email, nombre_usuario, activo, df_rol_id)
+VALUES(1, 'admin', 'sistema', 'as.is2.g15@gmail.com', 'as.is2.g15', true, 1);
 
 
