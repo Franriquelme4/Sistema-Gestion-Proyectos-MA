@@ -251,6 +251,7 @@ def rolesProyectoCrear(request,id):
     html_template = loader.get_template('home/rolesProyectoCrear.html')
     return HttpResponse(html_template.render(context,request))
 
+@login_required
 def crearRolProyecto(request,id):
     """Se crea un nuevo rol con todos los permisos asociados"""
     variables = request.POST
@@ -314,7 +315,7 @@ def eliminarRolProyecto(request,id):
         proyecto_rol.proyecto.remove(Proyecto.objects.get(id=id))"""
     return redirect(f'/proyecto/roles/1')
 
-
+@login_required
 def editarRolProyecto(request,idd):
     """Se elimina el rol asociado al id"""
     print("Entra en la funcion")
@@ -377,6 +378,7 @@ def colaboradoresProyectoCrear(request,id):
     html_template = loader.get_template('home/colaboradoresProyectoCrear.html')
     return HttpResponse(html_template.render(context,request)) 
 
+@login_required
 def asignarColaboradorProyecto(request,id):
     """Se almacena el nuevo rol con el colaborador al proyecto"""
     variables = request.POST
@@ -394,12 +396,14 @@ def asignarColaboradorProyecto(request,id):
         proyecto.miembro_proyecto.add(miembro)
     return redirect(f'/proyecto/colaboradores/{id}')
 
+@login_required
 def eliminarColaboradorProyecto(request,id):
     variables = request.POST
     record = MiembroEquipo.miembro_usuario.objects.filter(id = variables.get('idRol',False))
     record.delete()
     return redirect(f'/proyecto/{id}')
 
+@login_required
 def editarColaboradorProyecto(request,id):
     """Se eliminan los colaboradores de un proyecto especifico"""
     variables = request.POST
@@ -414,6 +418,7 @@ def editarColaboradorProyecto(request,id):
         proyecto.miembro_proyecto.add(miembro)
     return redirect(f'/proyecto/{id}')
 
+@login_required
 def tipoUs(request,id):
     """Se listan todos los tipos de US"""
     userSession = getUsuarioSesion(request.user.email)
@@ -437,6 +442,8 @@ def tipoUs(request,id):
         }
     html_template = loader.get_template('home/tipoUS.html')
     return HttpResponse(html_template.render(context,request))
+
+@login_required
 def tipoUsCrear(request,id):
     """Se listan todos los tipos de US"""
     userSession = getUsuarioSesion(request.user.email)
@@ -459,7 +466,7 @@ def tipoUsCrear(request,id):
     html_template = loader.get_template('home/tipoUSCrear.html')
     return HttpResponse(html_template.render(context,request))
 
-
+@login_required
 def crearTUSProyecto(request,id):
     """Se almacena en base de datos el nuevo tipo de US"""
     variables = request.POST
@@ -483,6 +490,7 @@ def crearTUSProyecto(request,id):
         )
     return redirect(f'/proyecto/tipoUs/{id}')
 
+@login_required
 def tipoUsImportar(request,id):
     """Se listan todos los tipos de US"""
     userSession = getUsuarioSesion(request.user.email)
@@ -515,6 +523,8 @@ def importarTusDeProyecto(request,id):
         proyecto = Proyecto.objects.get(id=id)
         TipoUs_Proyecto.objects.create(proyecto=proyecto,tipoUs=tipoUs)
     return redirect(f'/proyecto/tipoUs/{id}')
+
+@login_required
 def verProductBacklog(request,id):
     """Se visualiza todos los US"""
     userSession = getUsuarioSesion(request.user.email)
@@ -538,6 +548,7 @@ def verProductBacklog(request,id):
     html_template = loader.get_template('home/productBacklog.html')
     return HttpResponse(html_template.render(context,request))
 
+@login_required
 def crearUs(request,id):
     """Se listan todos los tipos de US"""
     userSession = getUsuarioSesion(request.user.email)
@@ -562,6 +573,7 @@ def crearUs(request,id):
     html_template = loader.get_template('home/usCrear.html')
     return HttpResponse(html_template.render(context,request))
 
+@login_required
 def crearUsGuardar(request,id):
     """Se agregan los nuevos Us"""
     variables = request.POST
@@ -577,6 +589,7 @@ def crearUsGuardar(request,id):
         userStory.save()
     return redirect(f'/proyecto/productBacklog/{id}')
 
+@login_required
 def editarProyecto(request,id):
     """
     Cuando un usuario ingresa a un proyecto en el cual fue asignado se visualizan 
@@ -619,6 +632,7 @@ def editarProyectoGuardar(request,id):
         )
     return redirect(f'/proyecto/{id}')
 
+@login_required
 def iniciarProyecto(request,id):
     proyectoActual = Proyecto.objects.get(id=id)
     Proyecto.objects.filter(id=id).update(
@@ -628,6 +642,7 @@ def iniciarProyecto(request,id):
     )
     return redirect(f'/proyecto/{id}')
 
+@login_required
 def sprintProyecto(request,id):
     """Se visualiza todos los US"""
     userSession = getUsuarioSesion(request.user.email)
@@ -677,6 +692,7 @@ def sprintCrear(request,id):
     html_template = loader.get_template('home/sprintCrear.html')
     return HttpResponse(html_template.render(context,request))
 
+@login_required
 def sprintCrearGuardar(request,id):
     """Se guardan los datos iniciales del sprint"""
     userSession = getUsuarioSesion(request.user.email)
@@ -748,7 +764,7 @@ def sprintColaboradorAgregar(request,idProyecto,idSprint):
     html_template = loader.get_template('home/sprintAgregarColaborador.html')
     return HttpResponse(html_template.render(context,request))
 
-
+@login_required
 def sprintColaboradorAgregarGuardar(request,id):
     """Se almacenan los colaboradores del Sprint"""
     userSession = getUsuarioSesion(request.user.email)
@@ -795,6 +811,7 @@ def sprintUsAgregar(request,idProyecto,idSprint):
     html_template = loader.get_template('home/sprintAgregarUs.html')
     return HttpResponse(html_template.render(context,request))
 
+@login_required
 def sprintUsAgregarGuardar(request,id):
     """Se almacenan los colaboradores del Sprint"""
     variables = request.POST
@@ -877,6 +894,7 @@ def pruebaAjax(request):
     print('llegue')
     return redirect(f'/proyecto/sprint/2')
 
+@login_required
 def sprintTableroActualizarEstado(request,idProyecto,idSprint):
     variables = request.POST
     if request.method == 'POST':
