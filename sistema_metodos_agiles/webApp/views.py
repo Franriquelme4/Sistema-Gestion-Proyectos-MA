@@ -418,8 +418,9 @@ def tipoUs(request,id):
     userSession = getUsuarioSesion(request.user.email)
     proyecto = getProyectsByID(id,userSession.id)[0]
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
+    print('view: ', id)
     tipoUs = getTipoUsbyProyectId(id)
-    prioridad = PrioridadTUs.objects.all()
+    #prioridad = PrioridadTUs.objects.all()
     rolesProyecto = getRolByProyectId(id)
     permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','ctr_TipoUs','imp_TipoUs','dsp_SprinBack']
     validacionPermisos = validarPermisos(permisosProyecto,userSession.id,id)
@@ -430,8 +431,8 @@ def tipoUs(request,id):
         'rolUsuario':rolUsuario,
         'validacionPermisos':validacionPermisos,
         'prueba':rolesProyecto,
-        'tipoUs':"tipoUs",
-        'prioridades':"prioridad",
+        'tipoUs':tipoUs,
+        #'prioridades':prioridad,
         }
     html_template = loader.get_template('home/tipoUS.html')
     return HttpResponse(html_template.render(context,request))
@@ -507,7 +508,9 @@ def tipoUsImportar(request,id):
     return HttpResponse(html_template.render(context,request))
 def importarTusDeProyecto(request,id):
     variables = request.POST
+    print("idTipoUs")
     if request.method == 'POST':
+        
         tipoUs = TipoUserStory.objects.get(id=variables.get('idTipoUs',False))
         proyecto = Proyecto.objects.get(id=id)
         TipoUs_Proyecto.objects.create(proyecto=proyecto,tipoUs=tipoUs)
