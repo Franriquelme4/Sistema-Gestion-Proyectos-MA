@@ -7,12 +7,12 @@
 
 {% block content %}
 {% include 'includes/options.html' %}
-{% if True %}
+{% if validacionPermisos.agr_Colaborador_US %}
 <a class="btn btn-primary btn-sm " href="{% url 'webApp:sprintColaboradorAgregar' proyecto.id sprint.id %}"><i class="material-icons">add</i>Agregar Colaborador</a>
 {% endif %}
-{% if True %}
+
 <a class="btn btn-danger btn-sm" href="{% url 'webApp:sprintProyecto' proyecto.id %}">Volver</a>
-{% endif %}
+
 
         <div class="row">
             <div class="col-md-12">

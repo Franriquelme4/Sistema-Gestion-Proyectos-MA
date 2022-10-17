@@ -193,7 +193,7 @@ def verProyecto(request,id):
     proyecto = getProyectsByID(id,userSession.id)[0]
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
     print(getPermisos(userSession.id,id),'Permisos')
-    permisosProyecto = ['dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','dsp_SprinBack']
+    permisosProyecto = ['dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','dsp_SprinBack','ini_Proyecto','upd_Proyecto']
     validacionPermisos = validarPermisos(permisosProyecto,userSession.id,id)
     context= {  'userSession':userSession,
                 'proyecto':proyecto,
@@ -214,7 +214,7 @@ def rolesProyecto(request,id):
     proyecto = getProyectsByID(id,userSession.id)[0]
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
     print(request.session['userSesion'])
-    permisosProyecto = ['crt_rol','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','dsp_SprinBack']
+    permisosProyecto = ['crt_rol','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','dsp_SprinBack','dlt_rol','upd_rol']
     validacionPermisos = validarPermisos(permisosProyecto,userSession.id,id)
     context= {  'userSession':userSession,
                 'proyecto':proyecto,
@@ -337,7 +337,7 @@ def colaboradoresProyecto(request,id):
     rolesProyecto = getRolByProyectId(id)
     colaboradores = getColaboratorsByProyect(id)
     usuarios = Usuario.objects.filter(~Q(id=userSession.id)).filter(~Q(df_rol=1))
-    permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','dsp_SprinBack']
+    permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','dsp_SprinBack','dlt_Colaborador','upd_Colaborador']
     validacionPermisos = validarPermisos(permisosProyecto,userSession.id,id)
     context={
         'colaboradores':colaboradores,
@@ -387,6 +387,7 @@ def asignarColaboradorProyecto(request,id):
         )
         miembro.save()
         for rol in variables.getlist('rol',False):
+            print(rol,'rol')
             miembro.miembro_rol.add(Rol.objects.get(id=rol))
         miembro.miembro_usuario.add(Usuario.objects.get(id=variables.get('usuario',False)))
         proyecto = Proyecto.objects.get(id=id)
@@ -421,7 +422,7 @@ def tipoUs(request,id):
     tipoUs = getTipoUsbyProyectId(id)
     prioridad = PrioridadTUs.objects.all()
     rolesProyecto = getRolByProyectId(id)
-    permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','ctr_TipoUs','imp_TipoUs','dsp_SprinBack']
+    permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','ctr_TipoUs','imp_TipoUs','dsp_SprinBack','dlt_TipoUs','upd_TipoUs']
     validacionPermisos = validarPermisos(permisosProyecto,userSession.id,id)
     context={
         'rolesProyecto':rolesProyecto,
@@ -491,7 +492,7 @@ def tipoUsImportar(request,id):
     todostipoUs = getTipoUsbyNotProyectId(id)
     print(tipoUs)
     rolesProyecto = getRolByProyectId(id)
-    permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','ctr_TipoUs','dsp_SprinBack']
+    permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','ctr_TipoUs','dsp_SprinBack','imp_TipoUs']
     validacionPermisos = validarPermisos(permisosProyecto,userSession.id,id)
     context={
         'rolesProyecto':rolesProyecto,
@@ -634,7 +635,7 @@ def sprintProyecto(request,id):
     sprint = Sprint.objects.filter(proyecto_sp=id)
     print(sprint,'sprint')
     # tipoUs = TipoUserStory.objects.filter(proyecto_tipo_us = id)
-    permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','crt_US','dsp_SprinBack']
+    permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','crt_Sprint','dsp_SprinBack','dsp_Colaborador_Sprint','dsp_SprinBack','dsp_Tablero','agr_Colaborador_US']
     validacionPermisos = validarPermisos(permisosProyecto,userSession.id,id)
     userStorys = UserStory.objects.filter(proyecto_us = id)
     context={
@@ -661,7 +662,7 @@ def sprintCrear(request,id):
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
     userStorys = UserStory.objects.filter(proyecto_us = id)
     colaboradores = getColaboratorsByProyect(id)
-    permisosProyecto = ['dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','dsp_SprinBack']
+    permisosProyecto = ['dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','dsp_SprinBack','ctr_Sprint']
     validacionPermisos = validarPermisos(permisosProyecto,userSession.id,id)
     context= {  'userSession':userSession,
                 'proyecto':proyecto,
@@ -706,7 +707,7 @@ def sprintColaboradores(request,idProyecto,idSprint):
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
     colaboradores = Sprint.objects.get(id=idSprint).colaborador_sp.all()
     print(colaboradores)
-    permisosProyecto = ['dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','dsp_SprinBack']
+    permisosProyecto = ['dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','dsp_SprinBack','agr_Colaborador','agr_Colaborador_US']
     validacionPermisos = validarPermisos(permisosProyecto,userSession.id,idProyecto)
     context= {  'userSession':userSession,
                 'proyecto':proyecto,
@@ -732,7 +733,7 @@ def sprintColaboradorAgregar(request,idProyecto,idSprint):
     proyecto = getProyectsByID(idProyecto,userSession.id)[0]
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
     colaboradores = getColaboratorsByProyect(idProyecto)
-    permisosProyecto = ['dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','dsp_SprinBack']
+    permisosProyecto = ['dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','dsp_SprinBack','agr_Colaborador_US']
     validacionPermisos = validarPermisos(permisosProyecto,userSession.id,idProyecto)
     context= {  'userSession':userSession,
                 'proyecto':proyecto,
