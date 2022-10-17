@@ -247,6 +247,7 @@ def rolesProyectoCrear(request,id):
     html_template = loader.get_template('home/rolesProyectoCrear.html')
     return HttpResponse(html_template.render(context,request))
 
+@login_required
 def crearRolProyecto(request,id):
     """Se crea un nuevo rol con todos los permisos asociados"""
     variables = request.POST
@@ -310,7 +311,7 @@ def eliminarRolProyecto(request,id):
         proyecto_rol.proyecto.remove(Proyecto.objects.get(id=id))"""
     return redirect(f'/proyecto/roles/1')
 
-
+@login_required
 def editarRolProyecto(request,idd):
     """Se elimina el rol asociado al id"""
     print("Entra en la funcion")
@@ -373,6 +374,7 @@ def colaboradoresProyectoCrear(request,id):
     html_template = loader.get_template('home/colaboradoresProyectoCrear.html')
     return HttpResponse(html_template.render(context,request)) 
 
+@login_required
 def asignarColaboradorProyecto(request,id):
     """Se almacena el nuevo rol con el colaborador al proyecto"""
     variables = request.POST
@@ -387,12 +389,14 @@ def asignarColaboradorProyecto(request,id):
         proyecto.miembro_proyecto.add(miembro)
     return redirect(f'/proyecto/colaboradores/{id}')
 
+@login_required
 def eliminarColaboradorProyecto(request,id):
     variables = request.POST
     record = MiembroEquipo.miembro_usuario.objects.filter(id = variables.get('idRol',False))
     record.delete()
     return redirect(f'/proyecto/{id}')
 
+@login_required
 def editarColaboradorProyecto(request,id):
     """Se eliminan los colaboradores de un proyecto especifico"""
     variables = request.POST
@@ -407,6 +411,7 @@ def editarColaboradorProyecto(request,id):
         proyecto.miembro_proyecto.add(miembro)
     return redirect(f'/proyecto/{id}')
 
+@login_required
 def tipoUs(request,id):
     """Se listan todos los tipos de US"""
     userSession = getUsuarioSesion(request.user.email)
@@ -431,6 +436,8 @@ def tipoUs(request,id):
         }
     html_template = loader.get_template('home/tipoUS.html')
     return HttpResponse(html_template.render(context,request))
+
+@login_required
 def tipoUsCrear(request,id):
     """Se listan todos los tipos de US"""
     userSession = getUsuarioSesion(request.user.email)
@@ -455,7 +462,7 @@ def tipoUsCrear(request,id):
     html_template = loader.get_template('home/tipoUSCrear.html')
     return HttpResponse(html_template.render(context,request))
 
-
+@login_required
 def crearTUSProyecto(request,id):
     """Se almacena en base de datos el nuevo tipo de US"""
     variables = request.POST
@@ -476,6 +483,7 @@ def crearTUSProyecto(request,id):
             faseTus.save()
     return redirect(f'/proyecto/tipoUS/{id}')
 
+@login_required
 def verProductBacklog(request,id):
     """Se visualiza todos los US"""
     userSession = getUsuarioSesion(request.user.email)
@@ -500,6 +508,7 @@ def verProductBacklog(request,id):
     html_template = loader.get_template('home/productBacklog.html')
     return HttpResponse(html_template.render(context,request))
 
+@login_required
 def crearUs(request,id):
     """Se agregan los nuevos Us"""
     variables = request.POST
@@ -514,6 +523,7 @@ def crearUs(request,id):
         userStory.save()
     return redirect(f'/proyecto/{id}')
 
+@login_required
 def importarTusDeProyecto(request,id):
     """Se importan los tipos de US """
     variables = request.POST
