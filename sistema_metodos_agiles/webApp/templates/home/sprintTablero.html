@@ -1,0 +1,164 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+{% include 'includes/options.html' %}
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h3>Tablero Kamban</h3>
+    </div>
+    <div class="card-body">
+      <form method="post" action="{% url 'webApp:sprintTablero2' proyecto.id sprint.id %}" id="formTus">
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-8">
+            <select id="tipoUs" class="form-control" aria-label="Default select example" name="tipoUsId">
+              {% for tpus in tipoUs %}
+              <option value="{{tpus.id}}" {% if tpus.id == tipoUsTablero.id %} selected {% endif %}>{{tpus.nombre_tipo_us}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-4">
+            <button class="btn btn-sm btn-success" type="submit">Filtrar</button>
+          </div>
+        </div>
+        <input hidden="true" type="text" name="jsonFase" id="jsonFase">
+      </form>
+
+      <div>
+        <div class="container-fluid">
+          <div class="d-flex">
+            {% for fase in fases %}
+            <div class="card mx-1 border border-dark">
+              <div class="card-body dropzone" id="{{fase.id}}" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="clearDrop(event)">
+                <h6 class=" text-uppercase text-truncate py-2">{{fase.nombre_fase}} {{fase.id}}</h6>
+                <div class="items border border-light">
+                  <!-- <div class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="clearDrop(event)"> &nbsp; </div> -->
+                  {% for userStory in userStorys %}
+                  {% if fase.id == userStory.us.fase.id %}
+                  <div class="card shadow-sm" id="{{userStory.us.id}}" draggable="true" ondragstart="drag(event)">
+                    <div class="card-body p-2">
+                      <div class="card-title">
+                        <img src="//via.placeholder.com/30" class="rounded-circle float-right">
+                        <a href="" class="lead ">{{userStory.us.nombre_us}}</a>
+                      </div>
+                      <p>
+                        {{userStory.us.descripcion_us}}
+                      </p>
+                      <button class="btn btn-primary btn-sm">Ver</button>
+                    </div>
+                  </div>
+                 
+                  {% endif %}
+
+                  {% endfor %}
+
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+      </div>
+      <form method="post" action="{% url 'webApp:sprintTableroActualizarEstado' proyecto.id sprint.id %}" id="formActualizarEstado">
+        {% csrf_token %}
+        <input hidden="true" type="number" name="userStory" id="userStory">
+        <input hidden="true" type="number" name="nuevaFase" id="nuevaFase">
+        <input hidden="true" type="number" name="tipoUsId" value="{{tipoUsTablero.id}}">
+      </form>
+
+      <a class="btn btn-danger btn-sm" href="{% url 'webApp:tipoUs' proyecto.id %}">Cancelar</a>
+
+    </div>
+  </div>
+</div>
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+let elementArrastrado=""
+  const drag = (event) => {
+    console.log('se arrastra');
+    elementArrastrado = event.target
+  event.dataTransfer.setData("text/plain", event.target.id);
+}
+
+const allowDrop = (ev) => {
+  ev.preventDefault();
+  if (hasClass(ev.target,"dropzone")) {
+    addClass(ev.target,"droppable");
+  }
+}
+
+const clearDrop = (ev) => {
+    removeClass(ev.target,"droppable");
+}
+
+const drop = (event) => {
+  event.preventDefault()
+  let idNuevaFase = event.target.id
+  let idUserStory = elementArrastrado.id
+
+  if (!idNuevaFase) {
+    const fases = $("div.dropzone")
+  console.log(fases[0].id)
+    idNuevaFase = fases[0].id
+  }
+  $("#userStory").val(idUserStory);
+  $("#nuevaFase").val(idNuevaFase);
+
+  $("#formActualizarEstado").submit()
+
+}
+
+const updateDropzones = () => {
+    /* after dropping, refresh the drop target areas
+      so there is a dropzone after each item
+      using jQuery here for simplicity */
+    
+    var dz = $('<div class="dropzone rounded" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="clearDrop(event)"> &nbsp; </div>');
+    
+    // delete old dropzones
+    $('.dropzone').remove();
+
+    // insert new dropdzone after each item   
+    dz.insertAfter('.card.draggable');
+    
+    // insert new dropzone in any empty swimlanes
+    $(".items:not(:has(.card.draggable))").append(dz);
+};
+
+// helpers
+function hasClass(target, className) {
+    return new RegExp('(\\s|^)' + className + '(\\s|$)').test(target.className);
+}
+
+function addClass(ele,cls) {
+  if (!hasClass(ele,cls)) ele.className += " "+cls;
+}
+
+function removeClass(ele,cls) {
+  if (hasClass(ele,cls)) {
+    var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
+    ele.className=ele.className.replace(reg,' ');
+  }
+}
+
+function unwrap(node) {
+    node.replaceWith(...node.childNodes);
+}
+
+</script>
+
+
+
+{% endblock javascripts %}

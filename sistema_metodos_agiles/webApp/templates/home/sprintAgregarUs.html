@@ -1,0 +1,115 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+{% include 'includes/options.html' %}
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h3>Agregar User Story</h3>
+    </div>
+    <div class="card-body">
+      <form method="post" action="{% url 'webApp:sprintUsAgregarGuardar' proyecto.id %}" id="formTus">
+        {% csrf_token %}
+        <input hidden="true" type="text" name="jsonUs" id="jsonUs">
+        <input type="number" hidden="true" name="idSprint" value="{{sprint.id}}">
+
+      </form>
+      <button id="addRow" class="btn btn-info btn-sm"><i class="material-icons">add</i>Agregar User Story</button>
+      <table id="tabla--fase" class="display" style="width:100%">
+        <thead>
+          <tr>
+            <th>User Story</th>
+            <th>Encargado</th>
+            <th>Eliminar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>
+              <select class="form-control userStory" aria-label="Default select example" name="colaborador">
+                <option selected>Seleccionar User Story</option>
+                {% for userStory in userStorys %}
+                <option value="{{userStory.id}}">{{userStory.nombre_us}}</option>
+                {% endfor %}
+              </select>
+            </th>
+            <th>
+              <select class="form-control userStory" aria-label="Default select example" name="us">
+                <option selected>Seleccionar Colaborador</option>
+                {% for colaborador in colaboradores %}
+                <option value="{{colaborador.colaborador.id}}">{{colaborador.colaborador.nombre}} {{colaborador.colaborador.apellido}}</option>
+                {% endfor %}
+              </select>
+            </th>
+            <th><button class="btn btn-danger btn-sm eliminar">Eliminar</button></th>
+          </tr>
+        </tbody>
+      </table>
+
+      <a class="btn btn-danger btn-sm" href="{% url 'webApp:sprintProyecto' proyecto.id %}">Cancelar</a>
+      <button type="submit" class="btn btn-primary btn-sm" id="enviar">Guardar</button>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  $(document).ready(function () {
+    const t = $('#tabla--fase').DataTable({
+      "dom": "ltpr"
+    });
+    let counter = 1;
+    const form = $('#formTus');
+
+    $('#addRow').on('click', function () {
+      t.row.add([
+        `<select class="form-control userStory" aria-label="Default select example" name="us">
+                <option selected>Seleccionar User Story</option>
+                {% for userStory in userStorys %}
+                <option value="{{userStory.id}}">{{userStory.nombre_us}}</option>
+                {% endfor %}
+              </select>`,
+        ` <select class="form-control userStory" aria-label="Default select example" name="colaborador">
+                <option selected>Seleccionar Colaborador</option>
+                {% for colaborador in colaboradores %}
+                <option value="{{colaborador.colaborador.id}}">{{colaborador.colaborador.nombre}} {{colaborador.colaborador.apellido}}</option>
+                {% endfor %}
+              </select>`,
+        '<button class="btn btn-danger btn-sm eliminar">Eliminar</button>'])
+        .draw(true);
+      counter++;
+    });
+    // $('#addRow').click();
+    $('#tabla--fase tbody').on('click', 'button.eliminar', function () {
+      t
+        .row($(this).parents('tr'))
+        .remove()
+        .draw();
+    });
+    $("#enviar").click(function () {
+      var data = t.$('.userStory');
+      //console.log(data);
+      let arrayFase = [];
+      for (let index = 0; index < data.length; index = index + 2) {
+        arrayFase = [...arrayFase, {
+          us: data[index].value,
+          colaborador: data[index + 1].value
+        }]
+      }
+      console.log(arrayFase);
+      $('#jsonUs').val(JSON.stringify(arrayFase))
+      //alert(data);
+      //return false;
+      $("#formTus").submit();
+    });
+  });
+</script>
+{% endblock javascripts %}
