@@ -315,7 +315,7 @@ def eliminarRolProyecto(request,id):
         proyecto_rol.proyecto.remove(Proyecto.objects.get(id=id))"""
     return redirect(f'/proyecto/roles/1')
 
-@login_required
+@login_required(login_url="/login/")
 def editarRolProyecto(request,idd):
     """Se elimina el rol asociado al id"""
     print("Entra en la funcion")
@@ -324,9 +324,9 @@ def editarRolProyecto(request,idd):
     print(validarEliminacion)
     record = Rol.objects.filter(id = idd).first()
     
-
     return redirect(f'/proyecto/{id}')
 
+@login_required(login_url="/login/")
 def colaboradoresProyecto(request,id):
     """
     Se lista todos colaboradores del proyecto
@@ -351,8 +351,8 @@ def colaboradoresProyecto(request,id):
         }
     html_template = loader.get_template('home/colaboradoresProyecto.html')
     return HttpResponse(html_template.render(context,request))
-@login_required(login_url="/login/")
 
+@login_required(login_url="/login/")
 def colaboradoresProyectoCrear(request,id):
     """
     Se lista todos colaboradores del proyecto
@@ -378,6 +378,7 @@ def colaboradoresProyectoCrear(request,id):
     html_template = loader.get_template('home/colaboradoresProyectoCrear.html')
     return HttpResponse(html_template.render(context,request))
 
+@login_required(login_url="/login/")
 def colaboradoresProyectoEditar(request,idProyecto,idColaborador):
     print(f"ID PROYECTO = {idProyecto}")
     print(f"ID COLABORADOR = {idColaborador}")
@@ -457,7 +458,8 @@ def eliminarRolProyecto(request,id):
     """Se elimina el rol asociado al id"""
     variables = request.POST
     record = Rol.objects.filter(id = variables.get('idRol',False))
-    record.delete()
+    for x in record:
+        x.permiso.clear()
 
     """validarEliminacion = getRolByID(id)
     print(validarEliminacion)
@@ -501,24 +503,20 @@ def editarRolProyecto(request,id):
         crearRolProyecto(request,id)
     return redirect(f'/proyecto/roles/{id}')
 
+@login_required(login_url="/login/")
 def crearRolProyecto(request,id):
     """Se crea un nuevo rol con todos los permisos asociados"""
     variables = request.POST
     if request.method == 'POST':
-        rol = Rol(
+        idRol=variables.get('idRol',False);
+        rol= Rol.objects.get(id=idRol)
+        Rol.objects.filter(id=idRol).update(
             descripcion_rol = variables.get('descripcion',False),
             nombre_rol = variables.get('nombre_rol',False),
         )
-        rol.save()
         for permiso in variables.getlist('permisos',False):
             print(permiso)
             rol.permiso.add(Permiso.objects.get(id=permiso))
-        proyecto_rol = ProyectoRol(
-            descripcion_proyecto_rol=''
-        )
-        proyecto_rol.save()
-        proyecto_rol.rol.add(rol)
-        proyecto_rol.proyecto.add(Proyecto.objects.get(id=id))
     return redirect(f'/proyecto/roles/{id}')
     
 

@@ -122,7 +122,7 @@ def getPermisos(id_usuario,id_proyecto):
 	# join usuario_miembroequipo_miembro_rol ummr on ummu.miembroequipo_id = um.id
 	# join usuario_rol_permiso urp on urp.rol_id = ummr.rol_id 
 	# where ummu.usuario_id = {id_usuario} group by um.id """)
-
+	print(id_usuario,id_proyecto,'permisos')
 	permisos = MiembroEquipo.objects.raw(f""" select um.id, array_agg(distinct urp.permiso_id) as permisos from usuario_miembroequipo um 
 	join usuario_miembroequipo_miembro_rol ummr on um.id = ummr.miembroequipo_id 
 	join usuario_miembroequipo_miembro_usuario ummu on um.id = ummu.miembroequipo_id 
