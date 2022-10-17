@@ -47,15 +47,30 @@ VALUES
 (38,'upd_Tablero'       ,'Modificar Tablero'                );
 
 
---INSERT INTO public.usuario_permiso
---(id, descripcion_permiso, nombre_permiso)
---VALUES(30, 'Crear Tipo de US', 'ctr_TipoUs');
---INSERT INTO public.usuario_permiso
---(id, descripcion_permiso, nombre_permiso)
---VALUES(31, 'Modificar Tipo de US', 'upd_TipoUs');
---INSERT INTO public.usuario_permiso
---(id, descripcion_permiso, nombre_permiso)
---VALUES(32, 'Eliminar Tipo de Us', 'dlt_TipoUs');
+INSERT INTO public.usuario_permiso
+(id, descripcion_permiso, nombre_permiso)
+VALUES(40, 'Modificar Rol', 'upd_rol');
+INSERT INTO public.usuario_permiso
+(id, descripcion_permiso, nombre_permiso)
+VALUES(41, 'Iniciar Proyecto', 'ini_Proyecto');
+
+INSERT INTO public.usuario_permiso
+(id, descripcion_permiso, nombre_permiso)
+VALUES(42, 'Editar Proyecto', 'upd_Proyecto');
+
+INSERT INTO public.usuario_permiso
+(id, descripcion_permiso, nombre_permiso)
+VALUES(44, 'Agregar Colaborador Sprint', 'agr_Colaborador_Sprint');
+
+INSERT INTO public.usuario_permiso
+(id, descripcion_permiso, nombre_permiso)
+VALUES(45, 'Consultar Colaborador Sprint', 'dsp_Colaborador_Sprint');
+
+INSERT INTO public.usuario_permiso
+(id, descripcion_permiso, nombre_permiso)
+VALUES(45, 'Agregar US - Colaborador Sprint', 'agr_Colaborador_US');
+
+
 --INSERT INTO public.usuario_permiso
 --(id, descripcion_permiso, nombre_permiso)
 --VALUES(33, 'Importar Tipo de US', 'imp_TipoUs');
@@ -108,6 +123,21 @@ VALUES
 (42,3,38),
 (43,3,39);
 
+INSERT INTO public.usuario_rol_permiso
+(id, rol_id, permiso_id)
+VALUES(44, 3, 40);
+INSERT INTO public.usuario_rol_permiso
+(id, rol_id, permiso_id)
+VALUES(45, 3, 41);
+INSERT INTO public.usuario_rol_permiso
+(id, rol_id, permiso_id)
+VALUES(46, 3, 42);
+INSERT INTO public.usuario_rol_permiso
+(id, rol_id, permiso_id)
+VALUES(47, 3, 44);
+INSERT INTO public.usuario_rol_permiso
+(id, rol_id, permiso_id)
+VALUES(48, 3, 45);
 
 
 

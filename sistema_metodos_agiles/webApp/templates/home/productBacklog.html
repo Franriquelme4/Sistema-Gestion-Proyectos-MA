@@ -8,24 +8,34 @@
 {% block content %}
 {% include 'includes/options.html' %}
 
+<h2>Product BackLog</h2>
 {% if validacionPermisos.crt_US %}
-<a class="btn btn-primary " href="{% url 'webApp:crearUs' proyecto.id %}"><i class="material-icons">add</i>Agregar Us</a>
+<a class="btn btn-primary btn-sm" href="{% url 'webApp:crearUs' proyecto.id %}"><i class="material-icons">add</i>Agregar Us</a>
 {% endif %}
 
-        <div class="d-flex my-3">
+        <div class="row my-3">
           {% for userStory in userStorys %}
           
-          <div class="card card-stats m-3">
+          <div class="col-3 card card-stats m-3">
             <div class="card-header card-header-{{userStory.tipo_us.prioridad_tipo_us.color}} card-header-icon">
-              <div class="card-icon">
-                <i class="material-icons">developer_mode</i>
-              </div>
+
               
               <h3 class="card-title">{{userStory.nombre_us}}</h3>
               <p class="card-category">{{userStory.descripcion_us}}</p>
+              <p class="card-category"><strong>Tipo de US</strong> {{userStory.tipo_us}}</p>
+
               <p class="card-category"><strong>Tiempo Estimado</strong> {{userStory.tiempoEstimado_us}} hs</p>
             </div>
             <div class="card-footer">
+              {% if userStory.disponible %}
+              <div class="bg-success text-light p-1 rounded">
+                Disponible
+              </div>
+              {% else %}
+              <div class="bg-danger text-light p-1 rounded">
+                Asignado
+              </div>
+              {% endif %}
               <!-- <div class="stats">
                 <i class="material-icons ">developer_board</i>
                 <a href="{% url 'webApp:verProyecto' proyecto.id %}">Ver proyecto</a>

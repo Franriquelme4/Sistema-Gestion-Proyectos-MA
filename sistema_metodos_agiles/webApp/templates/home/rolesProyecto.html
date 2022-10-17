@@ -8,7 +8,7 @@
 {% block content %}
 {% include 'includes/options.html' %}
 {% if validacionPermisos.crt_rol %}
-<a class="btn btn-primary " href="{% url 'webApp:rolesProyectoCrear' proyecto.id %}"><i class="material-icons">add</i>Agregar rol</a>
+<a class="btn btn-primary btn-sm" href="{% url 'webApp:rolesProyectoCrear' proyecto.id %}"><i class="material-icons">add</i>Agregar rol</a>
 {% endif %}
         <div class="row">
             <div class="col-md-12">

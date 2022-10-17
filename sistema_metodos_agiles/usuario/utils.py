@@ -153,6 +153,7 @@ def validarPermisos(permisosVista,idUsuario,idProyecto=None):
 
 	# for permisoVista in permisosVista:
 	# 	permisos[permisoVista] = rolUsuario.poseePermiso(permisoVista)
+	print(permisos)
 	return permisos
 
 

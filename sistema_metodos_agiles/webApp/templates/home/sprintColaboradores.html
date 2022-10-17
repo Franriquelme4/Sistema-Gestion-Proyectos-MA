@@ -7,57 +7,51 @@
 
 {% block content %}
 {% include 'includes/options.html' %}
-{% if validacionPermisos.ctr_TipoUs %}
-<a class="btn btn-primary btn-sm" href="{% url 'webApp:tipoUsCrear' proyecto.id %}"><i class="material-icons">add</i>Agregar tipo de US</a>
+{% if validacionPermisos.agr_Colaborador_US %}
+<a class="btn btn-primary btn-sm " href="{% url 'webApp:sprintColaboradorAgregar' proyecto.id sprint.id %}"><i class="material-icons">add</i>Agregar Colaborador</a>
 {% endif %}
-{% if validacionPermisos.imp_TipoUs %}
-<a class="btn btn-primary btn-sm" href="{% url 'webApp:tipoUsImportar' proyecto.id %}"><i class="material-icons">add</i>Importar tipo de US</a>
 
-{% endif %}
+<a class="btn btn-danger btn-sm" href="{% url 'webApp:sprintProyecto' proyecto.id %}">Volver</a>
+
+
         <div class="row">
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header card-header-primary">
-                  <h4 class="card-title ">Tipos de US</h4>
-                  <p class="card-category">Listado de tipos de US del proyecto</p>
+                  <h4 class="card-title ">Colaboradores Sprint</h4>
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
                     <table id="table" class="display" style="width:100%">
                       <thead class=" text-primary">
-                        <th>                         
+                        <th>
+                          
                         </th>
                         <th>
-                          Nombre 
+                          Nombre del Rol
                         </th>
                         <th>
-                          Descripcion 
+                          Horas Por dia
                         </th>
                         <th>
-                          Fase 
+                         Horas disponibles por Sprint
                         </th>
-                        <!--<th>
-                          Prioridad 
-                        </th> -->
                       </thead>
                       <tbody>
-                        {% for tipo in tipoUs %}
+                        {% for colaborador in colaboradores %}
                         <tr>
                           <td>
                             {{forloop.counter}}
                           </td>
                           <td>
-                            {{tipo.nombre_tipo_us}}
+                            {{colaborador.colaborador.nombre}} {{colaborador.colaborador.apellido}}
                           </td>
                           <td>
-                            {{tipo.descripcion_tipo_us}}
+                            {{colaborador.horas}}
                           </td>
                           <td>
-                            {{tipo.fases}}
+                            {{colaborador.horasDisponibles}}
                           </td>
-                          <!--<td>
-                            {{tipo.prioridad_tipo_us}}
-                          </td> -->
                         </tr>
                         {% endfor %}
                       </tbody>
@@ -71,4 +65,6 @@
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+
+{% endblock javascripts %}
