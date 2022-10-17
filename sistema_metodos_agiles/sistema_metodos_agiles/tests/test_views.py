@@ -1,3 +1,4 @@
+from ast import arg
 import os
 import sys
 from urllib import response
@@ -11,7 +12,7 @@ os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 from django.urls import reverse, resolve
 from webApp import views, urls
 from webApp.templates import *
-from usuario.models import MiembroEquipo, Proyecto, Cliente, Usuario, Rol, Permiso
+from usuario.models import MiembroEquipo, Proyecto, Cliente, UserStory, Usuario, Rol, Permiso, PrioridadTUs, CampoPersonalizado, TipoUserStory, Fase
 from django.test import TestCase, Client
 from django.contrib.auth.models import User, Permission, Group
 
@@ -62,6 +63,45 @@ class TestViews(TestCase):
         )
         self.proyecto.save()
         self.proyecto.miembro_proyecto.set(MiembroEquipo.objects.filter(descripcion='miembro equipo para prueba'))
+        self.proyecto.save()
+
+        self.prioridad_tus = PrioridadTUs.objects.create(
+            descripcion = 'prioridadTUS inicial',
+            valor = 4,
+            color = 'green',
+        )    
+        self.prioridad_tus.save()
+
+        self.campo_personalizado = CampoPersonalizado.objects.create(
+            nombre_cp = 'campo personalizado inicial',
+            tipoCampo_cp = 'inicial',
+        )
+        self.campo_personalizado.save()
+
+        self.tipo_user_story = TipoUserStory.objects.create(
+            proyecto_tipo_us = Proyecto.objects.get(nombre_proyecto = 'proyecto_prueba'),
+            prioridad_tipo_us = PrioridadTUs.objects.get(descripcion = 'prioridadTUS inicial'),
+            nombre_tipo_us = 'tipoUS inicial',
+            descripcion_tipo_us = 'descripcion TUS inicial',
+        )
+        self.tipo_user_story.campoPer_tipo_us.set(CampoPersonalizado.objects.filter(tipoCampo_cp = 'inicial'))
+        self.tipo_user_story.save()
+
+        self.fase_prueba = Fase.objects.create(nombre_fase = 'probando fase', cod_fase = '30')
+        self.fase_prueba.save()
+
+        self.user_story = UserStory.objects.create(
+            proyecto_us = Proyecto.objects.get(nombre_proyecto = 'proyecto_prueba'),
+            nombre_us = 'nombre us inicial',
+            descripcion_us = 'us inicial',
+            tiempoEstimado_us = None,
+            estadoActual_us = None,
+            duracion_us = 1,
+            tipo_us = TipoUserStory.objects.get(nombre_tipo_us = 'tipoUS inicial'),
+            asignadoUsu_us = MiembroEquipo.objects.get(descripcion='miembro equipo para prueba'),
+        )
+
+        self.user_story.save()
 
     
     def test_crear_proyecto_get(self):
@@ -141,13 +181,13 @@ class TestViews(TestCase):
         url = reverse('asignarColaboradorProyecto', args=['1'])
         response = self.client.post(url, data={
             'miembro': self.miembro_equipo,
-            'proyecto': self.proyecto
+            'proyecto': self.proyecto,
 
         }, follow=True)
 
         self.assertEqual(response.status_code, 200)
 
-    def test_crear_rol_proyecto(self):
+    def test_crear_rol_proyecto_post(self):
 
         """
             Prueba para verificar creacion de un rol de proyecto
@@ -160,3 +200,221 @@ class TestViews(TestCase):
         }, follow=True)
 
         self.assertEqual(response.status_code, 200)
+
+    def test_eliminar_rol_proyecto_post(self):
+        """
+            Test para verificar post al eliminar rol de un proyecto.
+        """
+
+        url = reverse('eliminarRolProyecto', args=['1'])
+
+        response = self.client.post(url, {
+            'record' : self.rol
+        }, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_eliminar_rol_proyecto_get(self):
+        """
+            Test para verificar get al eliminar rol de un proyecto
+        """
+
+        response = self.client.get(reverse('eliminarRolProyecto', args=['1']))
+        self.assertEqual(response.status_code, 302)
+
+    def test_editar_rol_proyecto_post(self):
+        """
+            Test para verificar post al editar un rol de proyecto
+        """
+
+        url = reverse('editarRolProyecto', args=['1'])
+
+        response = self.client.post(url, {
+            'record' : self.rol
+        }, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+    
+    def test_editar_rol_proyecto_get(self):
+        """
+            Test para verificar get al editar un rol de proyecto.
+        """
+
+        response = self.client.get(reverse('editarRolProyecto', args=['1']))
+        self.assertEqual(response.status_code, 302)
+
+    def test_eliminar_colaborador_proyecto_post(self):
+        """
+            Test para verificar post al eliminar un colaborador de un proyecto.
+        """
+        
+        url = reverse('eliminarColaboradorProyecto', args=['1'])
+
+        response = self.client.post(url, {
+            'record' : self.miembro_equipo
+        }, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_eliminar_colaborador_proyecto_get(self):
+        """
+            Test para verificar get al eliminar un colaborador de un proyecto.
+        """
+
+        response = self.client.get(reverse('eliminarColaboradorProyecto', args=['1']))
+        self.assertEqual(response.status_code, 302)
+
+    def test_editar_colaborador_proyecto_post(self):
+        """
+            Test para verificar post al editar un colaborador de un proyecto.
+        """
+
+        url = reverse('editarColaboradorProyecto', args=['1'])
+
+        response = self.client.post(url, {
+            'miembro' : self.miembro_equipo,
+            'proyecto' : self.proyecto,
+        }, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_editar_colaborador_proyecto_get(self):
+        """
+            Test para verificar get al editar un colaborador de un proyecto.
+        """
+
+        response = self.client.get(reverse('editarColaboradorProyecto', args=['1']))
+        self.assertEqual(response.status_code, 302)
+
+    def test_tipo_us_post(self):
+        """
+            Test para verificar post en listado de tipo de user story.
+        """
+
+        url = reverse('tipoUs', args=['1'])
+
+        response = self.client.post(url, {
+            'rolUsuario' : self.rol,
+            'prioridad' : self.prioridad_tus
+        }, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+    
+    def test_tipo_us_get(self):
+        """
+            Test para verificar get en listado de tipo de user story.
+        """
+
+        response = self.client.get(reverse('tipoUs', args=['1']))
+        self.assertEqual(response.status_code, 302)
+
+    def test_tipo_us_crear_post(self):
+        """
+            Test para verificar post al crear tipo de user story.        
+        """
+
+        url = reverse('tipoUsCrear', args=['1'])
+
+        response = self.client.post(url, {
+            'rolUsuario' : self.rol,
+            'tipoUs' : self.tipo_user_story,
+            'prioridad' : self.prioridad_tus
+        }, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_tipo_us_crear_get(self):
+        """
+            Test para verificar get al crear tipo de user story.
+        """
+
+        response = self.client.get(reverse('tipoUsCrear', args=['1']))
+        self.assertEqual(response.status_code, 302)
+
+    def test_crear_tus_proyecto_post(self):
+        """
+            Test para verificar post al crear tipo de user story de un proyecto.
+        """
+
+        url = reverse('crearTUSProyecto', args=['1'])
+
+        response = self.client.post(url, {
+            'tipoUs' : self.tipo_user_story,
+            'fases' : self.fase_prueba
+        }, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_crear_tus_proyecto_get(self):
+        """
+            Test para verificar get al crear tipo de user story de un proyecto.
+        """
+
+        response = self.client.get(reverse('crearTUSProyecto', args=['1']))
+        self.assertEqual(response.status_code, 302)
+
+    def test_ver_product_backlog_post(self):
+        """
+            Test para verificar post al ver product backlog.
+        """
+
+        url = reverse('verProductBacklog', args=['1'])
+
+        response = self.client.post(url, {
+            'rolUsuario' : self.rol,
+            'tipoUs' : self.tipo_user_story,
+        }, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_ver_product_backlog_get(self):
+        """
+            Test para verificar get al ver product backlog.
+        """
+
+        response = self.client.get(reverse('verProductBacklog', args=['1']))
+        self.assertEqual(response.status_code, 302)
+
+    def test_crear_us_post(self):
+        """
+            Test para verificar post al crear US.
+        """
+
+        url = reverse('crearUs', args=['1'])
+
+        response = self.client.post(url, {
+            'userStory' : self.user_story,
+        }, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_crear_us_get(self):
+        """
+            Test para verificar get al crear US.
+        """
+
+        response = self.client.get(reverse('crearUs', args=['1']))
+        self.assertEqual(response.status_code, 302)
+
+    def test_importar_tus_proyecto_post(self):
+        """
+            Test para verificar post al importar tipos de US.
+        """
+
+        url = reverse('importarTusDeProyecto', args=['1'])
+
+        response = self.client.post(url, {
+            'tipoUsSelect' : self.tipo_user_story,
+            'tipoUs' : self.tipo_user_story,
+            'fases' : self.fase_prueba,
+        }, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_importar_tus_proyecto_get(self):
+        """
+            Test para verificar get al importar tipos de US.
+        """
+
+        response = self.client.get(reverse('importarTusDeProyecto', args=['1']))
+        self.assertEqual(response.status_code, 302)

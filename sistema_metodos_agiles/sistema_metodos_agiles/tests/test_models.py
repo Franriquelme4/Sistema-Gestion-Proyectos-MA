@@ -287,9 +287,6 @@ class TestProyecto(TestCase):
             #fase_faseTUS = Fase.objects.get(nombre_fase = 'probando fase'),
         )
         fase_tus.save()
-        #fase_tus.tipo_us_faseTUS.set(TipoUserStory.objects.filter(descripcion_tipo_us = 'descripcion TUS de prueba'))
-        #fase_tus.fase_faseTUS.set(Fase.objects.filter(nombre_fase = 'fase de prueba'))
-        #fase_tus.save()
         self.assertEqual(fase_tus.tipo_us_faseTUS, TipoUserStory.objects.get(nombre_tipo_us = 'tipoUS inicial'))
 
     def test_tablero(self):
