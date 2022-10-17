@@ -7,58 +7,13 @@
 
 {% block content %}
 {% include 'includes/options.html' %}
+<h2>Sprint</h2>
 
-{% if validacionPermisos.crt_US %}
-<a class="btn btn-primary " href="{% url 'webApp:sprintCrear' proyecto.id %}"><i class="material-icons">add</i>Crear
+{% if validacionPermisos.crt_Sprint %}
+<a class="btn btn-primary btn-sm" href="{% url 'webApp:sprintCrear' proyecto.id %}"><i class="material-icons">add</i>Crear
   Nuevo Sprint</a>
 {% endif %}
-<!-- <div class="row">
-            <div class="col-md-12">
-              <div class="card">
-                <div class="card-header card-header-primary">
-                  <h4 class="card-title ">Tipos de US</h4>
-                  <p class="card-category">Listado de tipos de US del proyecto</p>
-                </div>
-                <div class="card-body">
-                  <div class="table-responsive">
-                    <table class="table">
-                      <thead class=" text-primary">
-                        <th>                         
-                        </th>
-                        <th>
-                          Nombre 
-                        </th>
-                        <th>
-                          Descripcion 
-                        </th>
-                        <th>
-                          Prioridad 
-                        </th>
-                      </thead>
-                      <tbody>
-                        {% for data in tipoUs %}
-                        <tr>
-                          <td>
-                            {{forloop.counter}}
-                          </td>
-                          <td>
-                            {{data.nombre_tipo_us}}
-                          </td>
-                          <td>
-                            {{data.descripcion_tipo_us}}
-                          </td>
-                          <td>
-                            {{data.prioridad_tipo_us}}
-                          </td>
-                        </tr>
-                        {% endfor %}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-        </div> -->
+
 <div class="container">
   {% for sp in sprint %}
 
@@ -76,10 +31,21 @@
 
         </div>
         <div class="col-4 d-flex flex-column">
-          <a href="{% url 'webApp:sprintColaboradorAgregar' proyecto.id sp.id %}" class="btn btn-sm btn-primary">Agregar Colaboradores</a>
+          {% if validacionPermisos.dsp_Colaborador_Sprint %}
+          <a href="{% url 'webApp:sprintColaboradores' proyecto.id sp.id %}" class="btn btn-sm btn-primary">Colaboradores</a>
+          {% endif %}
+          
+          {% if validacionPermisos.dsp_Colaborador_Sprint %}
           <a href="{% url 'webApp:sprintUsAgregar' proyecto.id sp.id %}" class="btn btn-sm btn-primary">Agregar US</a>
+          {% endif %}
+
+          {% if validacionPermisos.dsp_Tablero %}
           <a href="{% url 'webApp:sprintTablero' proyecto.id sp.id 0 %}" class="btn btn-sm btn-primary">Tablero</a>
+          {% endif %}
+
+          {% if validacionPermisos.dsp_SprinBack %}
           <a href="{% url 'webApp:sprintBacklog' proyecto.id sp.id %}" class="btn btn-sm btn-primary">Sprint Backlog</a>
+          {% endif %}
         </div>
 
       </div>
