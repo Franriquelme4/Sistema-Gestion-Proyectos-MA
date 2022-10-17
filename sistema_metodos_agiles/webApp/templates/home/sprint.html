@@ -1,0 +1,103 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+{% include 'includes/options.html' %}
+
+{% if validacionPermisos.crt_US %}
+<a class="btn btn-primary " href="{% url 'webApp:sprintCrear' proyecto.id %}"><i class="material-icons">add</i>Crear
+  Nuevo Sprint</a>
+{% endif %}
+<!-- <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header card-header-primary">
+                  <h4 class="card-title ">Tipos de US</h4>
+                  <p class="card-category">Listado de tipos de US del proyecto</p>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead class=" text-primary">
+                        <th>                         
+                        </th>
+                        <th>
+                          Nombre 
+                        </th>
+                        <th>
+                          Descripcion 
+                        </th>
+                        <th>
+                          Prioridad 
+                        </th>
+                      </thead>
+                      <tbody>
+                        {% for data in tipoUs %}
+                        <tr>
+                          <td>
+                            {{forloop.counter}}
+                          </td>
+                          <td>
+                            {{data.nombre_tipo_us}}
+                          </td>
+                          <td>
+                            {{data.descripcion_tipo_us}}
+                          </td>
+                          <td>
+                            {{data.prioridad_tipo_us}}
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div> -->
+<div class="container">
+  {% for sp in sprint %}
+
+  <div class="card mx-3 w-75">
+    <div class="card-header">
+      <h3>Nombre: {{sp.nombre_sp}}</h3>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-8">
+          <p>Fecha Inicio: {{sp.fechaIni_sp}}</p>
+          <p>Fecha Fin: {{sp.fechaFIn_sp}}</p>
+          <p>Duracion: {{sp.proyecto_sp.sprint_dias}}</p>
+          <p>Estado: {{sp.estado}}</p>
+
+        </div>
+        <div class="col-4 d-flex flex-column">
+          <a href="{% url 'webApp:sprintColaboradorAgregar' proyecto.id sp.id %}" class="btn btn-sm btn-primary">Agregar Colaboradores</a>
+          <a href="{% url 'webApp:sprintUsAgregar' proyecto.id sp.id %}" class="btn btn-sm btn-primary">Agregar US</a>
+          <a href="{% url 'webApp:sprintTablero' proyecto.id sp.id 0 %}" class="btn btn-sm btn-primary">Tablero</a>
+          <a href="{% url 'webApp:sprintBacklog' proyecto.id sp.id %}" class="btn btn-sm btn-primary">Sprint Backlog</a>
+        </div>
+
+      </div>
+
+
+    </div>
+  </div>
+
+
+  {% endfor %}
+
+</div>
+<style>
+  div.card-container {
+    width: 150px;
+  }
+</style>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

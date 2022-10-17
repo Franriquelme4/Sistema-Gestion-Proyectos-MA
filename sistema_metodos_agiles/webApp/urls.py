@@ -41,6 +41,17 @@ urlpatterns = [
     path('proyecto/proyecto/editar/<int:id>',views.editarProyecto, name='editarProyecto'),
     path('proyecto/proyecto/editar/guardar/<int:id>',views.editarProyectoGuardar, name='editarProyectoGuardar'),
     path('proyecto/iniciar/<int:id>',views.iniciarProyecto, name='iniciarProyecto'),
-    path('proyecto/sprint/crear/<int:id>',views.sprintCrear, name='sprintCrear')
+    path('proyecto/sprint/<int:id>',views.sprintProyecto, name='sprintProyecto'),
+    path('proyecto/sprint/crear/<int:id>',views.sprintCrear, name='sprintCrear'),
+    path('proyecto/sprint/guardar/<int:id>',views.sprintCrearGuardar, name='sprintCrearGuardar'),
+    path('proyecto/sprint/colaborador/<int:idProyecto>/<int:idSprint>',views.sprintColaboradorAgregar, name='sprintColaboradorAgregar'),
+    path('proyecto/sprint/colaborador/guardar/<int:id>',views.sprintColaboradorAgregarGuardar, name='sprintColaboradorAgregarGuardar'),
+    path('proyecto/sprint/us/<int:idProyecto>/<int:idSprint>',views.sprintUsAgregar, name='sprintUsAgregar'),
+    path('proyecto/sprint/us/guardar/<int:id>',views.sprintUsAgregarGuardar, name='sprintUsAgregarGuardar'),
+    path('proyecto/sprint/backlog/<int:idProyecto>/<int:idSprint>',views.sprintBacklog, name='sprintBacklog'),
+    path('proyecto/sprint/tablero/<int:idProyecto>/<int:idSprint>/<int:idTipoUs>',views.sprintTablero, name='sprintTablero'),
+    path('proyecto/sprint/tablero/<int:idProyecto>/<int:idSprint>',views.sprintTablero, name='sprintTablero2')
+
     
+
 ]

@@ -9,10 +9,30 @@
     <ul class="nav">
       <li class="nav-item {% if 'index' in segment %} active {% endif %}">
         <a class="nav-link" href="/">
+          <i class="material-icons">assignment</i>
+          <p>Proyectos</p>
+        </a>
+      </li>
+
+      {% if validacionPermisos.dsp_Roles %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'webApp:verProyecto' proyecto.id %}">
           <i class="material-icons">dashboard</i>
           <p>Inicio</p>
         </a>
       </li>
+      {% endif %}
+
+      {% if validacionPermisos.dsp_SprinBack %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'webApp:sprintProyecto' proyecto.id %}">
+          <i class="material-icons">schedule</i>
+          <p>Sprint</p>
+        </a>
+      </li>
+      {% endif %}
+
+
       {% if validacionPermisos.dsp_Roles %}
       <li class="nav-item">
         <a class="nav-link" href="{% url 'webApp:rolesProyecto' proyecto.id %}">

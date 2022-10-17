@@ -154,6 +154,7 @@ class UserStory(models.Model):
     fechaMod_us = models.DateField(auto_now=True)
     fecha_creacion = models.DateField(default=datetime.date.today)
     prioridad_negocio = models.IntegerField(default=0)
+    fase = models.ForeignKey('Fase',on_delete=models.CASCADE,null=True)
     class Meta:
         verbose_name = 'User Story'
         verbose_name_plural = 'User Stories'
@@ -161,15 +162,27 @@ class UserStory(models.Model):
     def __str__(self):
         return self.nombre_us
 
+class SprintColaborador(models.Model):
+    """Almacena todos los colaboradores"""
+    colaborador = models.ForeignKey('Usuario',on_delete=models.CASCADE)
+    horas = models.IntegerField(default=0)
+
+class SprintUserStory(models.Model):
+    """Almacena todos los colaboradores"""
+    colaborador = models.ForeignKey('Usuario',on_delete=models.CASCADE)
+    us = models.ForeignKey('UserStory',on_delete=models.CASCADE)
+
 class Sprint(models.Model):
     """Modelo de la tabla sprint, en la cual se almacenan todos los datos del sprint"""
     proyecto_sp = models.ForeignKey('Proyecto',on_delete=models.CASCADE,null=True)
     nombre_sp = models.CharField(max_length=50,null=False)
-    fechaIni_sp = models.DateField(default=datetime.date.today)
-    fechaFIn_sp = models.DateField()
-    duracion_sp = models.IntegerField(null=False)
-    userStory_sp = models.ManyToManyField('UserStory',blank=True)
+    descripcion_sp = models.CharField(max_length=50,null=False)
+    fechaIni_sp = models.DateField(null=True)
+    fechaFIn_sp = models.DateField(null=True)
+    userStory_sp = models.ManyToManyField('SprintUserStory',blank=True)
+    estado = models.ForeignKey('Estado',on_delete=models.CASCADE)
     fecha_creacion = models.DateField(default=datetime.date.today)
+    colaborador_sp = models.ManyToManyField('SprintColaborador',blank=True)
     class Meta:
         verbose_name = 'Sprint'
         verbose_name_plural = 'Sprints'
@@ -177,16 +190,6 @@ class Sprint(models.Model):
     def __str__(self):
         return self.nombre_sp
 
-
-#class ProyectoSprint(models.Model):
-#    """Modelo de la tabla ProyectoSprint, en la cual se almacenan todos los datos de los sprints de cada proyecto"""
-#    proyecto_PS = models.ForeignKey('Proyecto',on_delete=models.CASCADE)
-#    sprint_PS =  models.ForeignKey('Sprint',on_delete=models.CASCADE)
-#    orden_PS = models.IntegerField(null=False)
-#    class Meta:
-#        verbose_name = 'Sprint por Proyecto'
-#        verbose_name_plural = 'Sprints por Proyecto'
-#        ordering = ['orden_PS']
 
 Fases_CHOICES=[
     ('TODO','Por Hacer'),
