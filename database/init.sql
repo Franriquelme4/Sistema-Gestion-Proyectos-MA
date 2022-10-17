@@ -44,37 +44,13 @@ VALUES
 (35,'dsp_Tablero'       ,'Consultar Tablero'                ),
 (36,'crt_Tablero'       ,'Crear Tablero'                    ),
 (37,'dlt_Tablero'       ,'Eliminar Tablero'                 ),
-(38,'upd_Tablero'       ,'Modificar Tablero'                );
-
-
-INSERT INTO public.usuario_permiso
-(id, descripcion_permiso, nombre_permiso)
-VALUES(40, 'Modificar Rol', 'upd_rol');
-INSERT INTO public.usuario_permiso
-(id, descripcion_permiso, nombre_permiso)
-VALUES(41, 'Iniciar Proyecto', 'ini_Proyecto');
-
-INSERT INTO public.usuario_permiso
-(id, descripcion_permiso, nombre_permiso)
-VALUES(42, 'Editar Proyecto', 'upd_Proyecto');
-
-INSERT INTO public.usuario_permiso
-(id, descripcion_permiso, nombre_permiso)
-VALUES(44, 'Agregar Colaborador Sprint', 'agr_Colaborador_Sprint');
-
-INSERT INTO public.usuario_permiso
-(id, descripcion_permiso, nombre_permiso)
-VALUES(45, 'Consultar Colaborador Sprint', 'dsp_Colaborador_Sprint');
-
-INSERT INTO public.usuario_permiso
-(id, descripcion_permiso, nombre_permiso)
-VALUES(45, 'Agregar US - Colaborador Sprint', 'agr_Colaborador_US');
-
-
---INSERT INTO public.usuario_permiso
---(id, descripcion_permiso, nombre_permiso)
---VALUES(33, 'Importar Tipo de US', 'imp_TipoUs');
-
+(38,'upd_Tablero'       ,'Modificar Tablero'                ),
+(40,'upd_rol'           ,'Modificar Rol'                    ),
+(41,'ini_Proyecto'      ,'Iniciar Proyecto'                 ),
+(42,'upd_Proyecto'      ,'Editar Proyecto'                  ),
+(44,'agr_Colaborador_Sprint','Agregar Colaborador Sprint'   ),
+(45,'dsp_Colaborador_Sprint','Consultar Colaborador Sprint' ),
+(46,'agr_Colaborador_US','Agregar US - Colaborador Sprint'  );
 
 
 INSERT INTO usuario_rol_permiso(id, rol_id, permiso_id)
@@ -121,25 +97,13 @@ VALUES
 (40,3,36),
 (41,3,37),
 (42,3,38),
-(43,3,39);
-
-INSERT INTO public.usuario_rol_permiso
-(id, rol_id, permiso_id)
-VALUES(44, 3, 40);
-INSERT INTO public.usuario_rol_permiso
-(id, rol_id, permiso_id)
-VALUES(45, 3, 41);
-INSERT INTO public.usuario_rol_permiso
-(id, rol_id, permiso_id)
-VALUES(46, 3, 42);
-INSERT INTO public.usuario_rol_permiso
-(id, rol_id, permiso_id)
-VALUES(47, 3, 44);
-INSERT INTO public.usuario_rol_permiso
-(id, rol_id, permiso_id)
-VALUES(48, 3, 45);
-
-
+(43,3,39),
+(44,3,40),
+(45,3,41),
+(46,3,42),
+(47,3,44),
+(48,3,45),
+(49, 3, 46);
 
 
 
