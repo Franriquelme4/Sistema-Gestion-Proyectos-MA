@@ -36,28 +36,28 @@
                         <th>
                           Fase 
                         </th>
-                        <th>
+                        <!--<th>
                           Prioridad 
-                        </th>
+                        </th> -->
                       </thead>
                       <tbody>
-                        {% for data in tipoUs %}
+                        {% for tipo in tipoUs %}
                         <tr>
                           <td>
                             {{forloop.counter}}
                           </td>
                           <td>
-                            {{data.nombre_tipo_us}}
+                            {{tipo.nombre_tipo_us}}
                           </td>
                           <td>
-                            {{data.descripcion_tipo_us}}
+                            {{tipo.descripcion_tipo_us}}
                           </td>
                           <td>
-                            {{data.fases}}
+                            {{tipo.fases}}
                           </td>
-                          <td>
-                            {{data.prioridad_tipo_us}}
-                          </td>
+                          <!--<td>
+                            {{tipo.prioridad_tipo_us}}
+                          </td> -->
                         </tr>
                         {% endfor %}
                       </tbody>
