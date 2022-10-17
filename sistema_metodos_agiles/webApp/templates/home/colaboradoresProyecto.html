@@ -66,7 +66,7 @@
                             <form action="{% url 'webApp:eliminarColaboradorProyecto' proyecto.id %}" method="post">
                               {% csrf_token %}
                               <input name="idColaborador" type="text" hidden="true" value="{{colaborador.id}}">
-                              <input name="idProyecto type="text" hidden="true" value="{{proyecto.id}}">
+                              <input name="idProyecto" type="text" hidden="true" value="{{proyecto.id}}">
                               <button class="btn btn-danger btn-sm" type="submit"><i class="material-icons">&#xE872;</i></button>
                             </form>
                           </td>

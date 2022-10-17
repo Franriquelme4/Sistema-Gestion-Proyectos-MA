@@ -249,39 +249,6 @@ def rolesProyectoCrear(request,id):
                 }
     html_template = loader.get_template('home/rolesProyectoCrear.html')
     return HttpResponse(html_template.render(context,request))
-    
-
-def crearRolProyecto(request,id):
-    """Se crea un nuevo rol con todos los permisos asociados"""
-    variables = request.POST
-    if request.method == 'POST':
-        rol = Rol(
-            descripcion_rol = variables.get('descripcion',False),
-            nombre_rol = variables.get('nombre_rol',False),
-        )
-        rol.save()
-        for permiso in variables.getlist('permisos',False):
-            print(permiso)
-            rol.permiso.add(Permiso.objects.get(id=permiso))
-        proyecto_rol = ProyectoRol(
-            descripcion_proyecto_rol=''
-        )
-        proyecto_rol.save()
-        proyecto_rol.rol.add(rol)
-        proyecto_rol.proyecto.add(Proyecto.objects.get(id=id))
-    return redirect(f'/proyecto/roles/{id}')
-
-
-def editarRolProyecto(request,id):
-    variables = request.POST
-    if request.method == 'POST':
-        idRol = variables.get('idRol',False)
-        Rol.objects.filter(id=idRol).update(
-            descripcion_rol = variables.get('descripcion',False),
-            nombre_rol = variables.get('nombre_rol',False),
-        )
-
-    return redirect(f'/proyecto/roles/{id}')
 
 
 
@@ -343,11 +310,12 @@ def colaboradoresProyectoEditar(request,idProyecto,idColaborador):
     proyecto = getProyectsByID(idProyecto,userSession.id)[0]
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
     rolesProyecto = getRolByProyectId(idProyecto)
-    colaboradores = getColaboratorsByProyect(idProyecto)
-    print(f"GET COLABORADORES = {colaboradores}")
+    #colaboradores = getColaboratorsByProyect(idProyecto)
     print(f"GET COLABORADORES = {rolesProyecto}")
 
     usuarios = Usuario.objects.filter(~Q(id=userSession.id)).filter(~Q(df_rol=1))
+    colaboradores = Usuario.objects.get(id=idColaborador)
+
     permisosProyecto = ['agr_Colaborador','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack']
     validacionPermisos = validarPermisos(permisosProyecto,userSession.id,idProyecto)
     context={
@@ -366,43 +334,35 @@ def rolesProyectoEditar(request,idProyecto,idRol):
     """
     Se lista todos los roles especificos de cada proyecto
     """
+    print(f"IDROL DE ROLESPROYECTOEDITAR = {idRol}")
+    print(f"IDproyecto DE ROLESPROYECTOEDITAR = {idProyecto }")
     userSession = getUsuarioSesion(request.user.email)
     permisos = Permiso.objects.all()
+    print(f"PERMISOS = {permisos }")
+    rolesProyecto = getRolByProyectId(idProyecto)
     proyecto = getProyectsByID(idProyecto,userSession.id)[0]
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
     rolEditar = Rol.objects.get(id=idRol)
     print(userSession.id)
-    permisos = getPermisos(userSession.id,idProyecto)
-
+    permisos2 = Rol.objects.get(id=idRol).permiso.all()
+    permisosaux=None;
+    for i in permisos2:
+        permisosaux = permisos.filter(~Q(id=i.id))
     print(request.session['userSesion'])
     permisosProyecto = ['crt_rol','dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack']
     validacionPermisos = validarPermisos(permisosProyecto,userSession.id,idProyecto)
     context= {  'userSession':userSession,
                 'proyecto':proyecto,
-                'segment': 'rolesProyecto',
+                'rolesProyecto': rolesProyecto,
                 'permisos':permisos,
                 'rolUsuario':rolUsuario,
                 'validacionPermisos':validacionPermisos,
-                'rolEditar':rolEditar
+                'rolEditar':rolEditar,
+                'permisosaux':permisosaux
                 }
     html_template = loader.get_template('home/rolesProyectoEditar.html')
     return HttpResponse(html_template.render(context,request))
 
-def asignarColaboradorProyecto(request,id):
-    """Se almacena el nuevo rol con el colaborador al proyecto"""
-    variables = request.POST
-    roles = variables.getlist('rol',False)
-    if request.method == 'POST':
-        miembro = MiembroEquipo(
-           descripcion = ''
-        )
-        miembro.save()
-        for rol in variables.getlist('rol',False):
-            miembro.miembro_rol.add(Rol.objects.get(id=rol))
-        miembro.miembro_usuario.add(Usuario.objects.get(id=variables.get('usuario',False)))
-        proyecto = Proyecto.objects.get(id=id)
-        proyecto.miembro_proyecto.add(miembro)
-    return redirect(f'/proyecto/colaboradores/{id}')
 
 def eliminarColaboradorProyecto(request,id):
     variables = request.POST
@@ -410,6 +370,13 @@ def eliminarColaboradorProyecto(request,id):
     record = MiembroEquipo.objects.filter(miembro_usuario = variables.get('idColaborador',False))
     record.delete()
     return redirect(f'/proyecto/{id}')
+
+def eliminarColaboradorProyecto2(request,idColaborador,idProyecto):
+    variables = request.POST
+    print(f"ID COLABORADOR ELIMINAR = {idColaborador}")
+    record = MiembroEquipo.objects.filter(miembro_usuario = idColaborador)
+    record.delete()
+    return redirect(f'/proyecto/{idProyecto}')
 
 def eliminarRolProyecto(request,id):
     """Se elimina el rol asociado al id"""
@@ -452,21 +419,61 @@ def eliminarRolProyecto(request,id):
         proyecto_rol.proyecto.remove(Proyecto.objects.get(id=id))"""
     return redirect(f'/proyecto/roles/1')
 
+def editarRolProyecto(request,id):
+    variables = request.POST
+    if request.method == 'POST':
+        eliminarRolProyecto(request,id)
+        crearRolProyecto(request,id)
+    return redirect(f'/proyecto/roles/{id}')
+
+def crearRolProyecto(request,id):
+    """Se crea un nuevo rol con todos los permisos asociados"""
+    variables = request.POST
+    if request.method == 'POST':
+        rol = Rol(
+            descripcion_rol = variables.get('descripcion',False),
+            nombre_rol = variables.get('nombre_rol',False),
+        )
+        rol.save()
+        for permiso in variables.getlist('permisos',False):
+            print(permiso)
+            rol.permiso.add(Permiso.objects.get(id=permiso))
+        proyecto_rol = ProyectoRol(
+            descripcion_proyecto_rol=''
+        )
+        proyecto_rol.save()
+        proyecto_rol.rol.add(rol)
+        proyecto_rol.proyecto.add(Proyecto.objects.get(id=id))
+    return redirect(f'/proyecto/roles/{id}')
+    
+
 def editarColaboradorProyecto(request,idProyecto):
     """Se eliminan los colaboradores de un proyecto especifico"""
-    print(f"ID PROYECTO 2= {idProyecto}")
+    
     variables = request.POST
-    idRol= variables.get('rol',False)
+    idColaborador=variables.get('idColaborador',False)
+    print(f"ID COLABORADOR EDITAR = {idColaborador}")
+    print(f"ID PROYECTO EDITAR= {idProyecto}")
+    eliminarColaboradorProyecto2(request,idColaborador,idProyecto)
+    asignarColaboradorProyecto(request,idProyecto)
+    
+    return redirect(f'/proyecto/colaboradores/{idProyecto}')
+
+def asignarColaboradorProyecto(request,id):
+    """Se almacena el nuevo rol con el colaborador al proyecto"""
+    variables = request.POST
+    roles = variables.getlist('rol',False)
     if request.method == 'POST':
         miembro = MiembroEquipo(
            descripcion = ''
         )
         miembro.save()
-        miembro.miembro_rol.add(Rol.objects.get(id=variables.get('rol',False)))
+        for rol in variables.getlist('rol',False):
+            miembro.miembro_rol.add(Rol.objects.get(id=rol))
         miembro.miembro_usuario.add(Usuario.objects.get(id=variables.get('usuario',False)))
-        proyecto = Proyecto.objects.get(id=idProyecto)
+        proyecto = Proyecto.objects.get(id=id)
         proyecto.miembro_proyecto.add(miembro)
-    return redirect(f'/proyecto/{idProyecto}')
+    return redirect(f'/proyecto/colaboradores/{id}')
 
 def tipoUs(request,id):
     """Se listan todos los tipos de US"""

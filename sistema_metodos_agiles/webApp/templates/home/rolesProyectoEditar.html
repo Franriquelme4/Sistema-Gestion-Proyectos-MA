@@ -30,7 +30,7 @@
         <div class="form-group">
           <select class="form-select" multiple aria-label="multiple select example" name="permisos" value="{{rolEditar.getPermisos}}">
             <option selected disabled>Seleccionar los permisos</option>
-            {% for seleccionado in rolEditar.getPermisos %}
+            {% for seleccionado in rolEditar.permisos %}
             <option value="{{seleccionado.id}}" selected>{{seleccionado.descripcion_permiso}}</option>
             {% endfor %}
             {% for permiso in permisos %}
