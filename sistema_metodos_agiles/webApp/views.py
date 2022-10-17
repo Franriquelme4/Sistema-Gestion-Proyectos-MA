@@ -520,6 +520,8 @@ def importarTusDeProyecto(request,id):
         proyecto = Proyecto.objects.get(id=id)
         TipoUs_Proyecto.objects.create(proyecto=proyecto,tipoUs=tipoUs)
     return redirect(f'/proyecto/tipoUs/{id}')
+
+@login_required
 def verProductBacklog(request,id):
     """Se visualiza todos los US"""
     userSession = getUsuarioSesion(request.user.email)
@@ -568,6 +570,7 @@ def crearUs(request,id):
     html_template = loader.get_template('home/usCrear.html')
     return HttpResponse(html_template.render(context,request))
 
+@login_required
 def crearUsGuardar(request,id):
     """Se agregan los nuevos Us"""
     variables = request.POST
@@ -583,6 +586,7 @@ def crearUsGuardar(request,id):
         userStory.save()
     return redirect(f'/proyecto/{id}')
 
+@login_required
 def editarProyecto(request,id):
     """
     Cuando un usuario ingresa a un proyecto en el cual fue asignado se visualizan 
@@ -625,6 +629,7 @@ def editarProyectoGuardar(request,id):
         )
     return redirect(f'/proyecto/{id}')
 
+@login_required
 def iniciarProyecto(request,id):
     proyectoActual = Proyecto.objects.get(id=id)
     Proyecto.objects.filter(id=id).update(
@@ -634,6 +639,7 @@ def iniciarProyecto(request,id):
     )
     return redirect(f'/proyecto/{id}')
 
+@login_required
 def sprintProyecto(request,id):
     """Se visualiza todos los US"""
     userSession = getUsuarioSesion(request.user.email)
@@ -683,6 +689,7 @@ def sprintCrear(request,id):
     html_template = loader.get_template('home/sprintCrear.html')
     return HttpResponse(html_template.render(context,request))
 
+@login_required
 def sprintCrearGuardar(request,id):
     """Se guardan los datos iniciales del sprint"""
     userSession = getUsuarioSesion(request.user.email)
@@ -726,7 +733,7 @@ def sprintColaboradorAgregar(request,idProyecto,idSprint):
     html_template = loader.get_template('home/sprintAgregarColaborador.html')
     return HttpResponse(html_template.render(context,request))
 
-
+@login_required
 def sprintColaboradorAgregarGuardar(request,id):
     """Se almacenan los colaboradores del Sprint"""
     variables = request.POST
@@ -769,6 +776,7 @@ def sprintUsAgregar(request,idProyecto,idSprint):
     html_template = loader.get_template('home/sprintAgregarUs.html')
     return HttpResponse(html_template.render(context,request))
 
+@login_required
 def sprintUsAgregarGuardar(request,id):
     """Se almacenan los colaboradores del Sprint"""
     variables = request.POST
@@ -848,6 +856,7 @@ def pruebaAjax(request):
     print('llegue')
     return redirect(f'/proyecto/sprint/2')
 
+@login_required
 def sprintTableroActualizarEstado(request,idProyecto,idSprint):
     variables = request.POST
     if request.method == 'POST':
