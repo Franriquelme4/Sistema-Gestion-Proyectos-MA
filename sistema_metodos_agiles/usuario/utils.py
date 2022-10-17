@@ -156,26 +156,19 @@ def validarPermisos(permisosVista,idUsuario,idProyecto=None):
 	return permisos
 
 
-# def getTipoUsbyProyectId(id):
-#     tipoUs = TipoUserStory.objects.raw(f"""select ut.*,array_to_string(array_agg(uf.nombre_fase),', ') as fases from usuario_tipouserstory ut
-# 	full join usuario_tipous_proyecto utp on utp."tipoUs_id" = ut.id 
-# 	full join usuario_fase uf on uf."tipoUs_id" = ut.id where utp.proyecto_id = {id} group by ut.id""")
-#     return tipoUs
-
 def getTipoUsbyProyectId(id):
-    tipoUs = TipoUserStory.objects.raw(f"""select ut.*,array_to_string(array_agg(uf.nombre_fase),', ') as fases from usuario_tipouserstory ut
+	print("Llegue Id proyecto", id)
+	tipoUs = TipoUserStory.objects.raw(f"""select ut.*,array_to_string(array_agg(uf.nombre_fase),', ') as fases from usuario_tipouserstory ut 
 	full join usuario_tipous_proyecto utp on utp."tipoUs_id" = ut.id 
 	full join usuario_fase uf on uf."tipoUs_id" = ut.id where utp.proyecto_id = {id} group by ut.id""")
-    return tipoUs	
-
-
-
+	return tipoUs
 
 def getTipoUsbyNotProyectId(id):
-    tipoUs = TipoUserStory.objects.raw(f"""select ut.*,array_to_string(array_agg(uf.nombre_fase),', ') as fases from usuario_tipouserstory ut
+	print("Llegue Id proyecto", id)
+	tipoUs = TipoUserStory.objects.raw(f"""select ut.*,array_to_string(array_agg(uf.nombre_fase),', ') as fases from usuario_tipouserstory ut 
 	full join usuario_tipous_proyecto utp on utp."tipoUs_id" = ut.id 
 	full join usuario_fase uf on uf."tipoUs_id" = ut.id where utp.proyecto_id != {id} group by ut.id""")
-    return tipoUs
+	return tipoUs
 
 def calcularFechaFin(sourcedate, months):
     month = sourcedate.month - 1 + months
