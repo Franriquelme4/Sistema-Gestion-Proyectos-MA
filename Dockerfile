@@ -19,7 +19,8 @@ RUN pip install --upgrade pip
 # copy whole project to your docker home directory. 
 COPY sistema_metodos_agiles/ $DockerHOME  
 # run this command to install all dependencies  
-RUN pip install -r requirements.txt  
+RUN pip install -r requirements.txt 
+RUN pip install numpy   
 # port where the Django app runs  
 EXPOSE 8000  
 # start server  

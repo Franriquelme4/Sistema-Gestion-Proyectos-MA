@@ -500,11 +500,10 @@ def editarRolProyecto(request,id):
     variables = request.POST
     if request.method == 'POST':
         eliminarRolProyecto(request,id)
-        crearRolProyecto(request,id)
+        actualizarRolProyecto(request,id)
     return redirect(f'/proyecto/roles/{id}')
 
-@login_required(login_url="/login/")
-def crearRolProyecto(request,id):
+def actualizarRolProyecto(request,id):
     """Se crea un nuevo rol con todos los permisos asociados"""
     variables = request.POST
     if request.method == 'POST':
@@ -517,6 +516,27 @@ def crearRolProyecto(request,id):
         for permiso in variables.getlist('permisos',False):
             print(permiso)
             rol.permiso.add(Permiso.objects.get(id=permiso))
+    return redirect(f'/proyecto/roles/{id}')
+
+@login_required(login_url="/login/")
+def crearRolProyecto(request,id):
+    """Se crea un nuevo rol con todos los permisos asociados"""
+    variables = request.POST
+    if request.method == 'POST':
+        rol = Rol(
+            descripcion_rol = variables.get('descripcion',False),
+            nombre_rol = variables.get('nombre_rol',False),
+        )
+        rol.save()
+        for permiso in variables.getlist('permisos',False):
+            print(permiso)
+            rol.permiso.add(Permiso.objects.get(id=permiso))
+        proyecto_rol = ProyectoRol(
+            descripcion_proyecto_rol=''
+        )
+        proyecto_rol.save()
+        proyecto_rol.rol.add(rol)
+        proyecto_rol.proyecto.add(Proyecto.objects.get(id=id))
     return redirect(f'/proyecto/roles/{id}')
     
 
