@@ -15,11 +15,31 @@
     <div class="card-body">
       <form method="post" action="{% url 'webApp:sprintUsAgregarGuardar' proyecto.id %}" id="formTus">
         {% csrf_token %}
-        <input hidden="true" type="text" name="jsonUs" id="jsonUs">
         <input type="number" hidden="true" name="idSprint" value="{{sprint.id}}">
-
+        <div class="form-group">
+          <select class="form-control userStory" aria-label="Default select example" name="us" required
+            id="select-userStory">
+            <option selected>Seleccionar User Story</option>
+            {% for userStory in userStorys %}
+            <option value="{{userStory.id}}">{{userStory.nombre_us}} (Tiempo Estimado-{{userStory.tiempoEstimado_us}})
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <select class="form-control userStory" aria-label="Default select example" name="colaborador" required
+            id="select-colaborador">
+            <option selected>Seleccionar Colaborador</option>
+            {% for colaborador in colaboradores %}
+            <option value="{{colaborador.colaborador.id}}">{{colaborador.colaborador.nombre}}
+              {{colaborador.colaborador.apellido}} (horas Disponibles-{{colaborador.horasDisponibles}})</option>
+            {% endfor %}
+          </select>
+        </div>
       </form>
-      <button id="addRow" class="btn btn-info btn-sm"><i class="material-icons">add</i>Agregar User Story</button>
+      <a class="btn btn-danger btn-sm" href="{% url 'webApp:sprintProyecto' proyecto.id %}">Cancelar</a>
+      <button type="submit" class="btn btn-primary btn-sm" id="enviar">Guardar</button>
+      <!-- <button id="addRow" class="btn btn-info btn-sm"><i class="material-icons">add</i>Agregar User Story</button>
       <table id="tabla--fase" class="display" style="width:100%">
         <thead>
           <tr>
@@ -49,10 +69,8 @@
             <th><button class="btn btn-danger btn-sm eliminar">Eliminar</button></th>
           </tr>
         </tbody>
-      </table>
+      </table> -->
 
-      <a class="btn btn-danger btn-sm" href="{% url 'webApp:sprintProyecto' proyecto.id %}">Cancelar</a>
-      <button type="submit" class="btn btn-primary btn-sm" id="enviar">Guardar</button>
     </div>
   </div>
 </div>
@@ -63,53 +81,35 @@
 {% block javascripts %}
 <script>
   $(document).ready(function () {
-    const t = $('#tabla--fase').DataTable({
-      "dom": "ltpr"
+    const regexNumero1 = /[-][0-9]*[)]/;
+    const regexNumero2 = /[^0-9]+/g;
+    let tiempoEstimadoUS = 0;
+    let horasDisponibles = 0;
+    $("#Prueba").click(function () {
+      Swal.fire(`Tiempo ${tiempoEstimadoUS} disponible ${horasDisponibles}`)
     });
-    let counter = 1;
-    const form = $('#formTus');
-
-    $('#addRow').on('click', function () {
-      t.row.add([
-        `<select class="form-control userStory" aria-label="Default select example" name="us">
-                <option selected>Seleccionar User Story</option>
-                {% for userStory in userStorys %}
-                <option value="{{userStory.id}}">{{userStory.nombre_us}}</option>
-                {% endfor %}
-              </select>`,
-        ` <select class="form-control userStory" aria-label="Default select example" name="colaborador">
-                <option selected>Seleccionar Colaborador</option>
-                {% for colaborador in colaboradores %}
-                <option value="{{colaborador.colaborador.id}}">{{colaborador.colaborador.nombre}} {{colaborador.colaborador.apellido}}</option>
-                {% endfor %}
-              </select>`,
-        '<button class="btn btn-danger btn-sm eliminar">Eliminar</button>'])
-        .draw(true);
-      counter++;
-    });
-    // $('#addRow').click();
-    $('#tabla--fase tbody').on('click', 'button.eliminar', function () {
-      t
-        .row($(this).parents('tr'))
-        .remove()
-        .draw();
-    });
+    $("#select-colaborador").change(function () {
+      $("#select-colaborador option:selected").each(function () {
+        horasDisponibles = parseInt($(this).text().match(regexNumero1)[0].replace(regexNumero2, ""))
+      })
+    })
+    $("#select-userStory").change(function () {
+      $("#select-userStory option:selected").each(function () {
+        tiempoEstimadoUS = parseInt($(this).text().match(regexNumero1)[0].replace(regexNumero2, ""))
+      })
+    })
     $("#enviar").click(function () {
-      var data = t.$('.userStory');
-      //console.log(data);
-      let arrayFase = [];
-      for (let index = 0; index < data.length; index = index + 2) {
-        arrayFase = [...arrayFase, {
-          us: data[index].value,
-          colaborador: data[index + 1].value
-        }]
+      if (tiempoEstimadoUS>horasDisponibles) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: `El tiempo a estimado del User Story supera a las horas disponibles del colaborador (Tiempo Estimado ${tiempoEstimadoUS}hs, Horas Disponibles ${horasDisponibles}hs)`
+        })
+      }else{
+        $("form#formTus").submit()
       }
-      console.log(arrayFase);
-      $('#jsonUs').val(JSON.stringify(arrayFase))
-      //alert(data);
-      //return false;
-      $("#formTus").submit();
-    });
+    })
+
   });
 </script>
 {% endblock javascripts %}

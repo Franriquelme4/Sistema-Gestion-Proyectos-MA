@@ -898,13 +898,20 @@ def sprintColaboradorAgregar(request,idProyecto,idSprint):
     Cuando un usuario ingresa a un proyecto en el cual fue asignado se visualizan 
     todos los datos de la misma 
     """
-    aux = Sprint.objects.get(id=idSprint).colaborador_sp.all()
-    for i in aux:
-        print(i.colaborador,'col')
     userSession = getUsuarioSesion(request.user.email)
     proyecto = getProyectsByID(idProyecto,userSession.id)[0]
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
-    colaboradores = getColaboratorsByProyect(idProyecto)
+    colaboradoresSprint = Sprint.objects.get(id=idSprint).colaborador_sp.all()
+    colaboradoresProyecto = getColaboratorsByProyect(idProyecto)
+    colaboradores = []
+    for cP in colaboradoresProyecto:
+        flag = True
+        for cSp in colaboradoresSprint:
+            print(cSp.colaborador.nombre,cP.nombre)
+            if cP.id == cSp.colaborador.id:
+                flag = False
+        if flag:
+            colaboradores.append(cP)
     permisosProyecto = ['dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','dsp_SprinBack','agr_Colaborador_US']
     validacionPermisos = validarPermisos(permisosProyecto,userSession.id,idProyecto)
     context= {  'userSession':userSession,
@@ -925,17 +932,13 @@ def sprintColaboradorAgregarGuardar(request,id):
     variables = request.POST
     proyecto = getProyectsByID(id,userSession.id)[0]
     if request.method == 'POST':
-        jsonColaborador=json.loads(variables.get('jsonColaborador',False))
         sprint = Sprint.objects.get(id=variables.get('idSprint',False))
-        print(jsonColaborador)
-        for colJson in jsonColaborador:
-            print(int(colJson['horas'])*proyecto.sprint_dias)
-            spColaborador = SprintColaborador.objects.create(
-                colaborador=Usuario.objects.get(id=colJson['colaborador']),
-                horas=colJson['horas'],
-                horasDisponibles=int(colJson['horas'])*proyecto.sprint_dias
-            )
-            sprint.colaborador_sp.add(spColaborador)
+        spColaborador = SprintColaborador.objects.create(
+            colaborador=Usuario.objects.get(id=variables.get('usuario',False)),
+            horas=variables.get('horas',False),
+            horasDisponibles=int(variables.get('horas',False))*proyecto.sprint_dias
+        )
+        sprint.colaborador_sp.add(spColaborador)
     return redirect(f'/proyecto/sprint/{id}')
 
 def sprintUsAgregar(request,idProyecto,idSprint):
@@ -950,7 +953,7 @@ def sprintUsAgregar(request,idProyecto,idSprint):
     for i in aux:
         print(i.us,'col')
     userStorys = UserStory.objects.filter(proyecto_us = idProyecto,disponible=True)
-    colaboradores = Sprint.objects.get(id=idSprint).colaborador_sp.all()
+    colaboradores = Sprint.objects.get(id=idSprint).colaborador_sp.filter(horasDisponibles__gte=0)
     permisosProyecto = ['dsp_Colaborador','dsp_Roles','dsp_TipoUs','dsp_ProductBack','dsp_SprinBack']
     validacionPermisos = validarPermisos(permisosProyecto,userSession.id,idProyecto)
     context= {  'userSession':userSession,
@@ -970,20 +973,17 @@ def sprintUsAgregarGuardar(request,id):
     """Se almacenan los colaboradores del Sprint"""
     variables = request.POST
     if request.method == 'POST':
-        jsonUs=json.loads(variables.get('jsonUs',False))
         sprint = Sprint.objects.get(id=variables.get('idSprint',False))
-        print(jsonUs)
-        for colJson in jsonUs:
-            spUs = SprintUserStory.objects.create(
-                colaborador=Usuario.objects.get(id=colJson['colaborador']),
-                us=UserStory.objects.get(id = colJson['us']),
-            )
-            sColaboradorGet = sprint.colaborador_sp.get(colaborador=int(colJson['colaborador']))
-            sColaborador = sprint.colaborador_sp.filter(colaborador=int(colJson['colaborador']))
-            sColaborador.update(horasDisponibles=sColaboradorGet.horasDisponibles-UserStory.objects.get(id = colJson['us']).tiempoEstimado_us)
-            TipoUsEditar=UserStory.objects.get(id = colJson['us']).tipo_us
-            UserStory.objects.filter(id = colJson['us']).update(disponible=False,fase=Fase.objects.get(tipoUs=TipoUsEditar,orden_fase=1))
-            sprint.userStory_sp.add(spUs)
+        spUs = SprintUserStory.objects.create(
+            colaborador=Usuario.objects.get(id=variables.get('colaborador',False)),
+            us=UserStory.objects.get(id = variables.get('us',False)),
+        )
+        sColaboradorGet = sprint.colaborador_sp.get(colaborador=int(variables.get('colaborador',False)))
+        sColaborador = sprint.colaborador_sp.filter(colaborador=int(variables.get('colaborador',False)))
+        sColaborador.update(horasDisponibles=sColaboradorGet.horasDisponibles-UserStory.objects.get(id = variables.get('us',False)).tiempoEstimado_us)
+        TipoUsEditar=UserStory.objects.get(id = variables.get('us',False)).tipo_us
+        UserStory.objects.filter(id = variables.get('us',False)).update(disponible=False,fase=Fase.objects.get(tipoUs=TipoUsEditar,orden_fase=1))
+        sprint.userStory_sp.add(spUs)
     return redirect(f'/proyecto/sprint/{id}')
 def sprintBacklog(request,idProyecto,idSprint):
     """

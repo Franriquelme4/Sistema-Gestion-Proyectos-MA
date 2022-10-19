@@ -23,32 +23,13 @@
           <label for="recipient-name" class="col-form-label">Descripcion</label>
           <input type="text" class="form-control" id="recipient-name" name="descripcion">
         </div>
+        <div class="form-group">
+          <label for="recipient-name" class="col-form-label">Fases (Agregar las fases entre ,)</label>
+          <input type="text" class="form-control" id="prueba-id" name="prueba" value="Por hacer,Haciendo,Terminado">
+        </div>
           <input hidden="true" type="text" name="jsonFase" id="jsonFase">
-        <h4>Fases</h4>
-        <!-- <div class="form-group">
-          <button id="addRow">Agregar nueva fase</button> 
-          <table id="tabla--fase" class="display" style="width:100%">
-              <thead>
-                  <tr>
-                      <th>Nombre</th>
-                      <th>Orden</th>
-                      <th>Eliminar</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr>
-                      <th><input type="text" id="row-1-age" name="row-1-age" value="61"></th>
-                      <th><input type="text" id="row-1-age" name="row-1-age" value="61"></th>
-                      <th><button class="btn btn-danger eliminar">Eliminar</button></th>
-                  </tr>
-              </tbody>
-          </table>
-        </div> -->
-
-        <!-- <a class="btn btn-danger btn-sm" href="{% url 'webApp:tipoUs' proyecto.id %}">Cancelar</a>
-        <button type="submit" class="btn btn-primary btn-sm">Guardar</button> -->
       </form>
-                <button id="addRow" class="btn btn-info btn-sm"><i class="material-icons">add</i>Agregar nueva fase</button>
+                <!-- <button id="addRow" class="btn btn-info btn-sm"><i class="material-icons">add</i>Agregar nueva fase</button>
                 <table id="tabla--fase" class="display" style="width:100%">
                   <thead>
                       <tr>
@@ -64,7 +45,7 @@
                           <th><button class="btn btn-danger btn-sm eliminar">Eliminar</button></th>
                       </tr>
                   </tbody>
-              </table>
+              </table> -->
 
               <a class="btn btn-danger btn-sm" href="{% url 'webApp:tipoUs' proyecto.id %}">Cancelar</a>
               <button type="submit" class="btn btn-primary btn-sm" id="enviar">Guardar</button>
@@ -96,19 +77,24 @@
 } );
 $( "#enviar" ).click(function() {
   var data = t.$('input.fase');
+  const prueba = $('input#prueba-id')[0].value.split(",")
   //console.log(data);
   let arrayFase = [];
-  for (let index = 0; index < data.length; index=index+2) {
+  // for (let index = 0; index < data.length; index=index+2) {
+  //   arrayFase=[...arrayFase,{
+  //     nombre:data[index].value,
+  //     orden:data[index+1].value
+  //   }]
+  // }
+   for (let index = 0; index < prueba.length; index++) {
     arrayFase=[...arrayFase,{
-      nombre:data[index].value,
-      orden:data[index+1].value
+      nombre:prueba[index].trim(),
+      orden:index+1
     }]
   }
   console.log(arrayFase);
   $('#jsonFase').val(JSON.stringify(arrayFase))
-        //alert(data);
-        //return false;
- $( "#formTus" ).submit();
+$( "#formTus" ).submit();
 });
 });
 </script>
