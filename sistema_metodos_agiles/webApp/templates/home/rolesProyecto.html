@@ -8,50 +8,71 @@
 {% block content %}
 {% include 'includes/options.html' %}
 {% if validacionPermisos.crt_rol %}
-<a class="btn btn-primary btn-sm" href="{% url 'webApp:rolesProyectoCrear' proyecto.id %}"><i class="material-icons">add</i>Agregar rol</a>
+<a class="btn btn-primary btn-sm" href="{% url 'webApp:rolesProyectoCrear' proyecto.id %}"><i
+    class="material-icons">add</i>Agregar rol</a>
 {% endif %}
-        <div class="row">
-            <div class="col-md-12">
-              <div class="card">
-                <div class="card-header card-header-primary">
-                  <h4 class="card-title ">Roles del Proyecto</h4>
-                  <p class="card-category">Listado de roles del proyecto</p>
-                </div>
-                <div class="card-body">
-                  <div class="table-responsive">
-                    <table id="table" class="display" style="width:100%">
-                      <thead class=" text-primary">
-                        <th>
-                          
-                        </th>
-                        <th>
-                          Nombre del Rol
-                        </th>
-                        <th>
-                          Descripcion del Rol
-                        </th>
-                      </thead>
-                      <tbody>
-                        {% for rolProyecto in rolesProyecto %}
-                        <tr>
-                          <td>
-                            {{forloop.counter}}
-                          </td>
-                          <td>
-                            {{rolProyecto.nombre_rol}}
-                          </td>
-                          <td>
-                            {{rolProyecto.descripcion_rol}}
-                          </td>
-                        </tr>
-                        {% endfor %}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header card-header-primary">
+        <h4 class="card-title ">Roles del Proyecto</h4>
+        <p class="card-category">Listado de roles del proyecto</p>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table id="table" class="display" style="width:100%">
+            <thead class=" text-primary">
+              <th>
+                Id
+              </th>
+              <th>
+                Nombre del Rol
+              </th>
+              <th>
+                Descripcion del Rol
+              </th>
+              <th>
+                Accion
+              </th>
+            </thead>
+            <tbody>
+              {% for rolProyecto in rolesProyecto %}
+              <tr>
+                <td>
+                  {{forloop.counter}}
+                </td>
+                <td>
+                  {{rolProyecto.nombre_rol}}
+                </td>
+                <td>
+                  {{rolProyecto.descripcion_rol}}
+                </td>
+                <td>
+
+                  {% if validacionPermisos.upd_rol %}
+                    <a class="btn btn-success btn-sm"
+                      href="{% url 'webApp:rolesProyectoEditar' proyecto.id rolProyecto.id_rol %}"><i
+                        class="material-icons">&#xE254;</i></a>
+                  {% endif %}
+                  {% if validacionPermisos.dlt_rol %}
+                    <form action="{% url 'webApp:eliminarRolProyecto' proyecto.id %}" method="post">
+                      {% csrf_token %}
+                      <input name="idRol" type="text" hidden="true" value="{{rolProyecto.id_rol}}">
+                      <button class="btn btn-danger btn-sm" type="submit"><i class="material-icons">&#xE872;</i></button>
+                    </form>
+                  {% endif %}
+
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock content %}
 

@@ -15,10 +15,24 @@
     <div class="card-body">
       <form method="post" action="{% url 'webApp:sprintColaboradorAgregarGuardar' proyecto.id %}" id="formTus">
         {% csrf_token %}
-        <input hidden="true" type="text" name="jsonColaborador" id="jsonColaborador">
         <input type="number" hidden="true" name="idSprint" value="{{sprint.id}}">
+        <div class="form-group">
+          <select class="form-control colaborador" aria-label="Default select example" name="usuario">
+            <option selected>Seleccionar Colaborador</option>
+            {% for colaborador in colaboradores %}
+            <option value="{{colaborador.id}}">{{colaborador.nombre}} {{colaborador.apellido}} </option>
+            {% endfor %}
+          </select>
+      </div>
+        <div class="form-group">
+          <label for="recipient-name" class="col-form-label">Horas (Por dia)</label>
+          <input type="number" class="form-control" id="recipient-name" name="horas" max="8">
+        </div>
+
+        <a class="btn btn-danger btn-sm" href="{% url 'webApp:sprintProyecto' proyecto.id %}">Cancelar</a>
+        <button type="submit" class="btn btn-primary btn-sm" id="enviar">Guardar</button>
       </form>
-      <button id="addRow" class="btn btn-info btn-sm"><i class="material-icons">add</i>Agregar Colaborador</button>
+      <!-- <button id="addRow" class="btn btn-info btn-sm"><i class="material-icons">add</i>Agregar Colaborador</button>
       <table id="tabla--fase" class="display" style="width:100%">
         <thead>
           <tr>
@@ -30,12 +44,7 @@
         <tbody>
           <tr>
             <th>
-              <select class="form-control colaborador" aria-label="Default select example" name="usuario">
-                <option selected>Seleccionar Colaborador</option>
-                {% for colaborador in colaboradores %}
-                <option value="{{colaborador.id}}">{{colaborador.nombre}} {{colaborador.apellido}}</option>
-                {% endfor %}
-              </select>
+
             </th>
             <th> 
               <input type="number" class="form-control colaborador" id="recipient-name" name="horas">
@@ -43,10 +52,8 @@
             <th><button class="btn btn-danger btn-sm eliminar">Eliminar</button></th>
           </tr>
         </tbody>
-      </table>
+      </table> -->
 
-      <a class="btn btn-danger btn-sm" href="{% url 'webApp:sprintProyecto' proyecto.id %}">Cancelar</a>
-      <button type="submit" class="btn btn-primary btn-sm" id="enviar">Guardar</button>
     </div>
   </div>
 </div>
@@ -55,7 +62,7 @@
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
-<script>
+<!-- <script>
   $(document).ready(function () {
     const t = $('#tabla--fase').DataTable({
       "dom": "ltpr"
@@ -100,5 +107,5 @@
       $("#formTus").submit();
     });
   });
-</script>
+</script> -->
 {% endblock javascripts %}

@@ -37,7 +37,7 @@
             {% for fase in fases %}
             <div class="card mx-1 border border-dark">
               <div class="card-body dropzone" id="{{fase.id}}" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="clearDrop(event)">
-                <h6 class=" text-uppercase text-truncate py-2">{{fase.nombre_fase}} {{fase.id}}</h6>
+                <h6 class=" text-uppercase text-truncate py-2">{{fase.nombre_fase}}</h6>
                 <div class="items border border-light">
                   <!-- <div class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="clearDrop(event)"> &nbsp; </div> -->
                   {% for userStory in userStorys %}
@@ -50,8 +50,9 @@
                       </div>
                       <p>
                         {{userStory.us.descripcion_us}}
-                        {{userStory.colaborador.id}}
+            
                       </p>
+                      <p class="card-text">Responsable: {{userStory.colaborador}}</p>
                       <button class="btn btn-primary btn-sm">Ver</button>
                     </div>
                   </div>
