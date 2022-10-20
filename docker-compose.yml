@@ -13,8 +13,9 @@ services: # the different images that will be running as containers
   web: # service name
     build: . 
     command: sh -c "python manage.py makemigrations &&
-                    python manage.py migrate &&
-                    gunicorn sistema_metodos_agiles.wsgi:application --bind 0.0.0.0:${APP_PORT}" 
+                    python manage.py migrate && 
+                    python initSQL.py &&
+                    gunicorn sistema_metodos_agiles.wsgi:application --bind 0.0.0.0:${APP_PORT}"
     volumes: 
       - ./sistema_metodos_agiles:/microservice 
       - static_volume:/home/app/webapp/webApp/static
@@ -28,11 +29,11 @@ services: # the different images that will be running as containers
     depends_on: 
       - db
   db: # service name
-    image: postgres:14-alpine 
+    image: docker.io/postgres:14-alpine 
     container_name: postgres
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_data:/var/lib/postgresql/data/
 # access credentials from the .env file
     environment: 
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
