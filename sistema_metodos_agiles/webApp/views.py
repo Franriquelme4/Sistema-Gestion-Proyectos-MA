@@ -502,7 +502,7 @@ def editarRolProyecto(request,id):
         eliminarRolProyecto(request,id)
         actualizarRolProyecto(request,id)
     return redirect(f'/proyecto/roles/{id}')
-
+@login_required(login_url="/login/")
 def actualizarRolProyecto(request,id):
     """Se crea un nuevo rol con todos los permisos asociados"""
     variables = request.POST
