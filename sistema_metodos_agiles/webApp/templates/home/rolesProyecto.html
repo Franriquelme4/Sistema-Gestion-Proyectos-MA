@@ -8,7 +8,8 @@
 {% block content %}
 {% include 'includes/options.html' %}
 {% if validacionPermisos.crt_rol %}
-<a class="btn btn-primary btn-sm" href="{% url 'webApp:rolesProyectoCrear' proyecto.id %}"><i class="material-icons">add</i>Agregar rol</a>
+<a class="btn btn-primary btn-sm" href="{% url 'webApp:rolesProyectoCrear' proyecto.id %}"><i
+    class="material-icons">add</i>Agregar rol</a>
 {% endif %}
 
 <div class="row">
@@ -20,7 +21,7 @@
       </div>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table">
+          <table id="table" class="display" style="width:100%">
             <thead class=" text-primary">
               <th>
                 Id
@@ -49,17 +50,19 @@
                 </td>
                 <td>
 
+                  {% if validacionPermisos.upd_rol %}
+                    <a class="btn btn-success btn-sm"
+                      href="{% url 'webApp:rolesProyectoEditar' proyecto.id rolProyecto.id_rol %}"><i
+                        class="material-icons">&#xE254;</i></a>
+                  {% endif %}
+                  {% if validacionPermisos.dlt_rol %}
+                    <form action="{% url 'webApp:eliminarRolProyecto' proyecto.id %}" method="post">
+                      {% csrf_token %}
+                      <input name="idRol" type="text" hidden="true" value="{{rolProyecto.id_rol}}">
+                      <button class="btn btn-danger btn-sm" type="submit"><i class="material-icons">&#xE872;</i></button>
+                    </form>
+                  {% endif %}
 
-                  <a class="btn btn-success btn-sm"
-                    href="{% url 'webApp:rolesProyectoEditar' proyecto.id rolProyecto.id_rol %}"><i
-                      class="material-icons">&#xE254;</i></a>
-
-
-                  <form action="{% url 'webApp:eliminarRolProyecto' proyecto.id %}" method="post">
-                    {% csrf_token %}
-                    <input name="idRol" type="text" hidden="true" value="{{rolProyecto.id_rol}}">
-                    <button class="btn btn-danger btn-sm" type="submit"><i class="material-icons">&#xE872;</i></button>
-                  </form>
                 </td>
               </tr>
               {% endfor %}

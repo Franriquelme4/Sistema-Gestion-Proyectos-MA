@@ -31,8 +31,8 @@ services: # the different images that will be running as containers
     image: postgres:14-alpine 
     container_name: postgres
     volumes:
-      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
       - postgres_data:/var/lib/postgresql/data/
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
 # access credentials from the .env file
     environment: 
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
