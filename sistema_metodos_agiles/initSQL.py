@@ -1,33 +1,14 @@
+#import psycopg2
+#import usuario
 
-import os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sistema_metodos_agiles.settings')
-import sys
-import django
-django.setup()
-from usuario.models import Rol,Permiso
+#con = psycopg2.connect(database="metodologias_agiles", user="postgres", password="postgres", host="127.0.0.1", port="5433")
+#print("Database opened successfully")
 
-def cargarPermiso():
-    permiso = Permiso.objects.get_or_create(
-        id=1,
-        nombre_permiso="def",
-        descripcion_permiso="Default"
-    )[0]
-    permiso.save()
+#cur = con.cursor()
 
-    
+#cur.execute("INSERT INTO public.usuario_rol(id, nombre_rol, descripcion_rol) VALUES (1,'Administrador','Rol para administrar el sistema')");
+#con.commit()
 
-def cargarDB():
-    """Se carga la base de datos inicial"""
-    rol = Rol.objects.get_or_create(
-            id=900000,
-            descripcion_rol = "Poblacion DB 2",
-            nombre_rol = "Poblacion DB 2",
-    )[0]
-    rol.save()
-    rol.permiso.add(Permiso.objects.get(id=1))
+#print("Records inserted successfully")
 
-
-
-if __name__ == '__main__':
-    cargarDB()
-    print("La base de datos inicial se ha poblado correctamente")
+#con.close()

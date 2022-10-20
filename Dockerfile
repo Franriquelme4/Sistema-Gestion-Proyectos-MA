@@ -20,7 +20,8 @@ RUN pip install --upgrade pip
 COPY sistema_metodos_agiles/ $DockerHOME  
 # run this command to install all dependencies  
 RUN pip install -r requirements.txt 
-RUN pip install numpy   
+RUN pip install numpy
+#COPY ./database/load_extensions.sh /docker-entrypoint-initdb.d/   
 # port where the Django app runs  
 EXPOSE 8000  
 # start server  
