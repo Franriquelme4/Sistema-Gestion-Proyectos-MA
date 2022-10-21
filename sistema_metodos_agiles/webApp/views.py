@@ -752,13 +752,17 @@ def crearUsGuardar(request,id):
     """Se agregan los nuevos Us"""
     variables = request.POST
     if request.method == 'POST':
+        pn =float(variables.get('prioridad-negocio',False))
+        pt =float(variables.get('prioridad-tecnica',False))
         userStory = UserStory(
             proyecto_us = Proyecto.objects.get(id=id),
             nombre_us = variables.get('nombre',False),
             descripcion_us= variables.get('descripcion',False),
             tiempoEstimado_us = variables.get('tiempo',False),
             tipo_us= TipoUserStory.objects.get(id=variables.get('tipoUs',False)),
-            prioridad_negocio=variables.get('prioridad',False)
+            prioridad_negocio=pn,
+            prioridad_tecnica=pt,
+            prioridad_final=round((0.6*pn+0.4*pt)+0)
         )
         userStory.save()
     return redirect(f'/proyecto/productBacklog/{id}')
@@ -872,10 +876,8 @@ def sprintCrearGuardar(request,id):
     userSession = getUsuarioSesion(request.user.email)
     proyecto = getProyectsByID(id,userSession.id)[0]
     variables = request.POST
-    #print(variables.get('fecha_inicio',False),proyecto.sprint_dias)
-    #print(str(busy_end_date(datetime. strptime(variables.get('fecha_inicio',False),'%Y-%m-%d'),proyecto.sprint_dias)))
     if request.method == 'POST':
-         Sprint.objects.create(
+         sprint = Sprint.objects.create(
              descripcion_sp = variables.get('descripcion',False),
              nombre_sp = variables.get('nombre',False),
              fechaIni_sp = variables.get('fecha_inicio',False),
@@ -883,8 +885,12 @@ def sprintCrearGuardar(request,id):
              proyecto_sp = Proyecto.objects.get(id=id),
              estado = Estado.objects.get(descripcion="PENDIENTE"),
          )
+         sprint.save()
+    if not proyecto.sprint_actual:
+        Proyecto.objects.filter(id=id).update(
+            sprint_actual =  sprint
+        )
     return redirect(f'/proyecto/sprint/{id}')
-
 
 def sprintColaboradores(request,idProyecto,idSprint):
     """
