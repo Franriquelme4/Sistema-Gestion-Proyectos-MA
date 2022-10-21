@@ -13,7 +13,7 @@ services: # the different images that will be running as containers
   web: # service name python initSQL2.py &&
     build: . 
     command: sh -c "python manage.py makemigrations &&
-                    python manage.py migrate && 
+                    python manage.py migrate &&
                     gunicorn sistema_metodos_agiles.wsgi:application --bind 0.0.0.0:${APP_PORT}"
     volumes: 
       - ./sistema_metodos_agiles:/microservice 
