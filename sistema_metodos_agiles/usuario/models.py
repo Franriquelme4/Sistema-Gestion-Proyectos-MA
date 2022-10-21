@@ -96,6 +96,7 @@ class Proyecto(models.Model):
     sprint_dias = models.IntegerField(default=0)
     fecha_creacion = models.DateField(default=datetime.date.today)
     estado = models.ForeignKey('Estado',on_delete=models.CASCADE)
+    sprint_actual = models.ForeignKey('Sprint',on_delete=models.CASCADE,null=True)
     class Meta:
         verbose_name = 'Proyecto'
         verbose_name_plural = 'Proyectos'
@@ -154,11 +155,14 @@ class UserStory(models.Model):
     fechaMod_us = models.DateField(auto_now=True)
     fecha_creacion = models.DateField(default=datetime.date.today)
     prioridad_negocio = models.IntegerField(default=0)
+    prioridad_tecnica = models.IntegerField(default=0)
+    prioridad_sprint = models.IntegerField(default=0)
+    prioridad_final = models.IntegerField(default=0)
     fase = models.ForeignKey('Fase',on_delete=models.CASCADE,null=True)
     class Meta:
         verbose_name = 'User Story'
         verbose_name_plural = 'User Stories'
-        ordering = ['nombre_us']
+        ordering = ['-prioridad_final']
     def __str__(self):
         return self.nombre_us
 
@@ -205,6 +209,12 @@ class Fase(models.Model):
     nombre_fase = models.CharField(max_length=15)
     orden_fase = models.CharField(max_length=100,null=False)
     tipoUs = models.ForeignKey('TipoUserStory',on_delete=models.CASCADE,null=True)
+    class Meta:
+        verbose_name = 'Fase'
+        verbose_name_plural = 'Fases'
+        ordering = ['orden_fase']
+    def __str__(self):
+        return self.nombre_fase
 
     
 class FaseTUS(models.Model):
@@ -243,3 +253,9 @@ class PrioridadTUs(models.Model):
     def __str__(self):
         return self.descripcion
 
+class Comentarios(models.Model):
+    """
+    Comentarios de los userStory
+    """
+    comentario = models.CharField(max_length=1000,null=False)
+    fecha_creacion = models.DateField(null=True)

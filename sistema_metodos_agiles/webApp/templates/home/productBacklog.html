@@ -25,17 +25,21 @@
               <p class="card-category"><strong>Tipo de US</strong> {{userStory.tipo_us}}</p>
 
               <p class="card-category"><strong>Tiempo Estimado</strong> {{userStory.tiempoEstimado_us}} hs</p>
+              <p class="card-category"><strong>Prioridad: {{userStory.prioridad_final}}</strong></p>
+               
+
             </div>
             <div class="card-footer">
               {% if userStory.disponible %}
               <div class="bg-success text-light p-1 rounded">
-                Disponible
+                <strong>Disponible</strong> 
               </div>
               {% else %}
               <div class="bg-danger text-light p-1 rounded">
-                Asignado
+               <strong>Asignado</strong> 
               </div>
               {% endif %}
+
               <!-- <div class="stats">
                 <i class="material-icons ">developer_board</i>
                 <a href="{% url 'webApp:verProyecto' proyecto.id %}">Ver proyecto</a>
