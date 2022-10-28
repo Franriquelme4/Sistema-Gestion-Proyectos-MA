@@ -1,11 +1,11 @@
-/*
+
 INSERT INTO public.usuario_rol(id, nombre_rol, descripcion_rol)
 VALUES 
 (1,'Administrador','Rol para administrar el sistema'),
 (2,'Observador','Rol por default para todos los usuarios'),
 (3,'Scrum Master','Rol para gestionar proyecto');
-*/
-/*INSERT INTO usuario_permiso(id, nombre_permiso, descripcion_permiso)
+
+INSERT INTO usuario_permiso(id, nombre_permiso, descripcion_permiso)
 VALUES 
 (1, 'def'				,'Default'							),
 (2, 'crt_Sprint'		,'Crear Sprint'						),
@@ -121,6 +121,10 @@ VALUES(3, 'TERMINADO');
 INSERT INTO public.usuario_estado
 (id, descripcion)
 VALUES(4, 'CANCELADO');
+INSERT INTO public.usuario_estado
+(id, descripcion)
+VALUES(5, 'PLANIFICACION');
+
 
 
 INSERT INTO public.usuario_usuario
@@ -128,4 +132,3 @@ INSERT INTO public.usuario_usuario
 VALUES(1, 'admin', 'sistema', 'as.is2.g15@gmail.com', 'as.is2.g15', true, 1);
 
 
-*/

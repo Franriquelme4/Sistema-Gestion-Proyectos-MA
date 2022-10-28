@@ -38,6 +38,7 @@ urlpatterns = [
     path('proyecto/productBacklog/<int:id>',views.verProductBacklog, name='verProductBacklog'),
     path('proyecto/userStory/crear/<int:id>',views.crearUs, name='crearUs'),
     path('proyecto/userStory/guardar/<int:id>',views.crearUsGuardar, name='crearUsGuardar'),
+    path('proyecto/userStory/detalles/<int:idProyecto>/<int:idUs>',views.verDetallesUs, name='verDetallesUs'),
     path('proyecto/proyecto/editar/<int:id>',views.editarProyecto, name='editarProyecto'),
     path('proyecto/proyecto/editar/guardar/<int:id>',views.editarProyectoGuardar, name='editarProyectoGuardar'),
     path('proyecto/iniciar/<int:id>',views.iniciarProyecto, name='iniciarProyecto'),
