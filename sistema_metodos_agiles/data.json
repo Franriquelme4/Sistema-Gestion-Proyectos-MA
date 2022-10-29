@@ -1,0 +1,10 @@
+[
+	{
+		"model": "usuario.permiso",
+		"pk": 10000,
+		"fields": {
+			"descripcion_permiso": "Descripcion ",
+			"nombre_permiso": "Prueba"
+		}
+	}
+]

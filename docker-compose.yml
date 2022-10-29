@@ -10,11 +10,11 @@ services: # the different images that will be running as containers
     depends_on: 
       - web 
     restart: "on-failure" 
-  web: # service name
+  web: # service name python initSQL2.py &&
     build: . 
     command: sh -c "python manage.py makemigrations &&
                     python manage.py migrate &&
-                    gunicorn sistema_metodos_agiles.wsgi:application --bind 0.0.0.0:${APP_PORT}" 
+                    gunicorn sistema_metodos_agiles.wsgi:application --bind 0.0.0.0:${APP_PORT}"
     volumes: 
       - ./sistema_metodos_agiles:/microservice 
       - static_volume:/home/app/webapp/webApp/static
@@ -28,7 +28,7 @@ services: # the different images that will be running as containers
     depends_on: 
       - db
   db: # service name
-    image: postgres:14-alpine 
+    image: docker.io/postgres:14-alpine 
     container_name: postgres
     volumes:
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
