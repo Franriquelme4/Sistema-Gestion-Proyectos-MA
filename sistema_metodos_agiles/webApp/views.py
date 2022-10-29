@@ -439,14 +439,6 @@ def rolesProyectoEditar(request,idProyecto,idRol):
     html_template = loader.get_template('home/rolesProyectoEditar.html')
     return HttpResponse(html_template.render(context,request))
 
-
-def eliminarColaboradorProyecto(request,id):
-    variables = request.POST
-    print(f"ID COLABORADOR ELIMINAR = {variables.get('idColaborador',False)}")
-    record = MiembroEquipo.objects.filter(miembro_usuario = variables.get('idColaborador',False))
-    record.delete()
-    return redirect(f'/proyecto/{id}')
-
 def eliminarColaboradorProyecto2(request,idColaborador,idProyecto):
     variables = request.POST
     print(f"ID COLABORADOR ELIMINAR = {idColaborador}")
@@ -458,42 +450,9 @@ def eliminarRolProyecto(request,id):
     """Se elimina el rol asociado al id"""
     variables = request.POST
     record = Rol.objects.filter(id = variables.get('idRol',False))
+    record.delete()
     for x in record:
         x.permiso.clear()
-
-    """validarEliminacion = getRolByID(id)
-    print(validarEliminacion)
-    if(validarEliminacion==None):
-        print("no es")
-    else:
-        rol = Rol(
-            descripcion_rol = variables.get('descripcion',False),
-            nombre_rol = variables.get('nombre_rol',False),
-        )
-        rol.delete()
-    
-    rol = Rol(
-            descripcion_rol = variables.get('descripcion',False),
-            nombre_rol = variables.get('nombre_rol',False),
-        )
-    rol.delete()
-    if request.method == 'POST':
-        rol = Rol(
-            descripcion_rol = variables.get('descripcion',False),
-            nombre_rol = variables.get('nombre_rol',False),
-        )
-        rol.delete()
-        for permiso in variables.getlist('permisos',False):
-            print(permiso)
-            rol.permiso.remove(Permiso.objects.get(id=permiso))
-        proyecto_rol = ProyectoRol(
-            descripcion_proyecto_rol=''
-        )
-        rol.objects.filter(id=id).delete()
-        proyecto_rol.objects.filter(id=id).delete()
-        #$proyecto_rol.delete()
-        proyecto_rol.rol.remove(rol)
-        proyecto_rol.proyecto.remove(Proyecto.objects.get(id=id))"""
     return redirect(f'/proyecto/roles/1')
 
 def editarRolProyecto(request,id):
@@ -573,9 +532,11 @@ def asignarColaboradorProyecto(request,id):
 @login_required
 def eliminarColaboradorProyecto(request,id):
     variables = request.POST
-    record = MiembroEquipo.miembro_usuario.objects.filter(id = variables.get('idRol',False))
+    print("ID COLABORADOR 576")
+    print(variables.get('idColaborador',False))
+    record = MiembroEquipo.objects.filter(miembro_usuario = variables.get('idColaborador',False))
     record.delete()
-    return redirect(f'/proyecto/{id}')
+    return redirect(f'/proyecto/colaboradores/{id}')
 
 @login_required
 def editarColaboradorProyecto(request,id):
@@ -752,17 +713,13 @@ def crearUsGuardar(request,id):
     """Se agregan los nuevos Us"""
     variables = request.POST
     if request.method == 'POST':
-        pn =float(variables.get('prioridad-negocio',False))
-        pt =float(variables.get('prioridad-tecnica',False))
         userStory = UserStory(
             proyecto_us = Proyecto.objects.get(id=id),
             nombre_us = variables.get('nombre',False),
             descripcion_us= variables.get('descripcion',False),
             tiempoEstimado_us = variables.get('tiempo',False),
             tipo_us= TipoUserStory.objects.get(id=variables.get('tipoUs',False)),
-            prioridad_negocio=pn,
-            prioridad_tecnica=pt,
-            prioridad_final=round((0.6*pn+0.4*pt)+0)
+            prioridad_negocio=variables.get('prioridad',False)
         )
         userStory.save()
     return redirect(f'/proyecto/productBacklog/{id}')
@@ -876,8 +833,10 @@ def sprintCrearGuardar(request,id):
     userSession = getUsuarioSesion(request.user.email)
     proyecto = getProyectsByID(id,userSession.id)[0]
     variables = request.POST
+    #print(variables.get('fecha_inicio',False),proyecto.sprint_dias)
+    #print(str(busy_end_date(datetime. strptime(variables.get('fecha_inicio',False),'%Y-%m-%d'),proyecto.sprint_dias)))
     if request.method == 'POST':
-         sprint = Sprint.objects.create(
+         Sprint.objects.create(
              descripcion_sp = variables.get('descripcion',False),
              nombre_sp = variables.get('nombre',False),
              fechaIni_sp = variables.get('fecha_inicio',False),
@@ -885,12 +844,8 @@ def sprintCrearGuardar(request,id):
              proyecto_sp = Proyecto.objects.get(id=id),
              estado = Estado.objects.get(descripcion="PENDIENTE"),
          )
-         sprint.save()
-    if not proyecto.sprint_actual:
-        Proyecto.objects.filter(id=id).update(
-            sprint_actual =  sprint
-        )
     return redirect(f'/proyecto/sprint/{id}')
+
 
 def sprintColaboradores(request,idProyecto,idSprint):
     """
