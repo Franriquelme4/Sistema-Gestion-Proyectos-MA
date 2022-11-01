@@ -273,28 +273,6 @@ def rolesProyectoCrear(request, id):
     return HttpResponse(html_template.render(context, request))
 
 
-@login_required
-def crearRolProyecto(request, id):
-    """Se crea un nuevo rol con todos los permisos asociados"""
-    variables = request.POST
-    if request.method == 'POST':
-        rol = Rol(
-            descripcion_rol=variables.get('descripcion', False),
-            nombre_rol=variables.get('nombre_rol', False),
-        )
-        rol.save()
-        for permiso in variables.getlist('permisos', False):
-            print(permiso)
-            rol.permiso.add(Permiso.objects.get(id=permiso))
-        proyecto_rol = ProyectoRol(
-            descripcion_proyecto_rol=''
-        )
-        proyecto_rol.save()
-        proyecto_rol.rol.add(rol)
-        proyecto_rol.proyecto.add(Proyecto.objects.get(id=id))
-    return redirect(f'/proyecto/roles/{id}')
-
-
 def eliminarRolProyecto(request, id):
     """Se elimina el rol asociado al id"""
     variables = request.POST
@@ -337,16 +315,6 @@ def eliminarRolProyecto(request, id):
     return redirect(f'/proyecto/roles/1')
 
 
-@login_required(login_url="/login/")
-def editarRolProyecto(request, idd):
-    """Se elimina el rol asociado al id"""
-    print("Entra en la funcion")
-    variables = request.POST
-    validarEliminacion = getRolByID(id)
-    print(validarEliminacion)
-    record = Rol.objects.filter(id=idd).first()
-
-    return redirect(f'/proyecto/{id}')
 
 
 @login_required(login_url="/login/")
@@ -455,6 +423,7 @@ def rolesProyectoEditar(request, idProyecto, idRol):
     rolEditar = Rol.objects.get(id=idRol)
     print(userSession.id)
     permisosSelect = Rol.objects.get(id=idRol).permiso.all()
+    print(permisosSelect, 'hola')
     permisosaux = None
     for i in permisosSelect:
         permisos = permisos.filter(~Q(id=i.id))
@@ -499,40 +468,6 @@ def eliminarRolProyecto(request, id):
     record = Rol.objects.filter(id=variables.get('idRol', False))
     for x in record:
         x.permiso.clear()
-
-    """validarEliminacion = getRolByID(id)
-    print(validarEliminacion)
-    if(validarEliminacion==None):
-        print("no es")
-    else:
-        rol = Rol(
-            descripcion_rol = variables.get('descripcion',False),
-            nombre_rol = variables.get('nombre_rol',False),
-        )
-        rol.delete()
-    
-    rol = Rol(
-            descripcion_rol = variables.get('descripcion',False),
-            nombre_rol = variables.get('nombre_rol',False),
-        )
-    rol.delete()
-    if request.method == 'POST':
-        rol = Rol(
-            descripcion_rol = variables.get('descripcion',False),
-            nombre_rol = variables.get('nombre_rol',False),
-        )
-        rol.delete()
-        for permiso in variables.getlist('permisos',False):
-            print(permiso)
-            rol.permiso.remove(Permiso.objects.get(id=permiso))
-        proyecto_rol = ProyectoRol(
-            descripcion_proyecto_rol=''
-        )
-        rol.objects.filter(id=id).delete()
-        proyecto_rol.objects.filter(id=id).delete()
-        #$proyecto_rol.delete()
-        proyecto_rol.rol.remove(rol)
-        proyecto_rol.proyecto.remove(Proyecto.objects.get(id=id))"""
     return redirect(f'/proyecto/roles/1')
 
 
@@ -572,7 +507,7 @@ def crearRolProyecto(request, id):
         )
         rol.save()
         for permiso in variables.getlist('permisos', False):
-            print(permiso)
+            print(Permiso.objects.get(id=permiso))
             rol.permiso.add(Permiso.objects.get(id=permiso))
         proyecto_rol = ProyectoRol(
             descripcion_proyecto_rol=''
@@ -582,19 +517,15 @@ def crearRolProyecto(request, id):
         proyecto_rol.proyecto.add(Proyecto.objects.get(id=id))
     return redirect(f'/proyecto/roles/{id}')
 
-
 def editarColaboradorProyecto(request, idProyecto):
     """Se eliminan los colaboradores de un proyecto especifico"""
-
     variables = request.POST
     idColaborador = variables.get('idColaborador', False)
     print(f"ID COLABORADOR EDITAR = {idColaborador}")
     print(f"ID PROYECTO EDITAR= {idProyecto}")
     eliminarColaboradorProyecto2(request, idColaborador, idProyecto)
     asignarColaboradorProyecto(request, idProyecto)
-
     return redirect(f'/proyecto/colaboradores/{idProyecto}')
-
 
 @login_required
 def asignarColaboradorProyecto(request, id):
@@ -1107,10 +1038,12 @@ def sprintUsAgregarGuardar(request, id):
         UserStory.objects.filter(id=variables.get('us', False)).update(
             disponible=False, fase=Fase.objects.get(tipoUs=TipoUsEditar, orden_fase=1),
             prioridad_sprint=userStory.prioridad_sprint+3,
-            prioridad_final=round((0.6*userStory.prioridad_negocio+0.4*userStory.prioridad_tecnica)+userStory.prioridad_sprint+3)
-            )
+            prioridad_final=round((0.6*userStory.prioridad_negocio+0.4 *
+                                  userStory.prioridad_tecnica)+userStory.prioridad_sprint+3)
+        )
         sprint.userStory_sp.add(spUs)
     return redirect(f'/proyecto/sprint/{id}')
+
 
 def sprintBacklog(request, idProyecto, idSprint):
     """
@@ -1194,6 +1127,7 @@ def sprintTableroActualizarEstado(request, idProyecto, idSprint):
             fase=Fase.objects.get(id=idNuevaFase)
         )
     return redirect(f'/proyecto/sprint/tablero/{idProyecto}/{idSprint}/{idTipoUs}')
+
 
 def verDetallesUs(request, idProyecto, idUs):
     """
