@@ -4,7 +4,7 @@
 		"pk": 1,
 		"fields": {
 			"nombre_permiso": "def",
-			"descripcion_permiso": "Default",
+			"descripcion_permiso": "Default"
 		}
 	},
 
@@ -13,7 +13,7 @@
 		"pk": 2,
 		"fields": {
 			"nombre_permiso": "crt_Sprint",
-			"descripcion_permiso": "Crear Sprint",
+			"descripcion_permiso": "Crear Sprint"
 		}
 	},
 
@@ -22,7 +22,7 @@
 		"pk": 3,
 		"fields": {
 			"nombre_permiso": "asg_Sprint",
-			"descripcion_permiso": "Asignar Sprint",
+			"descripcion_permiso": "Asignar Sprint"
 		}
 	},
 
@@ -31,7 +31,7 @@
 		"pk": 4,
 		"fields": {
 			"nombre_permiso": "crt_Proyecto",
-			"descripcion_permiso": "Crear Proyecto",
+			"descripcion_permiso": "Crear Proyecto"
 		}
 	},
 
@@ -40,7 +40,7 @@
 		"pk": 5,
 		"fields": {
 			"nombre_permiso": "act_Usuario",
-			"descripcion_permiso": "Activar Usuarios",
+			"descripcion_permiso": "Activar Usuarios"
 		}
 	},
 
@@ -49,7 +49,7 @@
 		"pk": 6,
 		"fields": {
 			"nombre_permiso": "crt_US",
-			"descripcion_permiso": "Crear User Stories",
+			"descripcion_permiso": "Crear User Stories"
 		}
 	},
 
@@ -58,7 +58,7 @@
 		"pk": 7,
 		"fields": {
 			"nombre_permiso": "upd_US",
-			"descripcion_permiso": "Modificar User Stories",
+			"descripcion_permiso": "Modificar User Stories"
 		}
 	},
 
@@ -67,7 +67,7 @@
 		"pk": 8,
 		"fields": {
 			"nombre_permiso": "dlt_US",
-			"descripcion_permiso": "Eliminar User Stories",
+			"descripcion_permiso": "Eliminar User Stories"
 		}
 	},
 
@@ -76,7 +76,7 @@
 		"pk": 34,
 		"fields": {
 			"nombre_permiso": "dsp_US",
-			"descripcion_permiso": "Consultar User Stories",
+			"descripcion_permiso": "Consultar User Stories"
 		}
 	},
 
@@ -85,7 +85,7 @@
 		"pk": 9,
 		"fields": {
 			"nombre_permiso": "adm_Burndown",
-			"descripcion_permiso": "Administrar BurnDown Chart",
+			"descripcion_permiso": "Administrar BurnDown Chart"
 		}
 	},
 
@@ -94,7 +94,7 @@
 		"pk": 10,
 		"fields": {
 			"nombre_permiso": "crt_Dailys",
-			"descripcion_permiso": "Crear Dailys",
+			"descripcion_permiso": "Crear Dailys"
 		}
 	},
 
@@ -103,7 +103,7 @@
 		"pk": 11,
 		"fields": {
 			"nombre_permiso": "dsp_SprinBack",
-			"descripcion_permiso": "Consultar Sprint Backlog",
+			"descripcion_permiso": "Consultar Sprint Backlog"
 		}
 	},
 
@@ -112,7 +112,7 @@
 		"pk": 12,
 		"fields": {
 			"nombre_permiso": "dsp_ProductBack",
-			"descripcion_permiso": "Consultar Product Backlog",
+			"descripcion_permiso": "Consultar Product Backlog"
 		}
 	},
     
@@ -121,7 +121,7 @@
 		"pk": 13,
 		"fields": {
 			"nombre_permiso": "dsp_HisCambioUS",
-			"descripcion_permiso": "Consultar Historial Cambios US",
+			"descripcion_permiso": "Consultar Historial Cambios US"
 		}
 	},
 
@@ -130,7 +130,7 @@
 		"pk": 14,
 		"fields": {
 			"nombre_permiso": "upd_PrioridadUS",
-			"descripcion_permiso": "Modificar Prioridad US",
+			"descripcion_permiso": "Modificar Prioridad US"
 		}
 	},
 
@@ -139,7 +139,7 @@
 		"pk": 15,
 		"fields": {
 			"nombre_permiso": "crt_rol",
-			"descripcion_permiso": "Crear Roles",
+			"descripcion_permiso": "Crear Roles"
 		}
 	},
 
@@ -148,7 +148,7 @@
 		"pk": 16,
 		"fields": {
 			"nombre_permiso": "asg_rol",
-			"descripcion_permiso": "Asignar Roles",
+			"descripcion_permiso": "Asignar Roles"
 		}
 	},
 
@@ -157,7 +157,7 @@
 		"pk": 17,
 		"fields": {
 			"nombre_permiso": "dlt_rol",
-			"descripcion_permiso": "Eliminar Roles",
+			"descripcion_permiso": "Eliminar Roles"
 		}
 	},
 
@@ -166,7 +166,7 @@
 		"pk": 28,
 		"fields": {
 			"nombre_permiso": "dsp_Roles",
-			"descripcion_permiso": "Consultar Roles",
+			"descripcion_permiso": "Consultar Roles"
 		}
 	},
 
@@ -175,7 +175,7 @@
 		"pk": 18,
 		"fields": {
 			"nombre_permiso": "agr_Colaboradorf",
-			"descripcion_permiso": "Agregar Colaboradores",
+			"descripcion_permiso": "Agregar Colaboradores"
 		}
 	},
 
@@ -184,7 +184,7 @@
 		"pk": 19,
 		"fields": {
 			"nombre_permiso": "dlt_Colaborador",
-			"descripcion_permiso": "Eliminar Colaboradores",
+			"descripcion_permiso": "Eliminar Colaboradores"
 		}
 	},
 
@@ -193,7 +193,7 @@
 		"pk": 33,
 		"fields": {
 			"nombre_permiso": "upd_Colaborador",
-			"descripcion_permiso": "Modificar Colaborador",
+			"descripcion_permiso": "Modificar Colaborador"
 		}
 	},
 
@@ -202,7 +202,7 @@
 		"pk": 20,
 		"fields": {
 			"nombre_permiso": "upd_EstaKanban",
-			"descripcion_permiso": "Modificar Estado Kanban",
+			"descripcion_permiso": "Modificar Estado Kanban"
 		}
 	},
 
@@ -211,7 +211,7 @@
 		"pk": 21,
 		"fields": {
 			"nombre_permiso": "asg_Proyecto",
-			"descripcion_permiso": "Asignar Proyecto",
+			"descripcion_permiso": "Asignar Proyecto"
 		}
 	},
 
@@ -220,7 +220,7 @@
 		"pk": 22,
 		"fields": {
 			"nombre_permiso": "upd_PrioriNegoc",
-			"descripcion_permiso": "Modificar Prioridad Negocio",
+			"descripcion_permiso": "Modificar Prioridad Negocio"
 		}
 	},
 
@@ -229,7 +229,7 @@
 		"pk": 23,
 		"fields": {
 			"nombre_permiso": "dsp_Burndown",
-			"descripcion_permiso": "Consultar BurnDown Chart",
+			"descripcion_permiso": "Consultar BurnDown Chart"
 		}
 	},
 
@@ -238,7 +238,7 @@
 		"pk": 24,
 		"fields": {
 			"nombre_permiso": "dsp_Velocity",
-			"descripcion_permiso": "Consultar Velocity Chart",
+			"descripcion_permiso": "Consultar Velocity Chart"
 		}
 	},
 
@@ -247,7 +247,7 @@
 		"pk": 25,
 		"fields": {
 			"nombre_permiso": "dsp_ReporteEsta",
-			"descripcion_permiso": "Consultar Reporte Estado",
+			"descripcion_permiso": "Consultar Reporte Estado"
 		}
 	},
 
@@ -256,7 +256,7 @@
 		"pk": 26,
 		"fields": {
 			"nombre_permiso": "dct_Usuario",
-			"descripcion_permiso": "Desactivar Usuarios",
+			"descripcion_permiso": "Desactivar Usuarios"
 		}
 	},
 
@@ -265,7 +265,7 @@
 		"pk": 27,
 		"fields": {
 			"nombre_permiso": "dsp_Colaborador",
-			"descripcion_permiso": "Consultar Colaboradores",
+			"descripcion_permiso": "Consultar Colaboradores"
 		}
 	},
 
@@ -274,7 +274,7 @@
 		"pk": 29,
 		"fields": {
 			"nombre_permiso": "dsp_TipoUs",
-			"descripcion_permiso": "Consultar Tipo US",
+			"descripcion_permiso": "Consultar Tipo US"
 		}
 	},
 
@@ -283,7 +283,7 @@
 		"pk": 30,
 		"fields": {
 			"nombre_permiso": "ctr_TipoUs",
-			"descripcion_permiso": "Crear Tipo US",
+			"descripcion_permiso": "Crear Tipo US"
 		}
 	},
 
@@ -292,7 +292,7 @@
 		"pk": 31,
 		"fields": {
 			"nombre_permiso": "upd_TipoUs",
-			"descripcion_permiso": "Modificar Tipo US",
+			"descripcion_permiso": "Modificar Tipo US"
 		}
 	},
 
@@ -301,7 +301,7 @@
 		"pk": 32,
 		"fields": {
 			"nombre_permiso": "dlt_TipoUs",
-			"descripcion_permiso": "Eliminar Tipo US",
+			"descripcion_permiso": "Eliminar Tipo US"
 		}
 	},
     
@@ -310,7 +310,7 @@
 		"pk": 39,
 		"fields": {
 			"nombre_permiso": "imp_TipoUs",
-			"descripcion_permiso": "Importar Tipo US",
+			"descripcion_permiso": "Importar Tipo US"
 		}
 	},
 
@@ -319,7 +319,7 @@
 		"pk": 35,
 		"fields": {
 			"nombre_permiso": "dsp_Tablero",
-			"descripcion_permiso": "Consultar Tablero",
+			"descripcion_permiso": "Consultar Tablero"
 		}
 	},
 
@@ -328,7 +328,7 @@
 		"pk": 36,
 		"fields": {
 			"nombre_permiso": "crt_Tablero",
-			"descripcion_permiso": "Crear Tablero",
+			"descripcion_permiso": "Crear Tablero"
 		}
 	},
 
@@ -337,7 +337,7 @@
 		"pk": 37,
 		"fields": {
 			"nombre_permiso": "dlt_Tablero",
-			"descripcion_permiso": "Eliminar Tablero",
+			"descripcion_permiso": "Eliminar Tablero"
 		}
 	},
 
@@ -346,7 +346,7 @@
 		"pk": 38,
 		"fields": {
 			"nombre_permiso": "upd_Tablero",
-			"descripcion_permiso": "Modificar Tablero",
+			"descripcion_permiso": "Modificar Tablero"
 		}
 	},
 
@@ -355,7 +355,7 @@
 		"pk": 40,
 		"fields": {
 			"nombre_permiso": "upd_rol",
-			"descripcion_permiso": "Modificar Rol",
+			"descripcion_permiso": "Modificar Rol"
 		}
 	},
 
@@ -364,7 +364,7 @@
 		"pk": 41,
 		"fields": {
 			"nombre_permiso": "ini_Proyecto",
-			"descripcion_permiso": "Iniciar Proyecto",
+			"descripcion_permiso": "Iniciar Proyecto"
 		}
 	},
 
@@ -373,7 +373,7 @@
 		"pk": 42,
 		"fields": {
 			"nombre_permiso": "upd_Proyecto",
-			"descripcion_permiso": "Editar Proyecto",
+			"descripcion_permiso": "Editar Proyecto"
 		}
 	},
 
@@ -382,7 +382,7 @@
 		"pk": 44,
 		"fields": {
 			"nombre_permiso": "agr_Colaborador_Sprint",
-			"descripcion_permiso": "Agregar Colaborador Sprint",
+			"descripcion_permiso": "Agregar Colaborador Sprint"
 		}
 	},
 
@@ -391,7 +391,7 @@
 		"pk": 45,
 		"fields": {
 			"nombre_permiso": "dsp_Colaborador_Sprint",
-			"descripcion_permiso": "Consultar Colaborador Sprint",
+			"descripcion_permiso": "Consultar Colaborador Sprint"
 		}
 	},
 
@@ -400,7 +400,7 @@
 		"pk": 46,
 		"fields": {
 			"nombre_permiso": "agr_Colaborador_US",
-			"descripcion_permiso": "Agregar US - Colaborador Sprint",
+			"descripcion_permiso": "Agregar US - Colaborador Sprint"
 		}
 	},
 
@@ -438,7 +438,7 @@
 		"model": "usuario.estado",
 		"pk": 1,
 		"fields": {
-			"descripcion": "PENDIENTE",
+			"descripcion": "PENDIENTE"
 		}
 	},
 
@@ -446,7 +446,7 @@
 		"model": "usuario.estado",
 		"pk": 2,
 		"fields": {
-			"descripcion": "EN PROGRESO",
+			"descripcion": "EN PROGRESO"
 		}
 	},
 
@@ -454,7 +454,7 @@
 		"model": "usuario.estado",
 		"pk": 2,
 		"fields": {
-			"descripcion": "EN PROGRESO",
+			"descripcion": "EN PROGRESO"
 		}
 	},
     
@@ -462,7 +462,7 @@
 		"model": "usuario.estado",
 		"pk": 3,
 		"fields": {
-			"descripcion": "TERMINADO",
+			"descripcion": "TERMINADO"
 		}
 	},
 
@@ -470,7 +470,7 @@
 		"model": "usuario.estado",
 		"pk": 4,
 		"fields": {
-			"descripcion": "CANCELADO",
+			"descripcion": "CANCELADO"
 		}
 	},
 
@@ -483,9 +483,7 @@
 			"email": "as.is2.g15@gmail.com",
 			"nombre_usuario": "as.is2.g15",
 			"activo": true,
-			"df_rol_id": 1,
+			"df_rol_id": 1
 		}
-	},
-
-    }
+	} 
 ]
