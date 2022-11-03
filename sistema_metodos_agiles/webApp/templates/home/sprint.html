@@ -46,6 +46,9 @@
           {% if validacionPermisos.dsp_SprinBack %}
           <a href="{% url 'webApp:sprintBacklog' proyecto.id sp.id %}" class="btn btn-sm btn-primary">Sprint Backlog</a>
           {% endif %}
+          
+          <li class="nav-item"><a class="nav-link py-0" href="{% url 'webApp:visualizarBurndown' proyecto.id sprint.id %}"><span>Burndown Chart</span></a></li>
+
         </div>
 
       </div>
