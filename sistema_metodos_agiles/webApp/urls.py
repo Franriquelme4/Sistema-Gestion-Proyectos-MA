@@ -57,6 +57,7 @@ urlpatterns = [
     path('proyecto/sprint/comentarios/guardar/<int:idProyecto>/<int:idSprint>', views.guardarComentarioUs, name = "guardarComentarioUs"),
     path('proyecto/sprint/iniciar/<int:idProyecto>/<int:idSprint>', views.iniciarSprint, name="iniciarSprint"),
     path('proyecto/sprint/cancelar/<int:idProyecto>/<int:idSprint>', views.cancelarSprint, name="cancelarSprint"),
+    path('proyecto/sprint/us/finalizar', views.finalizarUserStory, name="finalizarUserStory"),
     
 
 

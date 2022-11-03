@@ -275,49 +275,6 @@ def rolesProyectoCrear(request, id):
     return HttpResponse(html_template.render(context, request))
 
 
-def eliminarRolProyecto(request, id):
-    """Se elimina el rol asociado al id"""
-    variables = request.POST
-    record = Rol.objects.filter(id=variables.get('idRol', False))
-    record.delete()
-
-    """validarEliminacion = getRolByID(id)
-    print(validarEliminacion)
-    if(validarEliminacion==None):
-        print("no es")
-    else:
-        rol = Rol(
-            descripcion_rol = variables.get('descripcion',False),
-            nombre_rol = variables.get('nombre_rol',False),
-        )
-        rol.delete()
-    
-    rol = Rol(
-            descripcion_rol = variables.get('descripcion',False),
-            nombre_rol = variables.get('nombre_rol',False),
-        )
-    rol.delete()
-    if request.method == 'POST':
-        rol = Rol(
-            descripcion_rol = variables.get('descripcion',False),
-            nombre_rol = variables.get('nombre_rol',False),
-        )
-        rol.delete()
-        for permiso in variables.getlist('permisos',False):
-            print(permiso)
-            rol.permiso.remove(Permiso.objects.get(id=permiso))
-        proyecto_rol = ProyectoRol(
-            descripcion_proyecto_rol=''
-        )
-        rol.objects.filter(id=id).delete()
-        proyecto_rol.objects.filter(id=id).delete()
-        #$proyecto_rol.delete()
-        proyecto_rol.rol.remove(rol)
-        proyecto_rol.proyecto.remove(Proyecto.objects.get(id=id))"""
-    return redirect(f'/proyecto/roles/1')
-
-
-
 
 @login_required(login_url="/login/")
 def colaboradoresProyecto(request, id):
@@ -458,16 +415,18 @@ def eliminarRolProyecto(request, id):
     """Se elimina el rol asociado al id"""
     variables = request.POST
     record = Rol.objects.filter(id = variables.get('idRol',False))
-    record.delete()
     for x in record:
         x.permiso.clear()
+    record.delete()
     return redirect(f'/proyecto/roles/1')
 
 
 def editarRolProyecto(request, id):
     variables = request.POST
     if request.method == 'POST':
-        eliminarRolProyecto(request, id)
+        record = Rol.objects.filter(id = variables.get('idRol',False))
+        for x in record:
+            x.permiso.clear()
         actualizarRolProyecto(request, id)
     return redirect(f'/proyecto/roles/{id}')
 
@@ -830,6 +789,7 @@ def sprintProyecto(request, id):
                         'crt_Sprint', 'dsp_SprinBack', 'dsp_Colaborador_Sprint', 'dsp_SprinBack', 'dsp_Tablero', 'agr_Colaborador_US']
     validacionPermisos = validarPermisos(permisosProyecto, userSession.id, id)
     userStorys = UserStory.objects.filter(proyecto_us=id)
+    print(proyecto.sprint_actual,"saprint ")
     context = {
         'rolesProyecto': rolesProyecto,
         'userSession': userSession,
@@ -1085,7 +1045,7 @@ def sprintTablero(request, idProyecto, idSprint, idTipoUs=None):
             tipoUsTablero = TipoUserStory.objects.get(id=idTp)
     fases = Fase.objects.filter(tipoUs=tipoUsTablero)
     permisosProyecto = ['dsp_Colaborador', 'dsp_Roles',
-                        'dsp_TipoUs', 'dsp_ProductBack', 'dsp_SprinBack']
+                        'dsp_TipoUs', 'dsp_ProductBack', 'dsp_SprinBack','fin_us']
     validacionPermisos = validarPermisos(
         permisosProyecto, userSession.id, idProyecto)
     context = {'userSession': userSession,
@@ -1179,7 +1139,7 @@ def guardarComentarioUs(request, idProyecto, idSprint):
         )
         userStory.comentario.add(newComentario)
 
-    return redirect(f'/proyecto/sprint/{idSprint}')
+    return redirect(f'/proyecto/sprint/tablero/{idProyecto}/{idSprint}/0')
 
 def iniciarSprint(request, idProyecto, idSprint):
     sprint = Sprint.objects.filter(id = idSprint)
@@ -1197,5 +1157,38 @@ def iniciarSprint(request, idProyecto, idSprint):
     return redirect(f'/proyecto/sprint/{idProyecto}')
 
 def cancelarSprint(request, idProyecto, idSprint):
+    sprint = Sprint.objects.filter(id = idSprint)
+    sprintActual = Sprint.objects.get(id = idSprint)
+    proyectoActual = Proyecto.objects.filter(id = idProyecto)
+    proyecto = Proyecto.objects.get(id = idProyecto)
+    fecha_hoy = datetime.today()
+    sprint.update(
+        estado=Estado.objects.get(descripcion="CANCELADO")
+    )
+    proyectoActual.update(
+       sprint_actual = None
+    )
 
     return redirect(f'/proyecto/sprint/{idProyecto}')
+
+def verDocumentacion(request):
+    """
+    Cuando un usuario ingresa a un proyecto en el cual fue asignado se visualizan 
+    todos los datos de la misma 
+    """
+    context = {}
+    html_template = loader.get_template('home/usDetalle.html')
+    return HttpResponse(html_template.render(context, request))
+
+
+def finalizarUserStory(request):
+    if request.accepts and request.method == "GET":
+        idUs = request.GET.get("idUs", None)
+        userStory = UserStory.objects.filter(id=idUs)
+        userStory.update(finalizado = True)
+
+        return JsonResponse({} , status = 200)
+    return JsonResponse({}, status = 400)  
+
+    # some error occured
+    return JsonResponse({"error": ""}, status=400)
