@@ -148,7 +148,7 @@ class UserStory(models.Model):
     tiempoEstimado_us = models.IntegerField(null=True)
     disponible = models.BooleanField(default=True)
     estadoActual_us = models.CharField(max_length=20,null=True)
-    duracion_us = models.IntegerField(default=0)
+    tiempoTrabajado = models.IntegerField(default=0)
     tipo_us = models.ForeignKey('TipoUserStory',on_delete=models.CASCADE)
     asignadoUsu_us = models.ForeignKey('MiembroEquipo',on_delete=models.CASCADE,null=True)
     fechaIni_us = models.DateField(auto_now_add=True)
@@ -159,8 +159,6 @@ class UserStory(models.Model):
     prioridad_sprint = models.IntegerField(default=0)
     prioridad_final = models.IntegerField(default=0)
     fase = models.ForeignKey('Fase',on_delete=models.CASCADE,null=True)
-    comentario = models.ManyToManyField('Comentario',blank=True)
-    finalizado = models.BooleanField(default=False)
     class Meta:
         verbose_name = 'User Story'
         verbose_name_plural = 'User Stories'
@@ -194,7 +192,7 @@ class Sprint(models.Model):
     class Meta:
         verbose_name = 'Sprint'
         verbose_name_plural = 'Sprints'
-        ordering = ['nombre_sp']
+        ordering = ['-estado']
     def __str__(self):
         return self.nombre_sp
 

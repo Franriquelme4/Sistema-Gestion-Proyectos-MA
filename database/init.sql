@@ -1,11 +1,11 @@
-/*
+
 INSERT INTO public.usuario_rol(id, nombre_rol, descripcion_rol)
 VALUES 
 (1,'Administrador','Rol para administrar el sistema'),
 (2,'Observador','Rol por default para todos los usuarios'),
 (3,'Scrum Master','Rol para gestionar proyecto');
-*/
-/*INSERT INTO usuario_permiso(id, nombre_permiso, descripcion_permiso)
+
+INSERT INTO usuario_permiso(id, nombre_permiso, descripcion_permiso)
 VALUES 
 (1, 'def'				,'Default'							),
 (2, 'crt_Sprint'		,'Crear Sprint'						),
@@ -51,7 +51,8 @@ VALUES
 (42,'upd_Proyecto'      ,'Editar Proyecto'                  ),
 (44,'agr_Colaborador_Sprint','Agregar Colaborador Sprint'   ),
 (45,'dsp_Colaborador_Sprint','Consultar Colaborador Sprint' ),
-(46,'agr_Colaborador_US','Agregar US - Colaborador Sprint'  );
+(46,'agr_Colaborador_US','Agregar US - Colaborador Sprint'  ),
+(47,'ini_sprint','Iniciar Sprint'  );
 
 
 INSERT INTO usuario_rol_permiso(id, rol_id, permiso_id)
@@ -121,6 +122,10 @@ VALUES(3, 'TERMINADO');
 INSERT INTO public.usuario_estado
 (id, descripcion)
 VALUES(4, 'CANCELADO');
+INSERT INTO public.usuario_estado
+(id, descripcion)
+VALUES(5, 'PLANIFICACION');
+
 
 
 INSERT INTO public.usuario_usuario
@@ -128,4 +133,3 @@ INSERT INTO public.usuario_usuario
 VALUES(1, 'admin', 'sistema', 'as.is2.g15@gmail.com', 'as.is2.g15', true, 1);
 
 
-*/

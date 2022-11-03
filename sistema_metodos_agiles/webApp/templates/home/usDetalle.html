@@ -1,0 +1,78 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+{% include 'includes/options.html' %}
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h3>Detalle Tipo de US</h3>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label" >Nombre</label>
+            <input type="text" class="form-control" id="recipient-name" name="nombre" disabled="true" value="{{userStory.nombre_us}}">
+          </div>
+          <div class="">
+            <label for="recipient-name" class="col-form-label" >Descripcion</label>
+            <input type="text" class="form-control" id="recipient-name" name="descripcion" disabled="true" value="{{userStory.descripcion_us}}">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label" >Tiempo Estimado (en horas)</label>
+            <input type="number" class="form-control" id="recipient-name" name="tiempo" disabled="true" value="{{userStory.tiempoEstimado_us}}">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label" >Tipo de User Story</label>
+            <input type="text" class="form-control" id="recipient-name" name="tiempo" disabled="true" value="{{userStory.tipo_us}}">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label" >Estado</label>
+            <input type="text" class="form-control" id="recipient-name" name="tiempo" disabled="true" value="{% if userStory.disponible %}Disponible{% else %} Asignado {% endif %}">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label" >Fase Actual</label>
+            <input type="text" class="form-control" id="recipient-name" name="prioridad-tecnica" disabled="true" value="{{userStory.fase}}">
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label" >Prioridad de negocio</label>
+            <input type="number" class="form-control" id="recipient-name" name="prioridad-negocio" min="1" max="10" disabled="true" value="{{userStory.prioridad_negocio}}">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label" >Prioridad Tecnica</label>
+            <input type="number" class="form-control" id="recipient-name" name="prioridad-tecnica" min="1" max="10" disabled="true" value="{{userStory.prioridad_tecnica}}">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label" >Prioridad Tecnica</label>
+            <input type="number" class="form-control" id="recipient-name" name="prioridad-tecnica" min="1" max="10" disabled="true" value="{{userStory.prioridad_sprint}}">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label" >Prioridad Sprint</label>
+            <input type="number" class="form-control" id="recipient-name" name="prioridad-tecnica" min="1" max="10" disabled="true" value="{{userStory.prioridad_final}}">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label" >Fecha de Creacion</label>
+            <input type="text" class="form-control" id="recipient-name" name="tiempo" disabled="true" value="{{userStory.fecha_creacion}}">
+          </div>
+
+        </div>
+      </div>
+
+
+      <a class="btn btn-danger btn-sm" href="{% url 'webApp:verProductBacklog' proyecto.id %}">Volver</a>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+{% endblock javascripts %}

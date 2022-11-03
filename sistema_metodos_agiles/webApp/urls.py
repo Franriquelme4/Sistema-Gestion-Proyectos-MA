@@ -34,10 +34,10 @@ urlpatterns = [
     path('proyecto/tipoUs/importar/<int:id>',views.tipoUsImportar, name='tipoUsImportar'),
     path('proyecto/tipoUs/importar/guardar/<int:id>',views.importarTusDeProyecto, name='importarTusDeProyecto'),
     path('proyecto/tipoUs/guardar/<int:id>',views.crearTUSProyecto, name='crearTUSProyecto'),
-    #path('proyecto/tipoUs/importar/<int:id>',views.importarTusDeProyecto, name='importarTusDeProyecto'),
     path('proyecto/productBacklog/<int:id>',views.verProductBacklog, name='verProductBacklog'),
     path('proyecto/userStory/crear/<int:id>',views.crearUs, name='crearUs'),
     path('proyecto/userStory/guardar/<int:id>',views.crearUsGuardar, name='crearUsGuardar'),
+    path('proyecto/userStory/detalles/<int:idProyecto>/<int:idUs>',views.verDetallesUs, name='verDetallesUs'),
     path('proyecto/proyecto/editar/<int:id>',views.editarProyecto, name='editarProyecto'),
     path('proyecto/proyecto/editar/guardar/<int:id>',views.editarProyectoGuardar, name='editarProyectoGuardar'),
     path('proyecto/iniciar/<int:id>',views.iniciarProyecto, name='iniciarProyecto'),
@@ -54,4 +54,14 @@ urlpatterns = [
     path('proyecto/sprint/tablero/<int:idProyecto>/<int:idSprint>',views.sprintTablero, name='sprintTablero2'),
     path('proyecto/sprint/tablero/actualizar/<int:idProyecto>/<int:idSprint>',views.sprintTableroActualizarEstado, name='sprintTableroActualizarEstado'),
     path('proyecto/sprint/velocitychart/<int:idProyecto>',views.visualizarVelocity, name='visualizarVelocity'),
+    path('proyecto/sprint/get/comentarios', views.getComentarios, name = "ajax_comentarios"),
+    path('proyecto/sprint/comentarios/guardar/<int:idProyecto>/<int:idSprint>', views.guardarComentarioUs, name = "guardarComentarioUs"),
+    path('proyecto/sprint/iniciar/<int:idProyecto>/<int:idSprint>', views.iniciarSprint, name="iniciarSprint"),
+    path('proyecto/sprint/cancelar/<int:idProyecto>/<int:idSprint>', views.cancelarSprint, name="cancelarSprint"),
+    path('proyecto/sprint/us/finalizar', views.finalizarUserStory, name="finalizarUserStory"),
+    
+
+
+    
+
 ]
