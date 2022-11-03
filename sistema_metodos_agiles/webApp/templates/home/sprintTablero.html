@@ -53,7 +53,7 @@
             
                       </p>
                       <p class="card-text">Responsable: {{userStory.colaborador}}</p>
-                      <button class="btn btn-primary btn-sm">Comentarios</button>
+                      <button class="btn btn-primary btn-sm ver-comentarios" id="{{userStory.us.id}}">Comentarios</button>
                     </div>
                   </div>
                  
@@ -83,11 +83,99 @@
 </div>
 
 
+
+<!-- Modal -->
+<div class="modal fade" id="comentariosModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-us-title"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="time-container">
+        <div class="row p-3">
+          <div class="col-6 ">
+            <div class=" bg-info text-white rounded px-2 horas-trabajadas">
+            </div>
+          </div>
+          <div class="col-6 ">
+            <div class=" bg-success text-white rounded px-2 hora-estimada">
+            </div>
+          </div>
+        </div>
+      
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <form method="post" id="formSprint" action="{% url 'webApp:guardarComentarioUs' proyecto.id sprint.id %}">
+          {% csrf_token %}
+          <label for="">Agregar Comentario</label>
+          <div class="row">
+            <div class="col-8">
+              <div class="form-group">
+                <input class="form-control" name="idUs" id="input-id--us" hidden="true">          
+              </div>
+              <div class="form-group">
+                <textarea class="form-control" name="comentario" id="" cols="40" rows="2" required="true"></textarea>              
+              </div>
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Horas Trabajadas</label>
+                <input type="number" class="form-control" id="recipient-name" name="horasTrabajadas" required="true">
+              </div>
+            </div>
+            <div class="col-4">
+              <button class="btn btn-primary btn-sm">Guardar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script>
+$("button.ver-comentarios").click(function (e) {
+  e.preventDefault();
+  const refComentarios = $("#comentariosModal")
+  const refComentarioModalBody = $("#comentariosModal .modal-body")
+  console.log("Click comentarios",e.target.id);
+  $.ajax({
+            type: 'GET',
+            url: "{% url 'webApp:ajax_comentarios' %}",
+            data: {"idUs": e.target.id},
+            success: function (response) {
+              if(response["comentario"])
+                comentarios = JSON.parse(response["comentario"]);
+                refComentarioModalBody.empty()
+                comentarios.forEach(element => {
+                  refComentarioModalBody.append(`<div class="border border-dark rounded m-1 p-1"><strong>${element.fields.comentario}</strong></div>`)
+                });
+               
+                userStory = JSON.parse(response["userStory"])[0];
+                console.log(userStory);
+              $("h5#modal-us-title").text(`Nombre: ${userStory.fields.nombre_us}`)
+               $("input#input-id--us").val(userStory.pk)
+               $("div#time-container .horas-trabajadas").empty().append(`<strong>Horas trabajadas: ${userStory.fields.tiempoTrabajado}</strong>`)
+               $("div#time-container .hora-estimada").empty().append(`<strong>Tiempo Estimado: ${userStory.fields.tiempoEstimado_us}</strong>`)
+                refComentarios.modal("show");
+            },
+            error: function (response) {
+                console.log(response)
+            }
+        })
+  
+})
+
+
+
 let elementArrastrado=""
   const drag = (event) => {
     console.log('se arrastra');

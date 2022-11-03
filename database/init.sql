@@ -51,7 +51,8 @@ VALUES
 (42,'upd_Proyecto'      ,'Editar Proyecto'                  ),
 (44,'agr_Colaborador_Sprint','Agregar Colaborador Sprint'   ),
 (45,'dsp_Colaborador_Sprint','Consultar Colaborador Sprint' ),
-(46,'agr_Colaborador_US','Agregar US - Colaborador Sprint'  );
+(46,'agr_Colaborador_US','Agregar US - Colaborador Sprint'  ),
+(47,'ini_sprint','Iniciar Sprint'  );
 
 
 INSERT INTO usuario_rol_permiso(id, rol_id, permiso_id)

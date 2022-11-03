@@ -260,3 +260,10 @@ class Comentario(models.Model):
     """
     comentario = models.CharField(max_length=1000,null=False)
     fecha_creacion = models.DateField(default=datetime.date.today)
+    horas = models.IntegerField(null=True);
+    class Meta:
+        verbose_name = 'comenario'
+        verbose_name_plural = 'comentarios'
+        ordering = ['fecha_creacion']
+    def __str__(self):
+        return self.comentario

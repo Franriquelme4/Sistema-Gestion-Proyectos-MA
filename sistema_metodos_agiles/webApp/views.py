@@ -2,11 +2,13 @@
 
 import datetime
 import json
+from django.http import JsonResponse
+from django.core import serializers
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from usuario.utils import validarPermisos, busy_end_date, getUsuarioSesion, getTipoUsBySprint, getIdScrumRol, getProyectsByUsuarioID, getProyectsByID, getRolByProyectId, getColaboratorsByProyect, calcularFechaFin, getTipoUsbyProyectId, getTipoUsbyNotProyectId, getPermisos
-from usuario.models import Usuario, FaseTUS, TipoUs_Proyecto, SprintUserStory, SprintColaborador, Sprint, Cliente, Proyecto, MiembroEquipo, Permiso, Rol, ProyectoRol, TipoUserStory, PrioridadTUs, UserStory, Fase, Estado
+from usuario.models import Usuario, FaseTUS, TipoUs_Proyecto,Comentario, SprintUserStory, SprintColaborador, Sprint, Cliente, Proyecto, MiembroEquipo, Permiso, Rol, ProyectoRol, TipoUserStory, PrioridadTUs, UserStory, Fase, Estado
 from django.template import loader
 from django.db.models import Q
 from datetime import datetime
@@ -886,17 +888,13 @@ def sprintCrearGuardar(request, id):
         sprint = Sprint.objects.create(
             descripcion_sp=variables.get('descripcion', False),
             nombre_sp=variables.get('nombre', False),
-            fechaIni_sp=variables.get('fecha_inicio', False),
-            fechaFIn_sp=busy_end_date(datetime. strptime(variables.get(
-                'fecha_inicio', False), '%Y-%m-%d'), proyecto.sprint_dias),
+            # fechaIni_sp=variables.get('fecha_inicio', False),
+            # fechaFIn_sp=busy_end_date(datetime. strptime(variables.get(
+            #     'fecha_inicio', False), '%Y-%m-%d'), proyecto.sprint_dias),
             proyecto_sp=Proyecto.objects.get(id=id),
             estado=Estado.objects.get(descripcion="PENDIENTE"),
         )
         sprint.save()
-    if not proyecto.sprint_actual:
-        Proyecto.objects.filter(id=id).update(
-            sprint_actual=sprint
-        )
     return redirect(f'/proyecto/sprint/{id}')
 
 
@@ -1153,3 +1151,57 @@ def verDetallesUs(request, idProyecto, idUs):
                }
     html_template = loader.get_template('home/usDetalle.html')
     return HttpResponse(html_template.render(context, request))
+
+
+
+def getComentarios(request):
+    if request.accepts and request.method == "GET":
+        idUs = request.GET.get("idUs", None)
+        userStory = UserStory.objects.get(id=idUs)
+        comentario = userStory.comentario.all()
+        return JsonResponse(
+            {"valid":True,
+            "comentario":serializers.serialize('json', comentario),
+            "userStory":serializers.serialize('json', [userStory,])
+            }
+            , status = 200)
+    return JsonResponse({}, status = 400)  
+
+
+def guardarComentarioUs(request, idProyecto, idSprint):
+    variables = request.POST
+    if request.method == 'POST':
+        comentario = variables.get('comentario', False)
+        horasTrabajadas = int(variables.get('horasTrabajadas', False))
+        idUs = variables.get('idUs', False)
+        newComentario = Comentario(
+        comentario = comentario,
+        horas = horasTrabajadas
+       )
+        newComentario.save()
+        userStory = UserStory.objects.get(id=idUs)
+        UserStory.objects.filter(id=idUs).update(
+            tiempoTrabajado = userStory.tiempoTrabajado + horasTrabajadas
+        )
+        userStory.comentario.add(newComentario)
+
+    return redirect(f'/proyecto/sprint/{idSprint}')
+
+def iniciarSprint(request, idProyecto, idSprint):
+    sprint = Sprint.objects.filter(id = idSprint)
+    proyectoActual = Proyecto.objects.filter(id = idProyecto)
+    proyecto = Proyecto.objects.get(id = idProyecto)
+    fecha_hoy = datetime.today()
+    sprint.update(
+        fechaIni_sp=fecha_hoy,
+        fechaFIn_sp=busy_end_date(fecha_hoy, proyecto.sprint_dias),
+        estado=Estado.objects.get(descripcion="EN PROGRESO")
+    )
+    proyectoActual.update(
+       sprint_actual = sprint[0] 
+    )
+    return redirect(f'/proyecto/sprint/{idProyecto}')
+
+def cancelarSprint(request, idProyecto, idSprint):
+
+    return redirect(f'/proyecto/sprint/{idProyecto}')

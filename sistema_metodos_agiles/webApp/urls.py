@@ -53,6 +53,12 @@ urlpatterns = [
     path('proyecto/sprint/tablero/<int:idProyecto>/<int:idSprint>/<int:idTipoUs>',views.sprintTablero, name='sprintTablero'),
     path('proyecto/sprint/tablero/<int:idProyecto>/<int:idSprint>',views.sprintTablero, name='sprintTablero2'),
     path('proyecto/sprint/tablero/actualizar/<int:idProyecto>/<int:idSprint>',views.sprintTableroActualizarEstado, name='sprintTableroActualizarEstado'),
+    path('proyecto/sprint/get/comentarios', views.getComentarios, name = "ajax_comentarios"),
+    path('proyecto/sprint/comentarios/guardar/<int:idProyecto>/<int:idSprint>', views.guardarComentarioUs, name = "guardarComentarioUs"),
+    path('proyecto/sprint/iniciar/<int:idProyecto>/<int:idSprint>', views.iniciarSprint, name="iniciarSprint"),
+    path('proyecto/sprint/cancelar/<int:idProyecto>/<int:idSprint>', views.cancelarSprint, name="cancelarSprint"),
+    
+
 
     
 
