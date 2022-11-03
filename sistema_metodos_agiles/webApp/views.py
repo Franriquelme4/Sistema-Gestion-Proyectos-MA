@@ -446,17 +446,7 @@ def rolesProyectoEditar(request, idProyecto, idRol):
     html_template = loader.get_template('home/rolesProyectoEditar.html')
     return HttpResponse(html_template.render(context, request))
 
-
-def eliminarColaboradorProyecto(request, id):
-    variables = request.POST
-    print(f"ID COLABORADOR ELIMINAR = {variables.get('idColaborador',False)}")
-    record = MiembroEquipo.objects.filter(
-        miembro_usuario=variables.get('idColaborador', False))
-    record.delete()
-    return redirect(f'/proyecto/{id}')
-
-
-def eliminarColaboradorProyecto2(request, idColaborador, idProyecto):
+def eliminarColaboradorProyecto2(request,idColaborador,idProyecto):
     variables = request.POST
     print(f"ID COLABORADOR ELIMINAR = {idColaborador}")
     record = MiembroEquipo.objects.filter(miembro_usuario=idColaborador)
@@ -467,7 +457,8 @@ def eliminarColaboradorProyecto2(request, idColaborador, idProyecto):
 def eliminarRolProyecto(request, id):
     """Se elimina el rol asociado al id"""
     variables = request.POST
-    record = Rol.objects.filter(id=variables.get('idRol', False))
+    record = Rol.objects.filter(id = variables.get('idRol',False))
+    record.delete()
     for x in record:
         x.permiso.clear()
     return redirect(f'/proyecto/roles/1')
@@ -552,10 +543,11 @@ def asignarColaboradorProyecto(request, id):
 @login_required
 def eliminarColaboradorProyecto(request, id):
     variables = request.POST
-    record = MiembroEquipo.miembro_usuario.objects.filter(
-        id=variables.get('idRol', False))
+    print("ID COLABORADOR 576")
+    print(variables.get('idColaborador',False))
+    record = MiembroEquipo.objects.filter(miembro_usuario = variables.get('idColaborador',False))
     record.delete()
-    return redirect(f'/proyecto/{id}')
+    return redirect(f'/proyecto/colaboradores/{id}')
 
 
 @login_required
@@ -884,6 +876,8 @@ def sprintCrearGuardar(request, id):
     userSession = getUsuarioSesion(request.user.email)
     proyecto = getProyectsByID(id, userSession.id)[0]
     variables = request.POST
+    #print(variables.get('fecha_inicio',False),proyecto.sprint_dias)
+    #print(str(busy_end_date(datetime. strptime(variables.get('fecha_inicio',False),'%Y-%m-%d'),proyecto.sprint_dias)))
     if request.method == 'POST':
         sprint = Sprint.objects.create(
             descripcion_sp=variables.get('descripcion', False),
