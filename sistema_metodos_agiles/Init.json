@@ -404,6 +404,15 @@
 		}
 	},
 
+	{
+		"model": "usuario.permiso",
+		"pk": 47,
+		"fields": {
+			"nombre_permiso": "ini_sprint",
+			"descripcion_permiso": "Iniciar Sprint"
+		}
+	},
+
     {
 		"model": "usuario.rol",
 		"pk": 1,
@@ -430,7 +439,7 @@
 		"fields": {
 			"nombre_rol": "Scrum Master",
 			"descripcion_rol": "Rol para gestionar proyecto",
-            "permiso": [1,2,3,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,44,45,46]
+            "permiso": [1,2,3,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,44,45,46,47]
 		}
 	},
 
