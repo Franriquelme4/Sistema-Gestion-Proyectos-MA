@@ -24,20 +24,10 @@
           <label for="recipient-name" class="col-form-label">Descripcion Sprint</label>
           <input type="text" class="form-control" id="recipient-name" name="descripcion">
         </div>
-        <div class="form-group">
-          <label for="recipient-name" class="col-form-label">Fecha de inicio</label>
-          <input type="date" class="form-control" id="fecha" name="fecha_inicio">
-        </div>
-
-        <input hidden="true" type="text" class="form-control" id="inicio-sprint" name="inicio-sprint"
-          value="{{proyecto.sprint_actual.fechaIni_sp}}">
-        <input hidden="true" type="text" class="form-control" id="fin-sprint" name="fin-sprint"
-          value="{{proyecto.sprint_actual.fechaFIn_sp}}">
-
-
+        <a class="btn btn-danger btn-sm" href="{% url 'webApp:rolesProyecto' proyecto.id %}">Cancelar</a>
+        <button type="submit" id="btn-submit" class="btn btn-primary btn-sm">Guardar</button>
       </form>
-      <a class="btn btn-danger btn-sm" href="{% url 'webApp:rolesProyecto' proyecto.id %}">Cancelar</a>
-      <button type="submit" id="btn-submit" class="btn btn-primary btn-sm">Guardar</button>
+
     </div>
   </div>
 </div>
@@ -47,23 +37,6 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script>
-  $(document).ready(function () {
-    $("button#btn-submit").click(function () {
-      let fechaInicio = $("input#inicio-sprint").val()
-      let fechaFin = $("input#fin-sprint").val()
-      let fechaAux = $("input#fecha").val()
-      let aux = moment(fechaFin).format("YYYY/MM/DD")
-      let aux2 = moment(fechaAux).format("YYYY/MM/DD")
-      if (false) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Fecha de Inicio Sprint Invalida',
-          text: `Fecha minima ${aux}`,
-        })
-      }else{
-        $("form#formSprint").submit()
-      }
-    })
-  })
+
 </script>
 {% endblock javascripts %}
