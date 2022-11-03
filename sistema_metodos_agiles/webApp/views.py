@@ -786,7 +786,7 @@ def sprintProyecto(request, id):
     print(sprint, 'sprint')
     # tipoUs = TipoUserStory.objects.filter(proyecto_tipo_us = id)
     permisosProyecto = ['agr_Colaborador', 'dsp_Colaborador', 'dsp_Roles', 'dsp_TipoUs', 'dsp_ProductBack',
-                        'crt_Sprint', 'dsp_SprinBack', 'dsp_Colaborador_Sprint', 'dsp_SprinBack', 'dsp_Tablero', 'agr_Colaborador_US']
+                        'crt_Sprint', 'dsp_SprinBack', 'dsp_Colaborador_Sprint', 'dsp_SprinBack', 'dsp_Tablero', 'agr_Colaborador_US','ini_sprint','cancelar_sprint']
     validacionPermisos = validarPermisos(permisosProyecto, userSession.id, id)
     userStorys = UserStory.objects.filter(proyecto_us=id)
     print(proyecto.sprint_actual,"saprint ")
