@@ -10,7 +10,8 @@
 <h2>Sprint</h2>
 
 {% if validacionPermisos.crt_Sprint %}
-<a class="btn btn-primary btn-sm" href="{% url 'webApp:sprintCrear' proyecto.id %}"><i class="material-icons">add</i>Crear
+<a class="btn btn-primary btn-sm" href="{% url 'webApp:sprintCrear' proyecto.id %}"><i
+    class="material-icons">add</i>Crear
   Nuevo Sprint</a>
 {% endif %}
 
@@ -32,20 +33,29 @@
         </div>
         <div class="col-4 d-flex flex-column">
           {% if validacionPermisos.dsp_Colaborador_Sprint %}
-          <a href="{% url 'webApp:sprintColaboradores' proyecto.id sp.id %}" class="btn btn-sm btn-primary">Colaboradores</a>
+          <a href="{% url 'webApp:sprintColaboradores' proyecto.id sp.id %}"
+            class="btn btn-sm btn-primary">Colaboradores</a>
           {% endif %}
-          
-          {% if validacionPermisos.dsp_Colaborador_Sprint %}
-          <a href="{% url 'webApp:sprintUsAgregar' proyecto.id sp.id %}" class="btn btn-sm btn-primary">Agregar US</a>
-          {% endif %}
-
-          {% if validacionPermisos.dsp_Tablero %}
-          <a href="{% url 'webApp:sprintTablero' proyecto.id sp.id 0 %}" class="btn btn-sm btn-primary">Tablero</a>
-          {% endif %}
-
           {% if validacionPermisos.dsp_SprinBack %}
           <a href="{% url 'webApp:sprintBacklog' proyecto.id sp.id %}" class="btn btn-sm btn-primary">Sprint Backlog</a>
           {% endif %}
+          {% if sp.estado.descripcion == "PENDIENTE" %}
+          {% if validacionPermisos.dsp_Colaborador_Sprint %}
+          <a href="{% url 'webApp:sprintUsAgregar' proyecto.id sp.id %}" class="btn btn-sm btn-primary">Agregar US</a>
+          {% endif %}
+          {% if validacionPermisos.dsp_Colaborador_Sprint %}
+            <a href="{% url 'webApp:iniciarSprint' proyecto.id sp.id %}" class="btn btn-sm btn-success">Iniciar Sprint</a>
+          {% endif %}
+          {% endif %}
+          {% if sp.estado.descripcion == "EN PROGRESO" %}
+          {% if validacionPermisos.dsp_Tablero %}
+          <a href="{% url 'webApp:sprintTablero' proyecto.id sp.id 0 %}" class="btn btn-sm btn-primary">Tablero</a>
+          {% endif %}
+          {% if validacionPermisos.dsp_Colaborador_Sprint %}
+            <a href="{% url 'webApp:cancelarSprint' proyecto.id sp.id %}" class="btn btn-sm btn-danger">Cancelar Sprint</a>
+          {% endif %}
+          {% endif %}
+
         </div>
 
       </div>
