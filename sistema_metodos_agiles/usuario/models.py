@@ -160,6 +160,7 @@ class UserStory(models.Model):
     prioridad_final = models.IntegerField(default=0)
     fase = models.ForeignKey('Fase',on_delete=models.CASCADE,null=True)
     comentario = models.ManyToManyField('Comentario',blank=True)
+    finalizado = models.BooleanField(default=False)
     class Meta:
         verbose_name = 'User Story'
         verbose_name_plural = 'User Stories'
@@ -193,7 +194,7 @@ class Sprint(models.Model):
     class Meta:
         verbose_name = 'Sprint'
         verbose_name_plural = 'Sprints'
-        ordering = ['nombre_sp']
+        ordering = ['-estado']
     def __str__(self):
         return self.nombre_sp
 
