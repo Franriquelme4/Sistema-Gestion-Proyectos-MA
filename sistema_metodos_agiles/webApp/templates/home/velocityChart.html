@@ -1,0 +1,57 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+{% include 'includes/options.html' %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<canvas id="salesChart" style="height: 224px; width: 475px;" width="1425" height="672"></canvas>
+<input type="text" id="cantidadUs" value = "{{cantidadUs}}">
+<input type="text" id="cantidadDias" value = "{{cantidadDiasSprint}}">
+<div id="myPlot" style="width:100%;max-width:700px"></div>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+new Chart(document.getElementById("salesChart"), {
+    type: 'bar',
+    data: {
+        labels: ["Enero", "Febrero", "Marzo", "Abril"],
+        datasets: [
+        {
+            label: "Motos",
+            backgroundColor: "#FFCC00",
+            data: [133.500, 221.500, 783.200, 2.478000]
+        },
+        {
+            label: "Autos",
+            backgroundColor: "#1111FF",
+            data: [100, 200, 400, 600],
+        }
+        ]
+    },
+    options: {
+        title: {
+            display: true,
+            text: 'Population growth (millions)',
+        },
+        tooltips: {
+            callback: function (value, index, values) {
+                if (parseInt(value) >= 1000) {
+                    return '$' + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    return '$' + value;
+                }
+            }
+        },
+    }
+});
+</script>
+{% endblock javascripts %}
+
+
+

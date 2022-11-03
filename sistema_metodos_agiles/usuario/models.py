@@ -159,6 +159,8 @@ class UserStory(models.Model):
     prioridad_sprint = models.IntegerField(default=0)
     prioridad_final = models.IntegerField(default=0)
     fase = models.ForeignKey('Fase',on_delete=models.CASCADE,null=True)
+    comentario = models.ManyToManyField('Comentario',blank=True)
+    finalizado = models.BooleanField(default=False)
     class Meta:
         verbose_name = 'User Story'
         verbose_name_plural = 'User Stories'
@@ -253,9 +255,16 @@ class PrioridadTUs(models.Model):
     def __str__(self):
         return self.descripcion
 
-class Comentarios(models.Model):
+class Comentario(models.Model):
     """
     Comentarios de los userStory
     """
     comentario = models.CharField(max_length=1000,null=False)
-    fecha_creacion = models.DateField(null=True)
+    fecha_creacion = models.DateField(default=datetime.date.today)
+    horas = models.IntegerField(null=True);
+    class Meta:
+        verbose_name = 'comenario'
+        verbose_name_plural = 'comentarios'
+        ordering = ['fecha_creacion']
+    def __str__(self):
+        return self.comentario

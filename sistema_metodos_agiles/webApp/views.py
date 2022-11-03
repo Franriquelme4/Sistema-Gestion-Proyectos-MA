@@ -1040,3 +1040,36 @@ def sprintTableroActualizarEstado(request,idProyecto,idSprint):
             fase = Fase.objects.get(id=idNuevaFase)
         )
     return redirect(f'/proyecto/sprint/tablero/{idProyecto}/{idSprint}/{idTipoUs}')
+
+
+
+def visualizarVelocity(request,idProyecto):
+    variables = request.POST
+    if request.method == 'POST':
+        userSession = getUsuarioSesion(request.user.email)
+        proyecto = getProyectsByID(idProyecto,userSession.id)[0]
+
+        arraysprint = Sprint.objects.filter(proyecto_sp = idProyecto).nombre_sp
+        #cantidadUS = Sprint.objects.filter(proyecto_sp = idProyecto).userStory_sp.count
+        sprint = Sprint.objects.filter(proyecto_sp = idProyecto)
+        i = 0 
+        for aux in sprint:
+            arrayCUS[i] = aux.userStory_sp.count
+            print(aux.userStory_sp.count)
+            j = 0
+            for aux2 in aux.userStory_sp:
+                if aux2.finalizado == True:
+                    j = j + 1 
+            arrayCUSF[i] = j
+            i = i+1
+        
+        context={
+        'userSession':userSession,
+        'proyecto':proyecto,
+        'arrayCUS': arrayCUS,
+        'arrayCUSF' : arrayCUSF,
+        'arraysprint' : arraysprint
+        }
+
+    html_template = loader.get_template('home/burndownchart.html')
+    return HttpResponse(html_template.render(context,request))
