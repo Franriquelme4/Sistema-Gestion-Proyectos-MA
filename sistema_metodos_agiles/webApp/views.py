@@ -5,7 +5,7 @@ from django.core import serializers
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from usuario.utils import validarPermisos, busy_end_date, getUsuarioSesion, getTipoUsBySprint, getIdScrumRol, getProyectsByUsuarioID, getProyectsByID, getRolByProyectId, getColaboratorsByProyect, calcularFechaFin, getTipoUsbyProyectId, getTipoUsbyNotProyectId, getPermisos
+from usuario.utils import validarPermisos, busy_end_date, getRolByproyectUsuario,getUsuarioSesion, getTipoUsBySprint, getIdScrumRol, getProyectsByUsuarioID, getProyectsByID, getRolByProyectId, getColaboratorsByProyect, calcularFechaFin, getTipoUsbyProyectId, getTipoUsbyNotProyectId, getPermisos
 from usuario.models import Usuario, FaseTUS, TipoUs_Proyecto,Comentario, SprintUserStory, SprintColaborador, Sprint, Cliente, Proyecto, MiembroEquipo, Permiso, Rol, ProyectoRol, TipoUserStory, PrioridadTUs, UserStory, Fase, Estado
 from django.template import loader
 from django.db.models import Q
@@ -334,19 +334,27 @@ def colaboradoresProyectoCrear(request, id):
 
 @login_required(login_url="/login/")
 def colaboradoresProyectoEditar(request, idProyecto, idColaborador):
-    print(f"ID PROYECTO = {idProyecto}")
-    print(f"ID COLABORADOR = {idColaborador}")
     userSession = getUsuarioSesion(request.user.email)
     proyecto = getProyectsByID(idProyecto, userSession.id)[0]
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
     rolesProyecto = getRolByProyectId(idProyecto)
-    #colaboradores = getColaboratorsByProyect(idProyecto)
-    print(f"GET COLABORADORES = {rolesProyecto}")
-
+    rolesSelect = []
+    rolesNoSelect = []
+    miembroEquipo = getRolByproyectUsuario(idProyecto,idColaborador)[0]
+    for me in rolesProyecto:
+        flag = False
+        for rp in  miembroEquipo.roles:
+            if rp == me.id_rol: 
+                flag=True
+                break
+        if flag:
+            rolesSelect.append(me)
+        else:
+           
+            rolesNoSelect.append(me)   
     usuarios = Usuario.objects.filter(
         ~Q(id=userSession.id)).filter(~Q(df_rol=1))
     colaboradores = Usuario.objects.get(id=idColaborador)
-
     permisosProyecto = ['agr_Colaborador', 'dsp_Colaborador',
                         'dsp_Roles', 'dsp_TipoUs', 'dsp_ProductBack']
     validacionPermisos = validarPermisos(
@@ -355,15 +363,16 @@ def colaboradoresProyectoEditar(request, idProyecto, idColaborador):
         'colaboradores': colaboradores,
         'rolesProyecto': rolesProyecto,
         'userSession': userSession,
-        'proyecto': proyecto,
+        'proyecto': Proyecto.objects.get(id=idProyecto),
         'rolUsuario': rolUsuario,
         'usuarios': usuarios,
-        'validacionPermisos': validacionPermisos
+        'validacionPermisos': validacionPermisos,
+        'rolesSelect':rolesSelect,
+        'rolesNoSelect':rolesNoSelect
     }
     html_template = loader.get_template(
         'home/colaboradoresProyectoEditar.html')
     return HttpResponse(html_template.render(context, request))
-
 
 def rolesProyectoEditar(request, idProyecto, idRol):
     """
@@ -470,11 +479,12 @@ def crearRolProyecto(request, id):
 def editarColaboradorProyecto(request, idProyecto):
     """Se eliminan los colaboradores de un proyecto especifico"""
     variables = request.POST
-    idColaborador = variables.get('idColaborador', False)
-    print(f"ID COLABORADOR EDITAR = {idColaborador}")
-    print(f"ID PROYECTO EDITAR= {idProyecto}")
-    eliminarColaboradorProyecto2(request, idColaborador, idProyecto)
-    asignarColaboradorProyecto(request, idProyecto)
+    if request.method == 'POST':
+        idColaborador = variables.get('idColaborador', False)
+        print(f"ID COLABORADOR EDITAR = {idColaborador}")
+        print(f"ID PROYECTO EDITAR= {idProyecto}")
+        eliminarColaboradorProyecto2(request, idColaborador, idProyecto)
+        asignarColaboradorProyecto(request, idProyecto)
     return redirect(f'/proyecto/colaboradores/{idProyecto}')
 
 @login_required
@@ -505,24 +515,6 @@ def eliminarColaboradorProyecto(request, id):
     record = MiembroEquipo.objects.filter(miembro_usuario = variables.get('idColaborador',False))
     record.delete()
     return redirect(f'/proyecto/colaboradores/{id}')
-
-
-@login_required
-def editarColaboradorProyecto(request, id):
-    """Se eliminan los colaboradores de un proyecto especifico"""
-    variables = request.POST
-    if request.method == 'POST':
-        miembro = MiembroEquipo(
-            descripcion=''
-        )
-        miembro.save()
-        miembro.miembro_rol.add(Rol.objects.get(
-            id=variables.get('rol', False)))
-        miembro.miembro_usuario.add(Usuario.objects.get(
-            id=variables.get('usuario', False)))
-        proyecto = Proyecto.objects.get(id=id)
-        proyecto.miembro_proyecto.add(miembro)
-    return redirect(f'/proyecto/{id}')
 
 
 @login_required
@@ -1156,7 +1148,12 @@ def iniciarSprint(request, idProyecto, idSprint):
 
 def cancelarSprint(request, idProyecto, idSprint):
     sprint = Sprint.objects.filter(id = idSprint)
-    sprintActual = Sprint.objects.get(id = idSprint)
+    sprintActual = Sprint.objects.get(id = idSprint).userStory_sp.all()
+    for sp in sprintActual:
+        if not sp.us.finalizado:
+            UserStory.objects.filter(id = sp.us.id).update(
+                disponible = True
+            )
     proyectoActual = Proyecto.objects.filter(id = idProyecto)
     proyecto = Proyecto.objects.get(id = idProyecto)
     fecha_hoy = datetime.today()

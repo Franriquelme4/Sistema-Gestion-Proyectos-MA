@@ -88,6 +88,14 @@ def getRolByProyectIdByUsuario(id,idUsuario):
 	join usuario_proyecto up2 on up2.id = upp.proyecto_id 
 	join usuario_rol ur on ur.id = upr.rol_id where up2.id = {id} """)
     return proyecto_rol
+def getRolByproyectUsuario(id,idUsuario):
+	proyectoRol = ProyectoRol.objects.raw(f"""select um.id, array_agg(distinct urp.id) as roles from usuario_miembroequipo um 
+	join usuario_miembroequipo_miembro_rol ummr on um.id = ummr.miembroequipo_id 
+	join usuario_miembroequipo_miembro_usuario ummu on um.id = ummu.miembroequipo_id 
+	join usuario_proyecto_miembro_proyecto upmp on upmp.proyecto_id = {id}
+	join usuario_rol urp on urp.id = ummr.rol_id 
+	where ummu.usuario_id = {idUsuario} group by um.id""")
+	return proyectoRol
 
 
 def getColaboratorsByProyect(id):
