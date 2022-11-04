@@ -782,7 +782,7 @@ def sprintProyecto(request, id):
     proyecto = getProyectsByID(id, userSession.id)[0]
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
     rolesProyecto = getRolByProyectId(id)
-    sprint = Sprint.objects.filter(proyecto_sp=id)
+    sprint = Sprint.objects.filter(proyecto_sp=id).order_by("-estado")
     print(sprint, 'sprint')
     # tipoUs = TipoUserStory.objects.filter(proyecto_tipo_us = id)
     permisosProyecto = ['agr_Colaborador', 'dsp_Colaborador', 'dsp_Roles', 'dsp_TipoUs', 'dsp_ProductBack',
@@ -1007,7 +1007,7 @@ def sprintBacklog(request, idProyecto, idSprint):
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
     userStorys = Sprint.objects.get(id=idSprint).userStory_sp.all()
     permisosProyecto = ['dsp_Colaborador', 'dsp_Roles',
-                        'dsp_TipoUs', 'dsp_ProductBack', 'dsp_SprinBack']
+                        'dsp_TipoUs', 'dsp_ProductBack', 'dsp_SprinBack','reasignar_us']
     validacionPermisos = validarPermisos(
         permisosProyecto, userSession.id, idProyecto)
     context = {'userSession': userSession,
@@ -1190,5 +1190,60 @@ def finalizarUserStory(request):
         return JsonResponse({} , status = 200)
     return JsonResponse({}, status = 400)  
 
-    # some error occured
-    return JsonResponse({"error": ""}, status=400)
+def sprintUsEditar(request,idProyecto,idSprint):
+    """
+    Cuando un usuario ingresa a un proyecto en el cual fue asignado se visualizan 
+    todos los datos de la misma 
+    """
+    variables = request.POST
+    if request.method == 'POST':
+        us = variables.get('idUs', False)
+        print(us,'datos del front')
+    sprintUs = SprintUserStory.objects.get(id = us)
+    userSession = getUsuarioSesion(request.user.email)
+    proyecto = getProyectsByID(idProyecto, userSession.id)[0]
+    rolUsuario = Rol.objects.get(id=proyecto.id_rol)
+    userStorys = UserStory.objects.get(id=sprintUs.us.id)
+    print(userStorys,"userStory")
+    colaboradores = Sprint.objects.get(id=idSprint).colaborador_sp.filter(horasDisponibles__gte=0)
+    permisosProyecto = ['dsp_Colaborador', 'dsp_Roles',
+                        'dsp_TipoUs', 'dsp_ProductBack', 'dsp_SprinBack']
+    validacionPermisos = validarPermisos(
+        permisosProyecto, userSession.id, idProyecto)
+    context = {'userSession': userSession,
+               'proyecto': proyecto,
+               'segment': 'verProyecto',
+               'rolUsuario': rolUsuario,
+               'validacionPermisos': validacionPermisos,
+               'colaboradores': colaboradores,
+               'colaboradorActual':Usuario.objects.get(id=sprintUs.colaborador.id),
+               'sprint': Sprint.objects.get(id=idSprint),
+               'userStory': userStorys,
+               'userStoryActual':sprintUs
+               }
+    html_template = loader.get_template('home/sprintReasignarUs.html')
+    return HttpResponse(html_template.render(context, request))
+
+def sprintUsEditarGuardar(request,id):
+    """Se almacenan los colaboradores del Sprint"""
+    variables = request.POST
+    if request.method == 'POST':
+        spUsget = SprintUserStory.objects.get(id =variables.get('usSprint', False))
+        sprint = Sprint.objects.get(id=variables.get('idSprint', False))
+        sColaboradorGet = sprint.colaborador_sp.get(colaborador=int(variables.get('colaborador', False)))
+        sColaborador = sprint.colaborador_sp.filter(colaborador=int(variables.get('colaborador', False)))
+        sColaborador.update(horasDisponibles=sColaboradorGet.horasDisponibles - spUsget.us.tiempoEstimado_us)
+
+        sColaboradorGet = sprint.colaborador_sp.get(colaborador=spUsget.colaborador.id)
+        sColaborador = sprint.colaborador_sp.filter(colaborador=spUsget.colaborador.id)
+        sColaborador.update(horasDisponibles=sColaboradorGet.horasDisponibles + spUsget.us.tiempoEstimado_us)
+
+        SprintUserStory.objects.filter(id = variables.get('usSprint', False) ).update(
+            colaborador=Usuario.objects.get(id=variables.get('colaborador', False)),
+            us=UserStory.objects.get(id=int(variables.get('us', False))),
+        )
+        sColaboradorGet = sprint.colaborador_sp.get(colaborador=int(variables.get('colaborador', False)))
+        sColaborador = sprint.colaborador_sp.filter(colaborador=int(variables.get('colaborador', False)))
+        sColaborador.update(horasDisponibles=sColaboradorGet.horasDisponibles - UserStory.objects.get(id=variables.get('us', False)).tiempoEstimado_us)
+
+    return redirect(f'/proyecto/sprint/{id}')
