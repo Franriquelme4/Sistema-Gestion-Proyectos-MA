@@ -49,6 +49,8 @@ urlpatterns = [
     path('proyecto/sprint/colaborador/guardar/<int:id>',views.sprintColaboradorAgregarGuardar, name='sprintColaboradorAgregarGuardar'),
     path('proyecto/sprint/us/<int:idProyecto>/<int:idSprint>',views.sprintUsAgregar, name='sprintUsAgregar'),
     path('proyecto/sprint/us/guardar/<int:id>',views.sprintUsAgregarGuardar, name='sprintUsAgregarGuardar'),
+    path('proyecto/sprint/us/editar/<int:idProyecto>/<int:idSprint>',views.sprintUsEditar, name='sprintUsEditar'),
+    path('proyecto/sprint/us/editar/guardar/<int:id>',views.sprintUsEditarGuardar, name='sprintUsEditarGuardar'),
     path('proyecto/sprint/backlog/<int:idProyecto>/<int:idSprint>',views.sprintBacklog, name='sprintBacklog'),
     path('proyecto/sprint/tablero/<int:idProyecto>/<int:idSprint>/<int:idTipoUs>',views.sprintTablero, name='sprintTablero'),
     path('proyecto/sprint/tablero/<int:idProyecto>/<int:idSprint>',views.sprintTablero, name='sprintTablero2'),
@@ -58,9 +60,6 @@ urlpatterns = [
     path('proyecto/sprint/iniciar/<int:idProyecto>/<int:idSprint>', views.iniciarSprint, name="iniciarSprint"),
     path('proyecto/sprint/cancelar/<int:idProyecto>/<int:idSprint>', views.cancelarSprint, name="cancelarSprint"),
     path('proyecto/sprint/us/finalizar', views.finalizarUserStory, name="finalizarUserStory"),
-    
-
-
     
 
 ]

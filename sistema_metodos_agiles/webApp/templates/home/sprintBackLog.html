@@ -13,18 +13,27 @@
         <div class="row my-3">
           {% for userStory in userStorys %}
           
-          <div class="col-3 card card-stats m-3">
-            <div class="card-header card-header-info card-header-icon">
+          <div class="col-3 card m-3 border">
+            <div class="card-body">
               <h3 class="card-title">{{userStory.us.nombre_us}}</h3>
+
               <p class="card-category">{{userStory.us.descripcion_us}}</p>
               <p class="card-category"><strong>Tipo de US</strong> {{userStory.us.tipo_us}}</p>
               <p class="card-category"><strong>Fase</strong> {{userStory.us.fase.nombre_fase}}</p>
               <p class="card-category"><strong>Tiempo Estimado</strong> {{userStory.us.tiempoEstimado_us}} hs</p>
-            </div>
-            <div class="card-body">
-             
               <p class="card-text">Responsable: {{userStory.colaborador}}</p>
+
             </div>
+            {% if sprint.estado.descripcion == "PENDIENTE" and validacionPermisos.reasignar_us %}
+            <div class="card-footer">
+              <form action="{% url 'webApp:sprintUsEditar' proyecto.id sprint.id %}" method="POST">
+                {% csrf_token %}
+                <input type="number" name="idUs" hidden="true" value="{{userStory.id}}">
+                <button type="submit" class="btn btn-primary btn-sm">Editar Colaborador</button>
+              </form>
+              
+            </div>
+            {% endif %}
           </div>
           {% endfor %}
 
