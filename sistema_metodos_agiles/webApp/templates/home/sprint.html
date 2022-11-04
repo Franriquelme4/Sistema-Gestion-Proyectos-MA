@@ -36,18 +36,18 @@ Velocity Chart</a>
         <div class="col-4 d-flex flex-column">
           {% if validacionPermisos.dsp_Colaborador_Sprint %}
           <a href="{% url 'webApp:sprintColaboradores' proyecto.id sp.id %}"
-            class="btn btn-sm btn-primary">Colaboradores</a>
+            class="btn btn-sm btn-dark">Colaboradores</a>
           {% endif %}
           {% if True %}
           <a href=""
             class="btn btn-sm btn-info">Burdont Chart</a>
           {% endif %}
           {% if validacionPermisos.dsp_SprinBack %}
-          <a href="{% url 'webApp:sprintBacklog' proyecto.id sp.id %}" class="btn btn-sm btn-primary">Sprint Backlog</a>
+          <a href="{% url 'webApp:sprintBacklog' proyecto.id sp.id %}" class="btn btn-sm btn-dark">Sprint Backlog</a>
           {% endif %}
           {% if sp.estado.descripcion == "PENDIENTE" %}
           {% if validacionPermisos.dsp_Colaborador_Sprint %}
-          <a href="{% url 'webApp:sprintUsAgregar' proyecto.id sp.id %}" class="btn btn-sm btn-primary">Agregar US</a>
+          <a href="{% url 'webApp:sprintUsAgregar' proyecto.id sp.id %}" class="btn btn-sm btn-dark">Agregar US</a>
           {% endif %}
           {% if validacionPermisos.ini_sprint %}
           {% if not proyecto.sprint_actual %}

@@ -44,23 +44,24 @@
                   <!-- <div class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="clearDrop(event)"> &nbsp; </div> -->
                   {% for userStory in userStorys %}
                   {% if fase.id == userStory.us.fase.id %}
-                  <div class="card shadow-sm" id="{{userStory.us.id}}" {% if userSession.id == userStory.colaborador.id and not userStory.us.finalizado %} draggable="true" ondragstart="drag(event)" {% endif %}>
+                  <div class="card shadow-sm " id="{{userStory.us.id}}" {% if userSession.id == userStory.colaborador.id and not userStory.us.finalizado %} draggable="true" ondragstart="drag(event)" {% endif %}>
                     <div class="card-body p-2">
-                      <div class="card-title">
-                        <img src="//via.placeholder.com/30" class="rounded-circle float-right" alt="Colaborador">
-                        <a href="" class="lead ">{{userStory.us.nombre_us}}</a>
+                      <div >
+                        <h3 class="my-1">{{userStory.us.nombre_us}}</h3>
                       </div>
                       <p>
                         {{userStory.us.descripcion_us}}
-
                       </p>
                       <p class="card-text">Responsable: {{userStory.colaborador}}</p>
                       <div class="d-flex flex-row">
                         <button class="btn btn-primary btn-sm ver-comentarios px-1"
                           id="{{userStory.us.id}}">Comentarios</button>
-                        {% if fase.nombre_fase == "DONE" and validacionPermisos.fin_us %}
-                        <button class="btn btn-success btn-sm terminar-us px-1" {% if userStory.us.finalizado %} disabled {% endif %}
-                          id="{{userStory.us.id}}">{% if userStory.us.finalizado %} Terminado {% else %} Terminar {% endif %}</button>
+                        {% if fase.nombre_fase == "DONE" and validacionPermisos.fin_us and not userStory.us.finalizado %}
+                        <button class="btn btn-success btn-sm terminar-us px-1"
+                          id="{{userStory.us.id}}">Terminar </button>
+                        {% endif %}
+                        {% if userStory.us.finalizado %}
+                        <button class="btn btn-success btn-sm terminar-us px-1" disabled >Terminado</button>
                         {% endif %}
                       </div>
 
