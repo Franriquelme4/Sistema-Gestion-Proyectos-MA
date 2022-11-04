@@ -729,7 +729,7 @@ def editarProyecto(request, id):
     html_template = loader.get_template('home/editarProyecto.html')
     return HttpResponse(html_template.render(context, request))
 
-
+@login_required
 def editarProyectoGuardar(request, id):
     """
     Metodo en el se crea el proyecto, realizando todos los inserts requeridos
@@ -794,7 +794,7 @@ def sprintProyecto(request, id):
     html_template = loader.get_template('home/sprint.html')
     return HttpResponse(html_template.render(context, request))
 
-
+@login_required
 def sprintCrear(request, id):
     """
     Cuando un usuario ingresa a un proyecto en el cual fue asignado se visualizan 
@@ -841,7 +841,7 @@ def sprintCrearGuardar(request, id):
         sprint.save()
     return redirect(f'/proyecto/sprint/{id}')
 
-
+@login_required
 def sprintColaboradores(request, idProyecto, idSprint):
     """
     Cuando un usuario ingresa a un proyecto en el cual fue asignado se visualizan 
@@ -870,7 +870,7 @@ def sprintColaboradores(request, idProyecto, idSprint):
     html_template = loader.get_template('home/sprintColaboradores.html')
     return HttpResponse(html_template.render(context, request))
 
-
+@login_required
 def sprintColaboradorAgregar(request, idProyecto, idSprint):
     """
     Cuando un usuario ingresa a un proyecto en el cual fue asignado se visualizan 
@@ -924,7 +924,7 @@ def sprintColaboradorAgregarGuardar(request, id):
         sprint.colaborador_sp.add(spColaborador)
     return redirect(f'/proyecto/sprint/{id}')
 
-
+@login_required
 def sprintUsAgregar(request, idProyecto, idSprint):
     """
     Cuando un usuario ingresa a un proyecto en el cual fue asignado se visualizan 
@@ -986,7 +986,7 @@ def sprintUsAgregarGuardar(request, id):
         sprint.userStory_sp.add(spUs)
     return redirect(f'/proyecto/sprint/{id}')
 
-
+@login_required
 def sprintBacklog(request, idProyecto, idSprint):
     """
     Cuando un usuario ingresa a un proyecto en el cual fue asignado se visualizan 
@@ -1011,7 +1011,7 @@ def sprintBacklog(request, idProyecto, idSprint):
     html_template = loader.get_template('home/sprintBackLog.html')
     return HttpResponse(html_template.render(context, request))
 
-
+@login_required
 def sprintTablero(request, idProyecto, idSprint, idTipoUs=None):
     """
     Cuando un usuario ingresa a un proyecto en el cual fue asignado se visualizan 
@@ -1070,7 +1070,7 @@ def sprintTableroActualizarEstado(request, idProyecto, idSprint):
         )
     return redirect(f'/proyecto/sprint/tablero/{idProyecto}/{idSprint}/{idTipoUs}')
 
-
+@login_required
 def verDetallesUs(request, idProyecto, idUs):
     """
     Cuando un usuario ingresa a un proyecto en el cual fue asignado se visualizan 
@@ -1097,7 +1097,7 @@ def verDetallesUs(request, idProyecto, idUs):
     return HttpResponse(html_template.render(context, request))
 
 
-
+@login_required
 def getComentarios(request):
     if request.accepts and request.method == "GET":
         idUs = request.GET.get("idUs", None)
@@ -1111,7 +1111,7 @@ def getComentarios(request):
             , status = 200)
     return JsonResponse({}, status = 400)  
 
-
+@login_required
 def guardarComentarioUs(request, idProyecto, idSprint):
     variables = request.POST
     if request.method == 'POST':
@@ -1130,7 +1130,7 @@ def guardarComentarioUs(request, idProyecto, idSprint):
         userStory.comentario.add(newComentario)
 
     return redirect(f'/proyecto/sprint/tablero/{idProyecto}/{idSprint}/0')
-
+@login_required
 def iniciarSprint(request, idProyecto, idSprint):
     sprint = Sprint.objects.filter(id = idSprint)
     proyectoActual = Proyecto.objects.filter(id = idProyecto)
@@ -1145,7 +1145,7 @@ def iniciarSprint(request, idProyecto, idSprint):
        sprint_actual = sprint[0] 
     )
     return redirect(f'/proyecto/sprint/{idProyecto}')
-
+@login_required
 def cancelarSprint(request, idProyecto, idSprint):
     sprint = Sprint.objects.filter(id = idSprint)
     sprintActual = Sprint.objects.get(id = idSprint).userStory_sp.all()
@@ -1165,7 +1165,7 @@ def cancelarSprint(request, idProyecto, idSprint):
     )
 
     return redirect(f'/proyecto/sprint/{idProyecto}')
-
+@login_required
 def verDocumentacion(request):
     """
     Cuando un usuario ingresa a un proyecto en el cual fue asignado se visualizan 
@@ -1175,7 +1175,7 @@ def verDocumentacion(request):
     html_template = loader.get_template('home/usDetalle.html')
     return HttpResponse(html_template.render(context, request))
 
-
+@login_required
 def finalizarUserStory(request):
     if request.accepts and request.method == "GET":
         idUs = request.GET.get("idUs", None)
@@ -1185,6 +1185,7 @@ def finalizarUserStory(request):
         return JsonResponse({} , status = 200)
     return JsonResponse({}, status = 400)  
 
+@login_required
 def sprintUsEditar(request,idProyecto,idSprint):
     """
     Cuando un usuario ingresa a un proyecto en el cual fue asignado se visualizan 
@@ -1219,6 +1220,7 @@ def sprintUsEditar(request,idProyecto,idSprint):
     html_template = loader.get_template('home/sprintReasignarUs.html')
     return HttpResponse(html_template.render(context, request))
 
+@login_required
 def sprintUsEditarGuardar(request,id):
     """Se almacenan los colaboradores del Sprint"""
     variables = request.POST
@@ -1244,7 +1246,7 @@ def sprintUsEditarGuardar(request,id):
     return redirect(f'/proyecto/sprint/{id}')
 
 
-
+@login_required
 def visualizarVelocity(request,idProyecto):
     variables = request.POST
     print("Velocity Proyecto: " + str(idProyecto))
