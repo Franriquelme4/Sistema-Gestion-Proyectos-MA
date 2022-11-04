@@ -1,5 +1,6 @@
 
 
+from cmath import isclose
 import datetime
 import json
 from django.http import JsonResponse
@@ -336,8 +337,8 @@ def colaboradoresProyectoCrear(request, id):
 
 @login_required(login_url="/login/")
 def colaboradoresProyectoEditar(request, idProyecto, idColaborador):
-    print(f"ID PROYECTO = {idProyecto}")
-    print(f"ID COLABORADOR = {idColaborador}")
+    print(f"ID PROYECTO =============== {idProyecto}")
+    print(f"ID COLABORADOR =============== {idColaborador}")
     userSession = getUsuarioSesion(request.user.email)
     proyecto = getProyectsByID(idProyecto, userSession.id)[0]
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
@@ -345,8 +346,7 @@ def colaboradoresProyectoEditar(request, idProyecto, idColaborador):
     #colaboradores = getColaboratorsByProyect(idProyecto)
     print(f"GET COLABORADORES = {rolesProyecto}")
 
-    usuarios = Usuario.objects.filter(
-        ~Q(id=userSession.id)).filter(~Q(df_rol=1))
+    usuarios = Usuario.objects.filter(~Q(id=userSession.id)).filter(~Q(df_rol=1))[0]
     colaboradores = Usuario.objects.get(id=idColaborador)
 
     permisosProyecto = ['agr_Colaborador', 'dsp_Colaborador',
@@ -431,6 +431,58 @@ def editarRolProyecto(request, id):
     return redirect(f'/proyecto/roles/{id}')
 
 
+"""def editarColaboradorProyecto(request, idProyecto):
+    variables = request.POST
+    if request.method == 'POST':
+        record = MiembroEquipo.objects.filter(miembro_rol = variables.get('idColaborador',False))
+        for x in record:
+            x.miembro_rol.clear()
+        actualizarColaboradorProyecto(request, idProyecto)
+    return redirect(f'/proyecto/roles/{idProyecto}')"""
+
+"""def editarColaboradorProyecto(request, idProyecto):
+    variables = request.POST
+    if request.method == 'POST':
+        proyecto = Proyecto.objects.get(id = idProyecto)
+        record = MiembroEquipo.objects.filter(miembro_rol = variables.get('idColaborador',False))
+        for x in record:
+            proyecto.miembro_proyecto.remove(x) 
+        miembro = MiembroEquipo(
+                    descripcion=''
+                )
+        miembro.save()
+        for rol in variables.getlist('rol', False):
+            print(rol, 'rol')
+            miembro.miembro_rol.add(Rol.objects.get(id=rol))
+        miembro.miembro_usuario.add(Usuario.objects.get(
+            id=variables.get('idColaborador', False)))
+        proyecto.miembro_proyecto.add(miembro)
+    return redirect(f'/proyecto/roles/{idProyecto}')"""
+
+def editarColaboradorProyecto(request, idProyecto):
+    variables = request.POST
+    if request.method == 'POST': 
+        idColaborador = variables.get('idColaborador',False)           
+        eliminarColaboradorProyecto(request,idProyecto)
+        asignarColaboradorProyecto(request,idProyecto)
+    return redirect(f'/proyecto/colaboradores/{idProyecto}')
+
+@login_required(login_url="/login/")
+def actualizarColaboradorProyecto(request, id):
+    """Se crea un nuevo rol con todos los permisos asociados"""
+    variables = request.POST
+    if request.method == 'POST':
+        idColaborador = variables.get('idColaborador', False)
+        miemboequipo = MiembroEquipo.objects.get(id=idColaborador)
+        MiembroEquipo.objects.filter(miembro_rol=idColaborador).update(
+            descripcion_rol=variables.get('descripcion', False),    
+            nombre_rol=variables.get('nombre_rol', False),
+        )
+        for permiso in variables.getlist('permisos', False):
+            print(permiso)
+            rol.permiso.add(Permiso.objects.get(id=permiso))
+    return redirect(f'/proyecto/roles/{id}')
+
 @login_required(login_url="/login/")
 def actualizarRolProyecto(request, id):
     """Se crea un nuevo rol con todos los permisos asociados"""
@@ -469,22 +521,14 @@ def crearRolProyecto(request, id):
         proyecto_rol.proyecto.add(Proyecto.objects.get(id=id))
     return redirect(f'/proyecto/roles/{id}')
 
-def editarColaboradorProyecto(request, idProyecto):
-    """Se eliminan los colaboradores de un proyecto especifico"""
-    variables = request.POST
-    idColaborador = variables.get('idColaborador', False)
-    print(f"ID COLABORADOR EDITAR = {idColaborador}")
-    print(f"ID PROYECTO EDITAR= {idProyecto}")
-    eliminarColaboradorProyecto2(request, idColaborador, idProyecto)
-    asignarColaboradorProyecto(request, idProyecto)
-    return redirect(f'/proyecto/colaboradores/{idProyecto}')
-
 @login_required
 def asignarColaboradorProyecto(request, id):
     """Se almacena el nuevo rol con el colaborador al proyecto"""
     variables = request.POST
     roles = variables.getlist('rol', False)
     if request.method == 'POST':
+        usu = variables.get('usuario', False)
+        print(f'USUARIO ESSSSSSSS ====== {usu}')
         miembro = MiembroEquipo(
             descripcion=''
         )
@@ -507,25 +551,6 @@ def eliminarColaboradorProyecto(request, id):
     record = MiembroEquipo.objects.filter(miembro_usuario = variables.get('idColaborador',False))
     record.delete()
     return redirect(f'/proyecto/colaboradores/{id}')
-
-
-@login_required
-def editarColaboradorProyecto(request, id):
-    """Se eliminan los colaboradores de un proyecto especifico"""
-    variables = request.POST
-    if request.method == 'POST':
-        miembro = MiembroEquipo(
-            descripcion=''
-        )
-        miembro.save()
-        miembro.miembro_rol.add(Rol.objects.get(
-            id=variables.get('rol', False)))
-        miembro.miembro_usuario.add(Usuario.objects.get(
-            id=variables.get('usuario', False)))
-        proyecto = Proyecto.objects.get(id=id)
-        proyecto.miembro_proyecto.add(miembro)
-    return redirect(f'/proyecto/{id}')
-
 
 @login_required
 def tipoUs(request, id):
