@@ -436,6 +436,15 @@
 		}
 	},
 
+	{
+		"model": "usuario.permiso",
+		"pk": 47,
+		"fields": {
+			"nombre_permiso": "ini_sprint",
+			"descripcion_permiso": "Iniciar Sprint"
+		}
+	},
+
     {
 		"model": "usuario.rol",
 		"pk": 1,
