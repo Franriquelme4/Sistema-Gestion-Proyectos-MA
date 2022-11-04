@@ -14,8 +14,10 @@
     class="material-icons">add</i>Crear
   Nuevo Sprint</a>
 {% endif %}
+{% if validacionPermisos.dsp_Velocity %}
 <a class="btn btn-info btn-sm" href="{% url 'webApp:visualizarVelocity' proyecto.id %}">
 Velocity Chart</a>
+{% endif %}
 <div class="container">
   {% for sp in sprint %}
 
@@ -38,9 +40,9 @@ Velocity Chart</a>
           <a href="{% url 'webApp:sprintColaboradores' proyecto.id sp.id %}"
             class="btn btn-sm btn-primary">Colaboradores</a>
           {% endif %}
-          {% if True %}
+          {% if validacionPermisos.dsp_Burndown%}
           <a href=""
-            class="btn btn-sm btn-info">Burdont Chart</a>
+            class="btn btn-sm btn-info">Burndown Chart</a>
           {% endif %}
           {% if validacionPermisos.dsp_SprinBack %}
           <a href="{% url 'webApp:sprintBacklog' proyecto.id sp.id %}" class="btn btn-sm btn-primary">Sprint Backlog</a>
