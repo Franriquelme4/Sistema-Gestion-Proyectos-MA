@@ -1,5 +1,3 @@
-
-
 import datetime
 import json
 from django.http import JsonResponse
@@ -785,7 +783,7 @@ def sprintProyecto(request, id):
     sprint = Sprint.objects.filter(proyecto_sp=id).order_by("-estado")
     print(sprint, 'sprint')
     # tipoUs = TipoUserStory.objects.filter(proyecto_tipo_us = id)
-    permisosProyecto = ['agr_Colaborador', 'dsp_Colaborador', 'dsp_Roles', 'dsp_TipoUs', 'dsp_ProductBack',
+    permisosProyecto = ['agr_Colaborador', 'dsp_Colaborador', 'dsp_Roles', 'dsp_TipoUs', 'dsp_ProductBack','dsp_Velocity','dsp_Burndown',
                         'crt_Sprint', 'dsp_SprinBack', 'dsp_Colaborador_Sprint', 'dsp_SprinBack', 'dsp_Tablero', 'agr_Colaborador_US','ini_sprint','cancelar_sprint']
     validacionPermisos = validarPermisos(permisosProyecto, userSession.id, id)
     userStorys = UserStory.objects.filter(proyecto_us=id)
@@ -1247,3 +1245,48 @@ def sprintUsEditarGuardar(request,id):
         sColaborador.update(horasDisponibles=sColaboradorGet.horasDisponibles - UserStory.objects.get(id=variables.get('us', False)).tiempoEstimado_us)
 
     return redirect(f'/proyecto/sprint/{id}')
+
+
+
+def visualizarVelocity(request,idProyecto):
+    variables = request.POST
+    print("Velocity Proyecto: " + str(idProyecto))
+    #if request.method == 'POST':
+    userSession = getUsuarioSesion(request.user.email)
+    proyecto = getProyectsByID(idProyecto,userSession.id)[0]
+    permisosProyecto = ['dsp_Colaborador', 'dsp_Roles',
+                        'dsp_TipoUs', 'dsp_ProductBack', 'dsp_SprinBack']
+    validacionPermisos = validarPermisos(permisosProyecto, userSession.id, idProyecto)
+    sprint = Sprint.objects.filter(proyecto_sp = idProyecto)
+    dataVelocity = []
+    arraysprint = []
+    arrayCUS = []
+    arrayCUSF = []
+    for sp in sprint:
+        arraysprint.append(sp.nombre_sp)
+        totalUs = 0
+        terminados = 0
+        userStory = sp.userStory_sp.all()
+        for us in userStory:
+            totalUs = totalUs + 1
+            if us.us.finalizado == True:
+                   terminados = terminados + 1
+        arrayCUS.append(totalUs)
+        arrayCUSF.append(terminados)
+    
+    dataVelocity = {
+    "nombre":arraysprint,
+    "estimado":arrayCUS, 
+    "terminado":arrayCUSF 
+    }
+    #print(dataVelocity)
+    dicc_velocity = json.dumps(dataVelocity)
+    print(dicc_velocity)
+    context={
+    'userSession':userSession,
+    'proyecto':proyecto,
+    'validacionPermisos': validacionPermisos,
+    'dicc_velocity' : dicc_velocity
+    }
+    html_template = loader.get_template('home/velocityChart.html')
+    return HttpResponse(html_template.render(context,request))
