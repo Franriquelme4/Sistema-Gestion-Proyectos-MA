@@ -8,36 +8,37 @@
 {% block content %}
 {% include 'includes/options.html' %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-<canvas id="salesChart" style="height: 224px; width: 475px;" width="1425" height="672"></canvas>
-<input type="text" id="cantidadUs" value = "{{cantidadUs}}">
-<input type="text" id="cantidadDias" value = "{{cantidadDiasSprint}}">
-<div id="myPlot" style="width:100%;max-width:700px"></div>
+<input type="text" hidden=true id="dicc_velocity" value = "{{dicc_velocity}}">
+<canvas id="salesChart" style="height: 224px; width: 475px;" width="1425" height="672" class="card"></canvas>
+<div  id="myPlot" style="width:100%;max-width:700px"></div>
+<a class="btn btn-danger btn-sm" href="{% url 'webApp:sprintProyecto' proyecto.id %}">Volver</a>
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script>
+let velocity = JSON.parse($("input#dicc_velocity").val())
 new Chart(document.getElementById("salesChart"), {
     type: 'bar',
     data: {
-        labels: ["Enero", "Febrero", "Marzo", "Abril"],
+        labels: velocity.nombre,                 
         datasets: [
         {
-            label: "Motos",
+            label: "Estimado",
             backgroundColor: "#FFCC00",
-            data: [133.500, 221.500, 783.200, 2.478000]
+            data: velocity.estimado,                 
         },
         {
-            label: "Autos",
+            label: "Terminado",
             backgroundColor: "#1111FF",
-            data: [100, 200, 400, 600],
+            data: velocity.terminado,              
         }
         ]
     },
     options: {
         title: {
             display: true,
-            text: 'Population growth (millions)',
+            text: 'VELOCITY CHART',
         },
         tooltips: {
             callback: function (value, index, values) {

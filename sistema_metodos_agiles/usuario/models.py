@@ -159,6 +159,8 @@ class UserStory(models.Model):
     prioridad_sprint = models.IntegerField(default=0)
     prioridad_final = models.IntegerField(default=0)
     fase = models.ForeignKey('Fase',on_delete=models.CASCADE,null=True)
+    comentario = models.ManyToManyField('Comentario',blank=True)
+    finalizado = models.BooleanField(default=False)
     class Meta:
         verbose_name = 'User Story'
         verbose_name_plural = 'User Stories'
