@@ -1,7 +1,3 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
 
 from django.urls import path, re_path
 from . import views
@@ -23,7 +19,7 @@ urlpatterns = [
     path('proyecto/roles/editar/<int:id>',views.editarRolProyecto, name='editarRolProyecto'),
     path('proyecto/roles/eliminar/<int:id>',views.eliminarRolProyecto, name='eliminarRolProyecto'),
     path('proyecto/colaboradores/eliminar/<int:id>',views.eliminarColaboradorProyecto, name='eliminarColaboradorProyecto'),
-    path('proyecto/colaboradores/editar/<int:idProyecto>',views.editarColaboradorProyecto, name='editarColaboradorProyecto'),
+    path('proyecto/colaboradores/editar/guardar/<int:idProyecto>',views.editarColaboradorProyecto, name='editarColaboradorProyecto'),
     path('proyecto/<int:id>',views.verProyecto, name='verProyecto'),
     path('proyecto/colaboradores/<int:id>',views.colaboradoresProyecto, name='colaboradoresProyecto'),
     path('proyecto/colaboradores/crear/<int:id>',views.colaboradoresProyectoCrear, name='colaboradoresProyectoCrear'),
@@ -61,6 +57,5 @@ urlpatterns = [
     path('proyecto/sprint/iniciar/<int:idProyecto>/<int:idSprint>', views.iniciarSprint, name="iniciarSprint"),
     path('proyecto/sprint/cancelar/<int:idProyecto>/<int:idSprint>', views.cancelarSprint, name="cancelarSprint"),
     path('proyecto/sprint/us/finalizar', views.finalizarUserStory, name="finalizarUserStory"),
-    
 
 ]

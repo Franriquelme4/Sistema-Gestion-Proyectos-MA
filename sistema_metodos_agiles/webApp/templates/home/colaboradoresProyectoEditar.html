@@ -12,20 +12,26 @@
     <div class="card-header">
       <h3>Editar colaborador</h3>
     </div>
+
     <div class="card-body">
       <form method="post" action="{% url 'webApp:editarColaboradorProyecto' proyecto.id %}">
         <input type="text" hidden="true" name="idColaborador" value="{{colaboradores.id}}"> 
-        {% csrf_token %}     
+        {% csrf_token %}
+
         <div class="form-group">
-            <select class="form-control" aria-label="Default select example" name="usuario">
-              <option value="{{usuarios.id}}">{{colaboradores.nombre}} {{colaboradores.apellido}}</option>
-            </select>    
+          <select class="form-control" aria-label="Default select example" name="usuario">
+            <option selected disable="true" value="{{colaboradores.id}}">{{colaboradores.nombre}} {{colaboradores.apellido}}</option>
+          </select>
         </div>
+
         <div class="form-group">
           <select class="form-control custom-select" aria-label="Default select example" name="rol" multiple="true">
             <option selected>Seleccionar rol</option>
-            {% for rolProyecto in rolesProyecto %}
-            <option value="{{rolProyecto.id_rol}}">{{rolProyecto.nombre_rol}}</option>
+            {% for rolProyecto in rolesSelect %}
+              <option selected value="{{rolProyecto.id_rol}}">{{rolProyecto.nombre_rol}}</option>  
+            {% endfor %}
+            {% for rp in rolesNoSelect %}
+              <option value="{{rp.id_rol}}">{{rp.nombre_rol}}</option>  
             {% endfor %}
           </select>
         </div>
