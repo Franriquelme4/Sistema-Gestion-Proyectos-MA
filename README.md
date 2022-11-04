@@ -61,5 +61,34 @@ sh sistema_metodos_agiles/testScript.sh
 Para el despliegue en produccion se utilizo ***docker y docker-compose*** en la cual se tienen 3 contenedores distintos
 - web 
 - servidor 
-- base de datos 
+- base de datos
 
+Estando en el directorio del proyecto, contruir la imagen del proyecto:
+```
+docker-compose build
+```
+## Creacion de base de datos ##
+- Se debe de realizar una conexion a una base de datos en el puerto ***:5433*** utilizando el gestor de base de datos que mejor le parezca
+- Se crea una base de datos llamada ***metodologias_agiles***
+## Ejecución Desarrollo ##
+Estando en el directorio del proyecto, levantar los containers de la base de datos y del servidor de django en segundo plano:
+```
+docker-compose up -d
+```
+Para poblar la base de datos con los valores iniciales, como permisos, roles por defecto etc. se ejecuta el siguiente comando
+```
+docker-compose exec web python3 manage.py loaddata Init.json
+```
+Para visualizar el log del servidor web:
+```
+docker-compose logs -f web
+```
+### Detencion 
+```
+docker-compose stop
+```
+***Pruebas Unitarias***
+- Para las pruebas unitarias se utiliza un script en la cual se engloba la ejecucion de todos los test, la cual se ejecuta con el siguiente comando
+```
+docker-compose exec web sh sistema_metodos_agiles/testScript.sh
+```
