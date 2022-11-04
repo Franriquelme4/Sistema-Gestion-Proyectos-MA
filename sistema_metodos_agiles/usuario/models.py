@@ -194,7 +194,7 @@ class Sprint(models.Model):
     class Meta:
         verbose_name = 'Sprint'
         verbose_name_plural = 'Sprints'
-        ordering = ['-estado']
+        ordering = ['estado']
     def __str__(self):
         return self.nombre_sp
 

@@ -11,84 +11,55 @@ Proyecto de Ingenieria de Software II
 * [Docker](https://www.docker.com/)
 
 
-## Instalación ##
+## Instalación Desarrollo ##
 - Clonar el repositorio de [GitHub](link)
+- Una vez que se clona el proyecto se ingresa al directorio sistema_metodos_agiles y se crea un entorno virtual con el siguiente comando 
+```
+ python3 -m venv env 
+```
+- Se inicia el entorno virtual con el comando 
+```
+source env/bin/activate 
+```
+- Dentro del directorio se encuentra el archivo requirements.txt -> Este archivo almacena todas las dependencias del proyecto, las cuales se instalan con el siguiente comando 
+```
+pip3 install -r requirements.txt 
+```
+## Creacion de base de datos ##
+- Se debe de realizar una conexion a una base de datos en el puerto ***:5432*** utilizando el gestor de base de datos que mejor le parezca
+- Se crea una base de datos llamada ***metodologias_agiles***
 
-- Duplicar el archivo `.env.example`, renombrarlo a `.env` y editar las variables de entorno a conveniencia.
+## Ejecución Desarrollo ##
+- Estando en el directorio del proyecto, se debe de ingresar al directorio sistemas_metodos_agiles :
+```
+cd sistema_metodos_agiles
+```
+Se debe de ejecutar las migraciones
+- ***makemigrations***, que se encarga de crear nuevas migraciones en función de los cambios que haya realizado en sus modelos.
+```
+python3 manage.py makemigrations 
+```
+- ***migrate*** , que se encarga de aplicar y desaplicar migraciones.
+```
+python3 manage.py migrate 
+```
+ 
+Para poblar la base de datos con los valores iniciales, como permisos, roles por defecto etc. se ejecuta el siguiente comando
+```
+python3 manage.py loaddata Init.json
+```
+Finalmente se ejecuta el sistema con el siguiente comando:
+```
+python3 manage.py runserver 
+```
+***Pruebas Unitarias***
+- Para las pruebas unitarias se utiliza un script en la cual se engloba la ejecucion de todos los test, la cual se ejecuta con el siguiente comando
+```
+sh sistema_metodos_agiles/testScript.sh
+```
+## Instalación Produccion ##
+Para el despliegue en produccion se utilizo ***docker y docker-compose*** en la cual se tienen 3 contenedores distintos
+- web 
+- servidor 
+- base de datos 
 
-- - Solicitar al equipo las variables de entorno de desarrollo de `GOOGLE_CLIENT_ID` y `GOOGLE_CLIENT_SECRET` para la autenticación con Google.
-
-- Estando en el directorio del proyecto, construir la imagen del proyecto :
-```
-$ docker-compose build
-```
-## Ejecución ##
-Estando en el directorio del proyecto, levantar los containers de la base de datos y del servidor de django en segundo plano:
-```
-$ docker-compose up -d
-```
-
-Para visualizar el log del servidor web:
-```
-$ docker-compose logs -f web
-```
-## Migraciones ##
-Teniendo la aplicación en ejecución, se aplican las migraciones de cada app instalada en el proyecto:
-```
-$ docker-compose exec web python manage.py migrate
-```
-## Detencion ##
-```
-$ docker-compose stop
-```
-## Ver documentacion ##
-```
-$ docker-compose exec web python django_pydoc.py -p 1234 -n 0.0.0.0
-```
-## Generar HTML
-```
-$ docker-compose exec web python django_pydoc.py -w <module>
-```
-## Realizar pruebas unitarias ##
-```
-$ docker-compose exec web python manage.py test
-```
-## Puesta a producción ##
-Para levantar el ambiente de producción se utiliza el archivo `docker-compose.prod.yml` que contiene las definiciones de los servicios para el ambiente de producción incluido ngnix y gunicorn
-
-- Duplicar el archivo `.env.example`, renombrarlo a `.prod.env` y editar las variables de entorno a conveniencia.
-
-- Solicitar al equipo las variables de entorno de producción de `GOOGLE_CLIENT_ID` y `GOOGLE_CLIENT_SECRET` para la autenticación con Google.
-
-- Estando en el directorio del proyecto, construir las imagenes de producción:
-```
-$ docker-compose -f docker-compose.prod.yml --env-file=.prod.env build
-```
-- Levantar la base de datos, el wsgi y el nginx en segundo plano:
-```
-$ docker-compose -f docker-compose.prod.yml --env-file=.prod.env up -d
-```
-- Aplicar las migraciones a la base de datos de producción:
-```
-$ docker-compose -f docker-compose.prod.yml --env-file=.prod.env exec web python manage.py migrate
-```
-- Visualizar la aplicación abriendo en el navegador `http://localhost`
-
-## Base de datos ##
-- Duplicar el archivo `data.json.example`, renombrarlo a `data.json` y editar el archivo a conveniencia.
-
-- Cargar datos en la base de datos
-```
-$ docker-compose exec web python manage.py loaddata data.json
-```
-- Limpiar la base de datos
-```
-$ docker-compose exec web python manage.py flush --noinput
-```
-- Para produccion:
-```
-$ docker-compose -f docker-compose.prod.yml --env-file=.prod.env exec web python manage.py loaddata data.json
-```
-```
-$ docker-compose -f docker-compose.prod.yml --env-file=.prod.env exec web python manage.py flush --noinput
-```
