@@ -1,0 +1,81 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+{% include 'includes/options.html' %}
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h3>Reasignar User Story</h3>
+    </div>
+    <div class="card-body">
+      <form method="post" action="{% url 'webApp:sprintUsEditarGuardar' proyecto.id %}" id="formTus">
+        {% csrf_token %}
+        <input type="number" hidden="true" name="usSprint" value="{{userStoryActual.id}}">
+        <input type="number" hidden="true" name="idSprint" value="{{sprint.id}}">
+        <div class="form-group">
+          <select class="form-control userStory" aria-label="Default select example" name="us" required
+            id="select-userStory">
+            <option selected value="{{userStory.id}}">{{userStory.nombre_us}} (Tiempo Estimado-{{userStory.tiempoEstimado_us}})
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <select class="form-control userStory" aria-label="Default select example" name="colaborador" required
+            id="select-colaborador">
+            <option selected>Seleccionar Colaborador</option>
+            {% for colaborador in colaboradores %}
+            <option value="{{colaborador.colaborador.id}}" {% if colaborador.colaborador.id == colaboradorActual.id %}selected{% endif %}>{{colaborador.colaborador.nombre}}
+              {{colaborador.colaborador.apellido}} (horas Disponibles-{{colaborador.horasDisponibles}})</option>
+            {% endfor %}
+          </select>
+        </div>
+      </form>
+      <a class="btn btn-danger btn-sm" href="{% url 'webApp:sprintProyecto' proyecto.id %}">Cancelar</a>
+      <button type="submit" class="btn btn-primary btn-sm" id="enviar">Guardar</button>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  $(document).ready(function () {
+    const regexNumero1 = /[-][0-9]*[)]/;
+    const regexNumero2 = /[^0-9]+/g;
+    let tiempoEstimadoUS = 0;
+    let horasDisponibles = 0;
+    $("#Prueba").click(function () {
+      Swal.fire(`Tiempo ${tiempoEstimadoUS} disponible ${horasDisponibles}`)
+    });
+    $("#select-colaborador").change(function () {
+      $("#select-colaborador option:selected").each(function () {
+        horasDisponibles = parseInt($(this).text().match(regexNumero1)[0].replace(regexNumero2, ""))
+      })
+    })
+    $("#select-userStory").change(function () {
+      $("#select-userStory option:selected").each(function () {
+        tiempoEstimadoUS = parseInt($(this).text().match(regexNumero1)[0].replace(regexNumero2, ""))
+      })
+    })
+    $("#enviar").click(function () {
+      if (tiempoEstimadoUS>horasDisponibles) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: `El tiempo a estimado del User Story supera a las horas disponibles del colaborador (Tiempo Estimado ${tiempoEstimadoUS}hs, Horas Disponibles ${horasDisponibles}hs)`
+        })
+      }else{
+        $("form#formTus").submit()
+      }
+    })
+
+  });
+</script>
+{% endblock javascripts %}

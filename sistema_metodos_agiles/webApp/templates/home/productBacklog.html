@@ -27,6 +27,7 @@
               <p class="card-category"><strong>Tiempo Estimado</strong> {{userStory.tiempoEstimado_us}} hs</p>
               <p class="card-category"><strong>Prioridad: {{userStory.prioridad_final}}</strong></p>
                
+              <a class="btn btn-sm btn-second" href="{% url 'webApp:verDetallesUs' proyecto.id userStory.id %}">Ver Detalle</a>
 
             </div>
             <div class="card-footer">
@@ -41,8 +42,7 @@
               {% endif %}
 
               <!-- <div class="stats">
-                <i class="material-icons ">developer_board</i>
-                <a href="{% url 'webApp:verProyecto' proyecto.id %}">Ver proyecto</a>
+                <a href="{% url 'webApp:verDetallesUs' proyecto.id userStory.id %}">Detalles</a>
               </div> -->
             </div>
           </div>
