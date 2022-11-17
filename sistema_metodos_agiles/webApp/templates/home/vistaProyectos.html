@@ -36,8 +36,8 @@
             <h3 class="card-title">
                 <small>Dias Sprint: {{proyecto.sprint_dias}}</small>
             </h3>
+            <a class="btn btn-primary " href="{% url 'webApp:verHistorialProyecto' proyecto.id %}">Ver historial</a>
             {% endif %}
-
           </div>
         </div>
         {% if proyecto.estado.descripcion == "EN PROGRESO" %}

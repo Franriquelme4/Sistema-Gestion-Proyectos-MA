@@ -5,7 +5,7 @@ from django.core import serializers
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from usuario.utils import validarPermisos, busy_end_date, getRolByproyectUsuario,getUsuarioSesion, getTipoUsBySprint, getIdScrumRol, getProyectsByUsuarioID, getProyectsByID, getRolByProyectId, getColaboratorsByProyect, calcularFechaFin, getTipoUsbyProyectId, getTipoUsbyNotProyectId, getPermisos
+from usuario.utils import validarPermisos, busy_end_date,agregarHistorial, getRolByproyectUsuario,getUsuarioSesion, getTipoUsBySprint, getIdScrumRol, getProyectsByUsuarioID, getProyectsByID, getRolByProyectId, getColaboratorsByProyect, calcularFechaFin, getTipoUsbyProyectId, getTipoUsbyNotProyectId, getPermisos
 from usuario.models import Usuario, FaseTUS, TipoUs_Proyecto,Comentario, SprintUserStory, SprintColaborador, Sprint, Cliente, Proyecto, MiembroEquipo, Permiso, Rol, ProyectoRol, TipoUserStory, PrioridadTUs, UserStory, Fase, Estado
 from django.template import loader
 from django.db.models import Q
@@ -130,6 +130,7 @@ def GestionProyectoAgregar(request):
         )
         proyecto.save()
         proyecto.miembro_proyecto.add(miembro)
+        agregarHistorial("Se crea el proyecto",proyecto.id)
     return redirect('/')
 
 
@@ -195,6 +196,7 @@ def crearProyectoGuardar(request):
         )
         proyecto.save()
         proyecto.miembro_proyecto.add(miembro)
+        agregarHistorial("Se crea el proyecto",proyecto.id)
     return redirect('/')
 
 
@@ -704,6 +706,7 @@ def crearUsGuardar(request, id):
             prioridad_final=round((0.6*pn+0.4*pt)+0)
         )
         userStory.save()
+        agregarHistorial(f"Creacion de UserStory nombre = {userStory.nombre_us}",id)
     return redirect(f'/proyecto/productBacklog/{id}')
 
 
@@ -1289,3 +1292,25 @@ def visualizarVelocity(request,idProyecto):
     }
     html_template = loader.get_template('home/velocityChart.html')
     return HttpResponse(html_template.render(context,request))
+
+@login_required(login_url="/login/")
+def verHistorialProyecto(request, id):
+    """
+    Se lista todos los roles especificos de cada proyecto
+    """
+    userSession = getUsuarioSesion(request.user.email)
+    proyecto = getProyectsByID(id, userSession.id)[0]
+    rolUsuario = Rol.objects.get(id=proyecto.id_rol)
+    print(request.session['userSesion'])
+    permisosProyecto = ['crt_rol', 'dsp_Colaborador', 'dsp_Roles',
+                        'dsp_TipoUs', 'dsp_ProductBack', 'dsp_SprinBack']
+    validacionPermisos = validarPermisos(permisosProyecto, userSession.id, id)
+    context = {'userSession': userSession,
+               'proyecto': proyecto,
+               'historial':Proyecto.objects.get(id = id).historial.all(),
+               'segment': 'rolesProyecto',
+               'rolUsuario': rolUsuario,
+               'validacionPermisos': validacionPermisos
+               }
+    html_template = loader.get_template('home/historialProyecto.html')
+    return HttpResponse(html_template.render(context, request))

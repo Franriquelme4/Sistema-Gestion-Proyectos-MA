@@ -1,4 +1,4 @@
-from .models import MiembroEquipo, Permiso, Proyecto, Usuario, Rol, ProyectoRol, TipoUserStory
+from .models import Historial, MiembroEquipo, Permiso, Proyecto, Usuario, Rol, ProyectoRol, TipoUserStory
 import calendar
 from datetime import date, datetime, timedelta
 import datetime
@@ -234,3 +234,14 @@ def busy_end_date(start_date,busy_days):
     if res == 1:
       aux_days = aux_days + 1
   return(aux_date)
+
+def agregarHistorial(descripcion,idProyecto):
+	print("Se guarda el historial ")
+	proyecto = Proyecto.objects.get(id=idProyecto)
+	historial = Historial(
+		descripcion = descripcion
+	)
+	historial.save()
+	proyecto.historial.add(historial)
+	return
+
