@@ -57,5 +57,7 @@ urlpatterns = [
     path('proyecto/sprint/iniciar/<int:idProyecto>/<int:idSprint>', views.iniciarSprint, name="iniciarSprint"),
     path('proyecto/sprint/cancelar/<int:idProyecto>/<int:idSprint>', views.cancelarSprint, name="cancelarSprint"),
     path('proyecto/sprint/us/finalizar', views.finalizarUserStory, name="finalizarUserStory"),
+    path('proyecto/historial/<int:id>',views.verHistorialProyecto, name='verHistorialProyecto'),
+
 
 ]

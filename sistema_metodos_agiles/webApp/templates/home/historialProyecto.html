@@ -1,0 +1,31 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+{% include 'includes/options.html' %}
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h3>Historial Proyecto</h3>
+    </div>
+    <div class="card-body">
+      {% for histo in historial %}
+        <p class="m-0"><strong>{{histo.fecha_creacion}}</strong> - {{histo.descripcion}}</p>
+      {% endfor %}
+    </div>
+    <div class="card-footer">
+      <button type="button" class="btn btn-danger" data-dismiss="modal">Volver</button>
+
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+{% endblock javascripts %}
