@@ -1,0 +1,93 @@
+
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+{% include 'includes/options.html' %}
+{% if validacionPermisos.agr_Colaborador %}
+<a class="btn btn-primary " href="{% url 'webApp:colaboradoresProyectoCrear' proyecto.id %}"><i
+    class="material-icons">add</i>Agregar colaborador</a>
+{% endif %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header card-header-primary">
+        <h4 class="card-title ">Colaboradores del Proyecto</h4>
+        <p class="card-category">Listado de los colaboradores del proyecto</p>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table id="table" class="display" style="width:100%">
+            <thead class=" text-primary">
+              <th>
+
+              </th>
+              <th>
+                Nombre del Colaborador
+              </th>
+              <th>
+                Email
+              </th>
+              <th>
+                Nombre del Rol
+              </th>
+              <th>
+                Descripcion del Rol
+              </th>
+              <th>
+                Acciones
+              </th>
+            </thead>
+            <tbody>
+              {% for colaborador in colaboradores %}
+              <tr>
+                <td>
+                  {{forloop.counter}}
+                </td>
+                <td>
+                  {{colaborador.nombre}} {{colaborador.apellido}}
+                </td>
+                <td>
+                  {{colaborador.email}}
+                </td>
+                <td>
+                  {{colaborador.nombre_rol}}
+                </td>
+                <td>
+                  {{colaborador.descripcion_rol}}
+                </td>
+                <td>
+                  {% if validacionPermisos.upd_Colaborador %}
+                    <a class="btn btn-success btn-sm"
+                      href="{% url 'webApp:colaboradoresProyectoEditar' proyecto.id colaborador.id %}"><i
+                        class="material-icons">&#xE254;</i>
+                    </a>
+                  {% endif %}
+
+                  {% if validacionPermisos.dlt_Colaborador %}
+                    <form action="{% url 'webApp:eliminarColaboradorProyecto' proyecto.id %}" method="post">
+                      {% csrf_token %}
+                      <input name="idColaborador" type="text" hidden="true" value="{{colaborador.id}}">
+                      <input name="idProyecto" type="text" hidden="true" value="{{proyecto.id}}">
+                      <button class="btn btn-danger btn-sm" type="submit"><i class="material-icons">&#xE872;</i></button>
+                    </form>
+                  {% endif %}
+
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

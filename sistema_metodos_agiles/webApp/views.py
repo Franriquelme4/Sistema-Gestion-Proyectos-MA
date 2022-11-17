@@ -1251,6 +1251,7 @@ def sprintUsEditarGuardar(request,id):
 
 @login_required
 def visualizarVelocity(request,idProyecto):
+    """Se visualiza el velocity chart"""
     variables = request.POST
     print("Velocity Proyecto: " + str(idProyecto))
     #if request.method == 'POST':
