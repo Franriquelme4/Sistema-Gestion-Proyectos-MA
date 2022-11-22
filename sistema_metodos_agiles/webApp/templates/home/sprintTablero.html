@@ -20,7 +20,8 @@
             <label for="tipoUs">Tipo de User Story</label>
             <select id="tipoUs" class="form-control" aria-label="Default select example" name="tipoUsId">
               {% for tpus in tipoUs %}
-              <option value="{{tpus.id}}" {% if tpus.id == tipoUsTablero.id %} selected {% endif %}>{{tpus.nombre_tipo_us}}</option>
+              <option value="{{tpus.id}}" {% if tpus.id == tipoUsTablero.id %} selected {% endif %}>
+                {{tpus.nombre_tipo_us}}</option>
               {% endfor %}
             </select>
           </div>
@@ -36,27 +37,37 @@
           <div class="d-flex">
             {% for fase in fases %}
             <div class="card mx-1 border border-dark">
-              <div class="card-body dropzone" id="{{fase.id}}" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="clearDrop(event)">
+              <div class="card-body dropzone" id="{{fase.id}}" ondrop="drop(event)" ondragover="allowDrop(event)"
+                ondragleave="clearDrop(event)">
                 <h6 class=" text-uppercase text-truncate py-2">{{fase.nombre_fase}}</h6>
                 <div class="items border border-light">
                   <!-- <div class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="clearDrop(event)"> &nbsp; </div> -->
                   {% for userStory in userStorys %}
                   {% if fase.id == userStory.us.fase.id %}
-                  <div class="card shadow-sm" id="{{userStory.us.id}}" {% if userSession.id == userStory.colaborador.id %} draggable="true" ondragstart="drag(event)" {% endif %}>
+                  <div class="card shadow-sm " id="{{userStory.us.id}}" {% if userSession.id == userStory.colaborador.id and not userStory.us.finalizado %} draggable="true" ondragstart="drag(event)" {% endif %}>
                     <div class="card-body p-2">
-                      <div class="card-title">
-                        <img src="//via.placeholder.com/30" class="rounded-circle float-right" alt="Colaborador">
-                        <a href="" class="lead ">{{userStory.us.nombre_us}}</a>
+                      <div >
+                        <h3 class="my-1">{{userStory.us.nombre_us}}</h3>
                       </div>
                       <p>
                         {{userStory.us.descripcion_us}}
-            
                       </p>
                       <p class="card-text">Responsable: {{userStory.colaborador}}</p>
-                      <button class="btn btn-primary btn-sm ver-comentarios" id="{{userStory.us.id}}">Comentarios</button>
+                      <div class="d-flex flex-row">
+                        <button class="btn btn-primary btn-sm ver-comentarios px-1"
+                          id="{{userStory.us.id}}">Comentarios</button>
+                        {% if fase.nombre_fase == "DONE" and validacionPermisos.fin_us and not userStory.us.finalizado %}
+                        <button class="btn btn-success btn-sm terminar-us px-1"
+                          id="{{userStory.us.id}}">Terminar </button>
+                        {% endif %}
+                        {% if userStory.us.finalizado %}
+                        <button class="btn btn-success btn-sm terminar-us px-1" disabled >Terminado</button>
+                        {% endif %}
+                      </div>
+
                     </div>
                   </div>
-                 
+
                   {% endif %}
 
                   {% endfor %}
@@ -69,14 +80,15 @@
         </div>
 
       </div>
-      <form method="post" action="{% url 'webApp:sprintTableroActualizarEstado' proyecto.id sprint.id %}" id="formActualizarEstado">
+      <form method="post" action="{% url 'webApp:sprintTableroActualizarEstado' proyecto.id sprint.id %}"
+        id="formActualizarEstado">
         {% csrf_token %}
         <input hidden="true" type="number" name="userStory" id="userStory">
         <input hidden="true" type="number" name="nuevaFase" id="nuevaFase">
         <input hidden="true" type="number" name="tipoUsId" value="{{tipoUsTablero.id}}">
       </form>
 
-<a class="btn btn-danger btn-sm" href="{% url 'webApp:sprintProyecto' proyecto.id %}">Volver</a>
+      <a class="btn btn-danger btn-sm" href="{% url 'webApp:sprintProyecto' proyecto.id %}">Volver</a>
 
     </div>
   </div>
@@ -85,7 +97,8 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="comentariosModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="comentariosModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -105,9 +118,9 @@
             </div>
           </div>
         </div>
-      
+
       </div>
-      <div class="modal-body">
+      <div class="modal-body" data-spy="scroll" data-target="#navbar-example3" data-offset="0">
         ...
       </div>
       <div class="modal-footer">
@@ -117,14 +130,15 @@
           <div class="row">
             <div class="col-8">
               <div class="form-group">
-                <input class="form-control" name="idUs" id="input-id--us" hidden="true">          
+                <input class="form-control" name="idUs" id="input-id--us" hidden="true">
               </div>
               <div class="form-group">
-                <textarea class="form-control" name="comentario" id="" cols="40" rows="2" required="true"></textarea>              
+                <textarea class="form-control" name="comentario" id="" cols="40" rows="2" required="true"></textarea>
               </div>
               <div class="form-group">
                 <label for="recipient-name" class="col-form-label">Horas Trabajadas</label>
-                <input type="number" class="form-control" id="recipient-name" name="horasTrabajadas" required="true">
+                <input type="number" class="form-control" id="recipient-name" name="horasTrabajadas" required="true"
+                  value="0">
               </div>
             </div>
             <div class="col-4">
@@ -142,111 +156,151 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script>
-$("button.ver-comentarios").click(function (e) {
-  e.preventDefault();
-  const refComentarios = $("#comentariosModal")
-  const refComentarioModalBody = $("#comentariosModal .modal-body")
-  console.log("Click comentarios",e.target.id);
-  $.ajax({
-            type: 'GET',
-            url: "{% url 'webApp:ajax_comentarios' %}",
-            data: {"idUs": e.target.id},
-            success: function (response) {
-              if(response["comentario"])
-                comentarios = JSON.parse(response["comentario"]);
-                refComentarioModalBody.empty()
-                comentarios.forEach(element => {
-                  refComentarioModalBody.append(`<div class="border border-dark rounded m-1 p-1"><strong>${element.fields.comentario}</strong></div>`)
-                });
-               
-                userStory = JSON.parse(response["userStory"])[0];
-                console.log(userStory);
-              $("h5#modal-us-title").text(`Nombre: ${userStory.fields.nombre_us}`)
-               $("input#input-id--us").val(userStory.pk)
-               $("div#time-container .horas-trabajadas").empty().append(`<strong>Horas trabajadas: ${userStory.fields.tiempoTrabajado}</strong>`)
-               $("div#time-container .hora-estimada").empty().append(`<strong>Tiempo Estimado: ${userStory.fields.tiempoEstimado_us}</strong>`)
-                refComentarios.modal("show");
-            },
-            error: function (response) {
-                console.log(response)
-            }
-        })
-  
+  $("button.terminar-us").click(function (e) {
+    e.preventDefault();
+    Swal.fire({
+      title: 'Estas Seguro/a ?',
+      text: "Desea finalizar el User Story !",
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          type: 'GET',
+          url: "{% url 'webApp:finalizarUserStory' %}",
+          data: {"idUs":e.target.id},
+          success: function (response) {
+            console.log(response);
+            Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'El User Story fue finalizado correctamente',
+  showConfirmButton: false,
+  timer: 1500
 })
+location.reload()
+
+          },
+          error: function (response) {
+            alert(response["responseJSON"]["error"]);
+          }
+        })
+      }
+    })
+
+
+  })
+  $("button.ver-comentarios").click(function (e) {
+    e.preventDefault();
+    const refComentarios = $("#comentariosModal")
+    const refComentarioModalBody = $("#comentariosModal .modal-body")
+    console.log("Click comentarios", e.target.id);
+    $.ajax({
+      type: 'GET',
+      url: "{% url 'webApp:ajax_comentarios' %}",
+      data: { "idUs": e.target.id },
+      success: function (response) {
+        if (response["comentario"])
+          comentarios = JSON.parse(response["comentario"]);
+        refComentarioModalBody.empty()
+        console.log(comentarios);
+        refComentarioModalBody.append(`<h3>Comentarios</h3>`)
+        comentarios.forEach(element => {
+          refComentarioModalBody.append(`<div class="border border-dark rounded m-1 p-1"><strong>${element.fields.comentario}</strong><p class="m-0">${element.fields.fecha_creacion}</p></div>`)
+        });
+
+        userStory = JSON.parse(response["userStory"])[0];
+        console.log(userStory);
+        $("h5#modal-us-title").text(`Nombre: ${userStory.fields.nombre_us}`)
+        $("input#input-id--us").val(userStory.pk)
+        $("div#time-container .horas-trabajadas").empty().append(`<strong>Horas trabajadas: ${userStory.fields.tiempoTrabajado}</strong>`)
+        $("div#time-container .hora-estimada").empty().append(`<strong>Tiempo Estimado: ${userStory.fields.tiempoEstimado_us}</strong>`)
+        refComentarios.modal("show");
+      },
+      error: function (response) {
+        console.log(response)
+      }
+    })
+
+  })
 
 
 
-let elementArrastrado=""
+  let elementArrastrado = ""
   const drag = (event) => {
     console.log('se arrastra');
     elementArrastrado = event.target
-  event.dataTransfer.setData("text/plain", event.target.id);
-}
-
-const allowDrop = (ev) => {
-  ev.preventDefault();
-  if (hasClass(ev.target,"dropzone")) {
-    addClass(ev.target,"droppable");
+    event.dataTransfer.setData("text/plain", event.target.id);
   }
-}
 
-const clearDrop = (ev) => {
-    removeClass(ev.target,"droppable");
-}
-
-const drop = (event) => {
-  event.preventDefault()
-  let idNuevaFase = event.target.id
-  let idUserStory = elementArrastrado.id
-
-  if (!idNuevaFase) {
-    const fases = $("div.dropzone")
-  console.log(fases[0].id)
-    idNuevaFase = fases[0].id
+  const allowDrop = (ev) => {
+    ev.preventDefault();
+    if (hasClass(ev.target, "dropzone")) {
+      addClass(ev.target, "droppable");
+    }
   }
-  $("#userStory").val(idUserStory);
-  $("#nuevaFase").val(idNuevaFase);
 
-  $("#formActualizarEstado").submit()
+  const clearDrop = (ev) => {
+    removeClass(ev.target, "droppable");
+  }
 
-}
+  const drop = (event) => {
+    event.preventDefault()
+    let idNuevaFase = event.target.id
+    let idUserStory = elementArrastrado.id
 
-const updateDropzones = () => {
+    if (!idNuevaFase) {
+      const fases = $("div.dropzone")
+      console.log(fases[0].id)
+      idNuevaFase = fases[0].id
+    }
+    $("#userStory").val(idUserStory);
+    $("#nuevaFase").val(idNuevaFase);
+
+    $("#formActualizarEstado").submit()
+
+  }
+
+  const updateDropzones = () => {
     /* after dropping, refresh the drop target areas
       so there is a dropzone after each item
       using jQuery here for simplicity */
-    
+
     var dz = $('<div class="dropzone rounded" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="clearDrop(event)"> &nbsp; </div>');
-    
+
     // delete old dropzones
     $('.dropzone').remove();
 
     // insert new dropdzone after each item   
     dz.insertAfter('.card.draggable');
-    
+
     // insert new dropzone in any empty swimlanes
     $(".items:not(:has(.card.draggable))").append(dz);
-};
+  };
 
-// helpers
-function hasClass(target, className) {
+  // helpers
+  function hasClass(target, className) {
     return new RegExp('(\\s|^)' + className + '(\\s|$)').test(target.className);
-}
-
-function addClass(ele,cls) {
-  if (!hasClass(ele,cls)) ele.className += " "+cls;
-}
-
-function removeClass(ele,cls) {
-  if (hasClass(ele,cls)) {
-    var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
-    ele.className=ele.className.replace(reg,' ');
   }
-}
 
-function unwrap(node) {
+  function addClass(ele, cls) {
+    if (!hasClass(ele, cls)) ele.className += " " + cls;
+  }
+
+  function removeClass(ele, cls) {
+    if (hasClass(ele, cls)) {
+      var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+      ele.className = ele.className.replace(reg, ' ');
+    }
+  }
+
+  function unwrap(node) {
     node.replaceWith(...node.childNodes);
-}
+  }
 
 </script>
 

@@ -1,0 +1,58 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+{% include 'includes/options.html' %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<input type="text" hidden=true id="dicc_velocity" value = "{{dicc_velocity}}">
+<canvas id="salesChart" style="height: 224px; width: 475px;" width="1425" height="672" class="card"></canvas>
+<div  id="myPlot" style="width:100%;max-width:700px"></div>
+<a class="btn btn-danger btn-sm" href="{% url 'webApp:sprintProyecto' proyecto.id %}">Volver</a>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+let velocity = JSON.parse($("input#dicc_velocity").val())
+new Chart(document.getElementById("salesChart"), {
+    type: 'bar',
+    data: {
+        labels: velocity.nombre,                 
+        datasets: [
+        {
+            label: "Estimado",
+            backgroundColor: "#FFCC00",
+            data: velocity.estimado,                 
+        },
+        {
+            label: "Terminado",
+            backgroundColor: "#1111FF",
+            data: velocity.terminado,              
+        }
+        ]
+    },
+    options: {
+        title: {
+            display: true,
+            text: 'VELOCITY CHART',
+        },
+        tooltips: {
+            callback: function (value, index, values) {
+                if (parseInt(value) >= 1000) {
+                    return '$' + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    return '$' + value;
+                }
+            }
+        },
+    }
+});
+</script>
+{% endblock javascripts %}
+
+
+

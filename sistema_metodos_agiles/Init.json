@@ -174,7 +174,7 @@
 		"model": "usuario.permiso",
 		"pk": 18,
 		"fields": {
-			"nombre_permiso": "agr_Colaboradorf",
+			"nombre_permiso": "agr_Colaborador",
 			"descripcion_permiso": "Agregar Colaboradores"
 		}
 	},
@@ -403,6 +403,47 @@
 			"descripcion_permiso": "Agregar US - Colaborador Sprint"
 		}
 	},
+	{
+		"model": "usuario.permiso",
+		"pk": 47,
+		"fields": {
+			"nombre_permiso": "ini_sprint",
+			"descripcion_permiso": "Iniciar Sprint"
+		}
+	},
+	{
+		"model": "usuario.permiso",
+		"pk": 48,
+		"fields": {
+			"nombre_permiso": "fin_us",
+			"descripcion_permiso": "Finalizar US"
+		}
+	},
+	{
+		"model": "usuario.permiso",
+		"pk": 49,
+		"fields": {
+			"nombre_permiso": "cancelar_sprint",
+			"descripcion_permiso": "Cancelar Sprint"
+		}
+	},
+	{
+		"model": "usuario.permiso",
+		"pk": 50,
+		"fields": {
+			"nombre_permiso": "reasignar_us",
+			"descripcion_permiso": "Reasignar User story"
+		}
+	},
+
+	{
+		"model": "usuario.permiso",
+		"pk": 47,
+		"fields": {
+			"nombre_permiso": "ini_sprint",
+			"descripcion_permiso": "Iniciar Sprint"
+		}
+	},
 
     {
 		"model": "usuario.rol",
@@ -430,7 +471,7 @@
 		"fields": {
 			"nombre_rol": "Scrum Master",
 			"descripcion_rol": "Rol para gestionar proyecto",
-            "permiso": [1,2,3,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,44,45,46]
+            "permiso": [1,2,3,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,44,45,46,47,48,49,50]
 		}
 	},
 
@@ -438,26 +479,18 @@
 		"model": "usuario.estado",
 		"pk": 1,
 		"fields": {
+			"descripcion": "EN PROGRESO"
+		}
+	},
+
+    {
+		"model": "usuario.estado",
+		"pk": 2,
+		"fields": {
 			"descripcion": "PENDIENTE"
 		}
 	},
 
-    {
-		"model": "usuario.estado",
-		"pk": 2,
-		"fields": {
-			"descripcion": "EN PROGRESO"
-		}
-	},
-
-    {
-		"model": "usuario.estado",
-		"pk": 2,
-		"fields": {
-			"descripcion": "EN PROGRESO"
-		}
-	},
-    
     {
 		"model": "usuario.estado",
 		"pk": 3,

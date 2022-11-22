@@ -1,7 +1,7 @@
 from email.policy import default
 from django.db import models
 import datetime
-
+ 
 # Create your models here.
 
 class Permiso(models.Model):
@@ -97,6 +97,7 @@ class Proyecto(models.Model):
     fecha_creacion = models.DateField(default=datetime.date.today)
     estado = models.ForeignKey('Estado',on_delete=models.CASCADE)
     sprint_actual = models.ForeignKey('Sprint',on_delete=models.CASCADE,null=True)
+    historial = models.ManyToManyField('Historial')
     class Meta:
         verbose_name = 'Proyecto'
         verbose_name_plural = 'Proyectos'
@@ -160,6 +161,7 @@ class UserStory(models.Model):
     prioridad_final = models.IntegerField(default=0)
     fase = models.ForeignKey('Fase',on_delete=models.CASCADE,null=True)
     comentario = models.ManyToManyField('Comentario',blank=True)
+    finalizado = models.BooleanField(default=False)
     class Meta:
         verbose_name = 'User Story'
         verbose_name_plural = 'User Stories'
@@ -193,7 +195,7 @@ class Sprint(models.Model):
     class Meta:
         verbose_name = 'Sprint'
         verbose_name_plural = 'Sprints'
-        ordering = ['nombre_sp']
+        ordering = ['estado']
     def __str__(self):
         return self.nombre_sp
 
@@ -267,3 +269,15 @@ class Comentario(models.Model):
         ordering = ['fecha_creacion']
     def __str__(self):
         return self.comentario
+
+class Historial(models.Model):
+    """Se almacena el historial de todo el ciclo del proyecto"""
+    descripcion = models.CharField(max_length=1000,null=False)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'historial'
+        verbose_name_plural = 'historiales'
+        ordering = ['fecha_creacion']
+    def __str__(self):
+        return self.descripcion

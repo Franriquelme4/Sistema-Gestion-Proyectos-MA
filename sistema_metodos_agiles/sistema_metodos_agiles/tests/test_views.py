@@ -100,7 +100,6 @@ class TestViews(TestCase):
             descripcion_us = 'us inicial',
             tiempoEstimado_us = None,
             estadoActual_us = None,
-            duracion_us = 1,
             tipo_us = TipoUserStory.objects.get(nombre_tipo_us = 'tipoUS inicial'),
             asignadoUsu_us = MiembroEquipo.objects.get(descripcion='miembro equipo para prueba'),
         )
@@ -279,27 +278,7 @@ class TestViews(TestCase):
         response = self.client.get(reverse('eliminarColaboradorProyecto', args=['1']))
         self.assertEqual(response.status_code, 302, 'El codigo estado del response no es 302')
 
-    def test_editar_colaborador_proyecto_post(self):
-        """
-            Test para verificar post al editar un colaborador de un proyecto.
-        """
 
-        url = reverse('editarColaboradorProyecto', args=['1'])
-
-        response = self.client.post(url, {
-            'miembro' : self.miembro_equipo,
-            'proyecto' : self.proyecto,
-        }, follow=True)
-
-        self.assertEqual(response.status_code, 200, 'El codigo estado del response no es 200')
-
-    def test_editar_colaborador_proyecto_get(self):
-        """
-            Test para verificar get al editar un colaborador de un proyecto.
-        """
-
-        response = self.client.get(reverse('editarColaboradorProyecto', args=['1']))
-        self.assertEqual(response.status_code, 302, 'El codigo estado del response no es 302')
 
     def test_tipo_us_post(self):
         """
@@ -511,3 +490,27 @@ class TestViews(TestCase):
 
         self.assertEqual(response.status_code, 200, 'El codigo estado del response no es 200')
     
+    def test_ver_detalles_us(self):
+        """
+            Test para verificar get al ver detalles de US.
+        """
+
+        response = self.client.get(reverse('verDetallesUs', args=['1', '1']))
+        self.assertEqual(response.status_code, 302, 'El codigo estado del response no es 302')
+
+    
+    def test_get_comentario(self):
+        """
+            Test para verificar get al obtener comentarios de US.
+        """
+
+        response = self.client.get(reverse('ajax_comentarios'))
+        self.assertEqual(response.status_code, 302, 'El codigo estado del response no es 302')
+    
+    def test_iniciar_sprint(self):
+        """
+            Test para verificar get al iniciar un sprint.
+        """
+
+        response = self.client.get(reverse('iniciarSprint', args=['1', '1']))
+        self.assertEqual(response.status_code, 302, 'El codigo estado del response no es 302')
