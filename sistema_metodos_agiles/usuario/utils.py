@@ -1,8 +1,13 @@
+from django.http import HttpResponse
 from .models import Historial, MiembroEquipo, Permiso, Proyecto, Usuario, Rol, ProyectoRol, TipoUserStory
 import calendar
 from datetime import date, datetime, timedelta
 import datetime
 import numpy as np
+from xhtml2pdf import pisa
+from django.template.loader import get_template
+from io import BytesIO
+
 
 def getUsuarioSesion(email):
     usuario = Usuario.objects.get(email=email)
@@ -244,4 +249,11 @@ def agregarHistorial(descripcion,idProyecto):
 	historial.save()
 	proyecto.historial.add(historial)
 	return
-
+def render_to_pdf(template_src, context_dict={}):
+    template = get_template(template_src)
+    html  = template.render(context_dict)
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return None
