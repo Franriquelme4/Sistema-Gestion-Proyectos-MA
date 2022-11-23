@@ -235,13 +235,15 @@ def busy_end_date(start_date,busy_days):
       aux_days = aux_days + 1
   return(aux_date)
 
-def agregarHistorial(descripcion,idProyecto):
+def agregarHistorial(descripcion,idProyecto,idUsuario):
 	print("Se guarda el historial ")
+	print("Usuarioo Historial: "+str(idUsuario))
 	proyecto = Proyecto.objects.get(id=idProyecto)
+	user = Usuario.objects.get(id=idUsuario)
 	historial = Historial(
 		descripcion = descripcion
 	)
 	historial.save()
+	#historial.usuario.add(user)
 	proyecto.historial.add(historial)
 	return
-

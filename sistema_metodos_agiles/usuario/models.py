@@ -274,7 +274,7 @@ class Historial(models.Model):
     """Se almacena el historial de todo el ciclo del proyecto"""
     descripcion = models.CharField(max_length=1000,null=False)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
-
+    usuario = models.ForeignKey('Usuario',on_delete=models.CASCADE,null=True)
     class Meta:
         verbose_name = 'historial'
         verbose_name_plural = 'historiales'

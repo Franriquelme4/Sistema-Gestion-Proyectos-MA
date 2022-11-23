@@ -130,7 +130,8 @@ def GestionProyectoAgregar(request):
         )
         proyecto.save()
         proyecto.miembro_proyecto.add(miembro)
-        agregarHistorial("Se crea el proyecto",proyecto.id)
+        idUsuario = request.user.id
+        agregarHistorial("Se crea el proyecto",proyecto.id,idUsuario)
     return redirect('/')
 
 
@@ -196,7 +197,8 @@ def crearProyectoGuardar(request):
         )
         proyecto.save()
         proyecto.miembro_proyecto.add(miembro)
-        agregarHistorial("Se crea el proyecto",proyecto.id)
+        idUsuario = request.user.id
+        agregarHistorial("Se crea el proyecto",proyecto.id,idUsuario)
     return redirect('/')
 
 
@@ -1303,6 +1305,7 @@ def verHistorialProyecto(request, id):
     proyecto = getProyectsByID(id, userSession.id)[0]
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
     print(request.session['userSesion'])
+    print("Usuario nombre", request.user.first_name)
     permisosProyecto = ['crt_rol', 'dsp_Colaborador', 'dsp_Roles',
                         'dsp_TipoUs', 'dsp_ProductBack', 'dsp_SprinBack']
     validacionPermisos = validarPermisos(permisosProyecto, userSession.id, id)
