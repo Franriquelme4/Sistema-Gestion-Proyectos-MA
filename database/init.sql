@@ -1,4 +1,5 @@
 
+
 -- INSERT INTO public.usuario_rol(id, nombre_rol, descripcion_rol)
 -- VALUES 
 -- (1,'Administrador','Rol para administrar el sistema'),
