@@ -5,11 +5,15 @@ from django.core import serializers
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from usuario.utils import validarPermisos, busy_end_date,agregarHistorial, getRolByproyectUsuario,getUsuarioSesion, getTipoUsBySprint, getIdScrumRol, getProyectsByUsuarioID, getProyectsByID, getRolByProyectId, getColaboratorsByProyect, calcularFechaFin, getTipoUsbyProyectId, getTipoUsbyNotProyectId, getPermisos
+from usuario.utils import validarPermisos, render_to_pdf,busy_end_date,agregarHistorial, getRolByproyectUsuario,getUsuarioSesion, getTipoUsBySprint, getIdScrumRol, getProyectsByUsuarioID, getProyectsByID, getRolByProyectId, getColaboratorsByProyect, calcularFechaFin, getTipoUsbyProyectId, getTipoUsbyNotProyectId, getPermisos
 from usuario.models import Usuario, FaseTUS, TipoUs_Proyecto,Comentario, SprintUserStory, SprintColaborador, Sprint, Cliente, Proyecto, MiembroEquipo, Permiso, Rol, ProyectoRol, TipoUserStory, PrioridadTUs, UserStory, Fase, Estado
 from django.template import loader
 from django.db.models import Q
 from datetime import datetime
+from django.views.generic import ListView,View
+from xhtml2pdf import pisa
+from django.template.loader import get_template
+from io import BytesIO
 
 # Create your views here.
 
@@ -1318,3 +1322,28 @@ def verHistorialProyecto(request, id):
                }
     html_template = loader.get_template('home/historialProyecto.html')
     return HttpResponse(html_template.render(context, request))
+
+# def ListHistorialPdf(request,id):
+#     proyecto = Proyecto.objects.get(id=id)
+#     data = {
+#         'historial':proyecto.historial.all(),
+#         'proyecto':proyecto
+#     }
+#     pdf = render_to_pdf('reportes/historial.html',data)
+#     return HttpResponse(pdf, content_type='application/pdf')
+
+def ListHistorialPdf(request,id):
+    template_path = 'reportes/historial.html'
+    proyecto = Proyecto.objects.get(id=id)
+    context = {
+        'historial':proyecto.historial.all(),
+        'proyecto':proyecto
+    }
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="historial_{proyecto}_{datetime.today()}.pdf"'
+    template = get_template(template_path)
+    html = template.render(context)
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response

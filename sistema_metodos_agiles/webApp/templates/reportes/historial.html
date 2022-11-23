@@ -1,0 +1,22 @@
+<h1>Proyecto - {{proyecto}}</h1>
+<div>
+    <h2>Datos del Proyecto</h2>
+    <p><strong>Nombre del Proyecto:</strong> {{proyecto.nombre_proyecto}}</p>
+    <p><strong>Duracion:</strong> {{proyecto.duracion}} meses</p>
+    <p><strong>Duracion de Sprint:</strong> {{proyecto.sprint_dias}} dias</p>
+    <p><strong>Descripcion:</strong> {{proyecto.descripcion_proyecto}}</p>
+</div>
+<div>
+    <h2>Datos del Cliente</h2>
+    <p><strong>Nombre: </strong>{{proyecto.cliente_proyecto.nombre_cliente}}</p>
+    <p><strong>Apellido: </strong>{{proyecto.cliente_proyecto.apellido_cliente}}</p>
+    <p><strong>Email: </strong>{{proyecto.cliente_proyecto.email_cliente}}</p>
+    <p><strong>Telefono: </strong>{{proyecto.cliente_proyecto.telefono_cliente}}</p>
+    <p><strong>Empresa: </strong>{{proyecto.cliente_proyecto.empresa_cliente}}</p>
+</div>
+<div>
+    <h2>Historial de Cambios</h2>
+    {% for histo in historial %}
+    <p class="m-0"><strong>{{histo.fecha_creacion}}</strong> - {{histo.descripcion}}</p>
+    {% endfor %}
+</div>

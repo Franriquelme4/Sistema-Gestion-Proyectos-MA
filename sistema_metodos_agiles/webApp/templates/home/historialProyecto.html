@@ -12,15 +12,19 @@
     <div class="card-header">
       <h3>Historial Proyecto</h3>
     </div>
-    <div class="card-body">
-      {% for histo in historial %}
+    <div class="card-body p-2">
+      <div class="border">
+        {% for histo in historial %}
         <p class="m-0"><strong>{{histo.fecha_creacion}}</strong> - {{histo.descripcion}}</p>
       {% endfor %}
+      </div>
+ 
     </div>
-    <div class="card-footer">
-      <button type="button" class="btn btn-danger" data-dismiss="modal">Volver</button>
+    <div class="card-body">
+      <a class="btn btn-danger btn-sm" href="{% url 'webApp:verProyecto' proyecto.id %}">Volver</a>
+      <a class="btn btn-success btn-sm" href="{% url 'webApp:ListHistorialPdf' proyecto.id %}" >Descargar Historial</a>
+    </div>
 
-    </div>
   </div>
 </div>
 {% endblock content %}
