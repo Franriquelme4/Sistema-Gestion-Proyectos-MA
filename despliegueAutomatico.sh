@@ -1,5 +1,6 @@
 # !bin/bash
 dev(){
+    crearDB=""
     read -p "Desea crear una nueva base de datos (y/n)?: " crearDB
     if [ $crearDB = "y" ]
     then
@@ -16,7 +17,7 @@ dev(){
     source env/bin/activate
     # Se instalan todos lo requerimientos
     pip3 install -r requirements.txt
-    crearDB=""
+
     # read -p "Desea crear una nueva base de datos (y/n)?: " crearDB
     # if [ $crearDB = "y" ]
     # then
@@ -112,4 +113,4 @@ esac
 # shift
 # done
 # psql -U postgres -W -h localhost metodologias_agiles < database/iteracion_2.sql
-psql -X -U postgres -d metodologias_agiles password=postgres -p 5432  < ../database/iteracion_2.sql
+# psql -X -U postgres -d metodologias_agiles password=postgres -p 5432  < ../database/iteracion_2.sql
