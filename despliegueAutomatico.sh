@@ -71,16 +71,18 @@ prod(){
     case $iteracion in
     "2")
         echo "Poblando base de datos ..."
-        # psql -X -U postgres password=postgres -p 5432 metodologias_agiles < ../database/iteracion_2.sql
+        docker-compose  exec -T db psql -U postgres -d metodologias_agiles < database/init.sql
         # python3 manage.py loaddata ../database/iteracion_2.json
     ;;
     "3") 
         echo "Poblando base de datos ..."
         # psql -X -U postgres password=postgres -p 5432 < ../database/init.sql
+        docker-compose  exec -T db psql -U postgres -d metodologias_agiles < database/init.sql
     ;;
     "4") 
         echo "Poblando base de datos ..."
         # psql -X -U postgres password=postgres -p 5432 < ../database/init.sql
+        docker-compose  exec -T db psql -U postgres -d metodologias_agiles < database/init.sql
     ;;
     "5") 
         echo "Poblando base de datos ..."
@@ -88,7 +90,7 @@ prod(){
     ;;
     "6") 
         echo "Poblando base de datos ..."
-        # python3 manage.py loaddata Init.json
+        docker-compose exec web python3 manage.py loaddata Init.json
     ;;
     esac
     # python3 sistema_metodos_agiles/manage.py loaddata sistema_metodos_agiles/Init.json
