@@ -3,10 +3,29 @@
 {% block title %} UI Tables {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+<style>
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+</style>
+{% endblock stylesheets %}
 
 {% block content %}
 {% include 'includes/options.html' %}
+
 <div class="container">
   <div class="card">
     <div class="card-header">
@@ -15,7 +34,21 @@
     <div class="card-body p-2">
       <div class="border">
         {% for histo in historial %}
-        <p class="m-0"><strong>{{histo.fecha_creacion}}</strong> - {{histo.descripcion}}</p>
+        <!--<p class="m-0"><strong>{{histo.fecha_creacion}}</strong> - {{histo.descripcion}} <strong> Usuario: </strong> {{histo.usuario.nombre}}</p> -->
+        <table>
+          <tr>
+            <th>Fecha</th>
+            <th>Usuario</th>
+            <th>Descripcion</th>
+          </tr>
+          {% for histo in historial %}
+          <tr>
+              <td>{{histo.fecha_creacion}}</td>
+              <td>{{histo.usuario.nombre}}</td>
+              <td>{{histo.descripcion}}</td>
+          </tr>
+          {% endfor %}
+          </table>
       {% endfor %}
       </div>
  
