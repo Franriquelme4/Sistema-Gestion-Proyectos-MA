@@ -59,6 +59,7 @@ urlpatterns = [
     path('proyecto/sprint/us/finalizar', views.finalizarUserStory, name="finalizarUserStory"),
     path('proyecto/historial/<int:id>',views.verHistorialProyecto, name='verHistorialProyecto'),
     path('proyecto/historial/descargar/<int:id>',views.ListHistorialPdf, name='ListHistorialPdf'),
+    path('proyecto/finalizar', views.cerrarProyecto, name="cerrarProyecto"),
 
 
 ]

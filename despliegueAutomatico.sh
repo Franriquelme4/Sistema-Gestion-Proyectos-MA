@@ -1,11 +1,13 @@
 # !bin/bash
 dev(){
+    export PGPASSWORD=postgres;
     crearDB=""
     read -p "Desea crear una nueva base de datos (y/n)?: " crearDB
     if [ $crearDB = "y" ]
     then
         # Se crea la nueva base de datos
-        psql -X -U postgres password=postgres -p 5432 < database/init.sql
+        # psql -X -U postgres password=postgres -p 5432 < database/init.sql
+        cat database/init.sql | psql -U postgres -p 5432 
     fi
     # psql -X -U postgres password=postgres -p 5432 < ../database/init.sql
     git checkout $tag

@@ -1344,3 +1344,19 @@ def ListHistorialPdf(request,id):
     if pisa_status.err:
        return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
+
+@login_required
+def cerrarProyecto(request):
+    if request.accepts and request.method == "GET":
+        idProyecto = request.GET.get("idProyecto", None)
+        proyecto = Proyecto.objects.filter(id=idProyecto)
+        proyecto.update(
+            estado=Estado.objects.get(descripcion="CANCELADO")  
+        )
+        sprint = Sprint.objects.all()
+        for sp in sprint:
+            Sprint.objects.filter(id=sp.id).update(
+                estado=Estado.objects.get(descripcion="CANCELADO")
+        )
+        return JsonResponse({} , status = 200)
+    return JsonResponse({}, status = 400)  

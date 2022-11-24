@@ -3,103 +3,98 @@
 {% block content %}
 {% include 'includes/options.html' %}
 <div class="container">
-        <div class="card card-stats my-3 m-3 p-3">
-          <div class="card-header card-header-warning card-header-icon">
-            <div class="card-icon">
-              <i class="material-icons">build</i>
-            </div>
-            <p class="card-category"></p>
-            <h3 class="card-title">
-              <small>Configuracion de proyecto</small>
-            </h3>
-            <h3 class="card-title">
-                <small>Estado: {{proyecto.estado}}</small>
-            </h3>
+  <div class="card card-stats my-3 m-3 p-3">
+    <div class="card-header card-header-warning card-header-icon">
+      <div class="card-icon">
+        <i class="material-icons">build</i>
+      </div>
+      <p class="card-category"></p>
+      <h3 class="card-title">
+        <small>Configuracion de proyecto</small>
+      </h3>
+      <h3 class="card-title">
+        <small>Estado: {{proyecto.estado}}</small>
+      </h3>
 
-            {% if proyecto.estado.descripcion == "PENDIENTE" %}
-            <h3 class="card-title">
-                {% if validacionPermisos.ini_Proyecto %}
-                <small><a class="btn btn-sm btn-success" href="{% url 'webApp:iniciarProyecto' proyecto.id %}">Iniciar Proyecto</a></small>
-                {% endif %}
-                {% if validacionPermisos.upd_Proyecto %}
-                <small><a class="btn btn-sm btn-info" href="{% url 'webApp:editarProyecto' proyecto.id %}">Editar</a></small>
-                {% endif %}
-            </h3>
-            {% endif %}
-            {% if proyecto.estado.descripcion == "EN PROGRESO" %}
-            <h3 class="card-title">
-                <small>Fecha Inicio: {{proyecto.fecha_ini_proyecto}}</small>
-            </h3>
-            <h3 class="card-title">
-                <small>Fecha Fin: {{proyecto.fecha_fin_proyecto}}</small>
-            </h3>
-            <h3 class="card-title">
-                <small>Dias Sprint: {{proyecto.sprint_dias}}</small>
-            </h3>
-            <a class="btn btn-primary " href="{% url 'webApp:verHistorialProyecto' proyecto.id %}">Ver historial</a>
-            {% endif %}
-          </div>
-        </div>
-        {% if proyecto.estado.descripcion == "EN PROGRESO" %}
-        <!-- <div class="row">
-            <div class="col-md-12 mx-3 p-3">
-              <div class="card">
-                <div class="card-header">
-                    <a class="btn btn-primary btn-sm" href="{% url 'webApp:sprintCrear' proyecto.id %}"><i class="material-icons">add</i>Crear Sprint</a>
-                </div>
-                <div class="card-body">
-                  <div class="table-responsive">
-                    <table class="display" style="width:100%">
-                      <thead class=" text-primary">
-                        <th>                         
-                        </th>
-                        <th>
-                          Nombre 
-                        </th>
-                        <th>
-                          Descripcion 
-                        </th>
-                        <th>
-                          Fase 
-                        </th>
-                        <th>
-                          Prioridad 
-                        </th>
-                      </thead>
-                      <tbody>
-                        {% for data in tipoUs %}
-                        <tr>
-                          <td>
-                            {{forloop.counter}}
-                          </td>
-                          <td>
-                            {{data.nombre_tipo_us}}
-                          </td>
-                          <td>
-                            {{data.descripcion_tipo_us}}
-                          </td>
-                          <td>
-                            {{data.fases}}
-                          </td>
-                          <td>
-                            {{data.prioridad_tipo_us}}
-                          </td>
-                        </tr>
-                        {% endfor %}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-        </div> -->
+      {% if proyecto.estado.descripcion == "PENDIENTE" %}
+      <h3 class="card-title">
+        {% if validacionPermisos.ini_Proyecto %}
+        <small><a class="btn btn-sm btn-success" href="{% url 'webApp:iniciarProyecto' proyecto.id %}">Iniciar
+            Proyecto</a></small>
+        {% endif %}
+        {% if validacionPermisos.upd_Proyecto %}
+        <small><a class="btn btn-sm btn-info" href="{% url 'webApp:editarProyecto' proyecto.id %}">Editar</a></small>
+        {% endif %}
+      </h3>
+      {% endif %}
+      {% if proyecto.estado.descripcion == "EN PROGRESO" %}
+      <h3 class="card-title">
+        <small>Fecha Inicio: {{proyecto.fecha_ini_proyecto}}</small>
+      </h3>
+      <h3 class="card-title">
+        <small>Fecha Fin: {{proyecto.fecha_fin_proyecto}}</small>
+      </h3>
+      <h3 class="card-title">
+        <small>Dias Sprint: {{proyecto.sprint_dias}}</small>
+      </h3>
+      <button class="btn btn-danger btn-sm cerrar-proyecto" id="{{proyecto.id}}">Cerrar Proyecto</button>
+      <a class="btn btn-primary btn-sm" href="{% url 'webApp:verHistorialProyecto' proyecto.id %}">Ver historial</a>
+      {% endif %}
+    </div>
+  </div>
 
-          {% endif %}
-    
+
 
 </div>
 
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+<script>
+  $("button.cerrar-proyecto").click(function (e) {
+    console.log('se apreto el');
+    e.preventDefault();
+    Swal.fire({
+      title: 'Estas Seguro/a ?',
+      text: "Desea cerrar el proyecto !",
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          type: 'GET',
+          url: "{% url 'webApp:cerrarProyecto' %}",
+          data: { "idProyecto": e.target.id },
+          success: function (response) {
+            console.log(response);
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: 'El proyecto se cerro correctamente',
+              showConfirmButton: false,
+              timer: 1500
+            })
+            setTimeout(() => {
+              
+              location.reload()
+            }, 1500);
+          },
+          error: function (response) {
+            alert(response["responseJSON"]["error"]);
+          }
+        })
+      }
+    })
+
+
+  })
+</script>
+
+
+
+{% endblock javascripts %}
