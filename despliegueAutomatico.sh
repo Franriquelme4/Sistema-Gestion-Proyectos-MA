@@ -37,7 +37,7 @@ dev(){
     ;;
     "3") 
         echo "Poblando base de datos ..."
-        psql -X -U postgres password=postgres -p 5432 < ../database/init.sql
+        cat ../database/init.sql | psql -X -U postgres -p 5432 -d metodologias_agiles
     ;;
     "4") 
         echo "Poblando base de datos ..."
