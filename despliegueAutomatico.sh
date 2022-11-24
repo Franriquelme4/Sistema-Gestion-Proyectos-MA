@@ -33,7 +33,7 @@ dev(){
     "2")
         echo "Poblando base de datos ..."
         # psql -X -U postgres password=postgres -p 5432 metodologias_agiles < ../database/iteracion_2.sql
-        python3 manage.py loaddata ../database/iteracion_2.json
+        cat ../database/init.sql | psql -X -U postgres -p 5432 -d metodologias_agiles
     ;;
     "3") 
         echo "Poblando base de datos ..."
@@ -41,7 +41,7 @@ dev(){
     ;;
     "4") 
         echo "Poblando base de datos ..."
-        psql -X -U postgres password=postgres -p 5432 < ../database/init.sql
+        cat ../database/init.sql | psql -X -U postgres -p 5432 -d metodologias_agiles
     ;;
     "5") 
         echo "Poblando base de datos ..."
