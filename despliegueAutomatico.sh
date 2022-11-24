@@ -17,7 +17,6 @@ dev(){
     source env/bin/activate
     # Se instalan todos lo requerimientos
     pip3 install -r requirements.txt
-
     # read -p "Desea crear una nueva base de datos (y/n)?: " crearDB
     # if [ $crearDB = "y" ]
     # then
@@ -52,9 +51,46 @@ dev(){
     ;;
     esac
     # python3 sistema_metodos_agiles/manage.py loaddata sistema_metodos_agiles/Init.json
-
     python3 manage.py runserver
-
+}
+prod(){
+    # crearDB=""
+    # read -p "Desea crear una nueva base de datos (y/n)?: " crearDB
+    # if [ $crearDB = "y" ]
+    # then
+    #     # Se crea la nueva base de datos
+    #     psql -X -U postgres password=postgres -p 5432 < database/init.sql
+    # fi
+    # psql -X -U postgres password=postgres -p 5432 < ../database/init.sql
+    git checkout $tag
+    git pull
+    docker-compose build
+    echo "iteracion $iteracion"
+    case $iteracion in
+    "2")
+        echo "Poblando base de datos ..."
+        # psql -X -U postgres password=postgres -p 5432 metodologias_agiles < ../database/iteracion_2.sql
+        # python3 manage.py loaddata ../database/iteracion_2.json
+    ;;
+    "3") 
+        echo "Poblando base de datos ..."
+        # psql -X -U postgres password=postgres -p 5432 < ../database/init.sql
+    ;;
+    "4") 
+        echo "Poblando base de datos ..."
+        # psql -X -U postgres password=postgres -p 5432 < ../database/init.sql
+    ;;
+    "5") 
+        echo "Poblando base de datos ..."
+        docker-compose exec web python3 manage.py loaddata Init.json
+    ;;
+    "6") 
+        echo "Poblando base de datos ..."
+        # python3 manage.py loaddata Init.json
+    ;;
+    esac
+    # python3 sistema_metodos_agiles/manage.py loaddata sistema_metodos_agiles/Init.json
+    docker-compose up 
 }
 
 echo "--------------------------------------------------------------------------"
@@ -86,31 +122,12 @@ echo "2) Produccion"
 read -p "Ingresar una opcion: " entorno
 case $entorno in
     "1") 
-    echo "Ejecutando entorno de desarrollo..."
+    echo "Ejecutando entorno de desarrollo ..."
     dev
     ;;
-
-    
     "2") 
-    psql -U postgres -W postgres -h localhost metodologias_agiles < database/iteracion_2.sql
-
+    echo "Ejecutando entorno de produccion ..."
+    prod
     ;;
     "*") echo "Opcion incorrecta"
 esac
-# git checkout $entorno
-# echo "Opcion 2 $2"
-# echo "Opciones enviadas $*"
-# echo -e "\n"
-# echo "Recuperar valores"
-# while [ -n "$1" ]
-# do
-# case "$1" in
-# -a) echo "-a opcion utilizada";;
-# -b) echo "-b opcion utilizada";;
-# -c) echo "-c opcion utilizada";;
-# *) echo "$1 no es una opcion"
-# esac
-# shift
-# done
-# psql -U postgres -W -h localhost metodologias_agiles < database/iteracion_2.sql
-# psql -X -U postgres -d metodologias_agiles password=postgres -p 5432  < ../database/iteracion_2.sql
