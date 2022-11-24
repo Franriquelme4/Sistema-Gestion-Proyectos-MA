@@ -1,8 +1,13 @@
-from .models import MiembroEquipo, Permiso, Proyecto, Usuario, Rol, ProyectoRol, TipoUserStory
+from django.http import HttpResponse
+from .models import Historial, MiembroEquipo, Permiso, Proyecto, Usuario, Rol, ProyectoRol, TipoUserStory
 import calendar
 from datetime import date, datetime, timedelta
 import datetime
 import numpy as np
+from xhtml2pdf import pisa
+from django.template.loader import get_template
+from io import BytesIO
+
 
 def getUsuarioSesion(email):
     usuario = Usuario.objects.get(email=email)
@@ -88,6 +93,14 @@ def getRolByProyectIdByUsuario(id,idUsuario):
 	join usuario_proyecto up2 on up2.id = upp.proyecto_id 
 	join usuario_rol ur on ur.id = upr.rol_id where up2.id = {id} """)
     return proyecto_rol
+def getRolByproyectUsuario(id,idUsuario):
+	proyectoRol = ProyectoRol.objects.raw(f"""select um.id, array_agg(distinct urp.id) as roles from usuario_miembroequipo um 
+	join usuario_miembroequipo_miembro_rol ummr on um.id = ummr.miembroequipo_id 
+	join usuario_miembroequipo_miembro_usuario ummu on um.id = ummu.miembroequipo_id 
+	join usuario_proyecto_miembro_proyecto upmp on upmp.proyecto_id = {id}
+	join usuario_rol urp on urp.id = ummr.rol_id 
+	where ummu.usuario_id = {idUsuario} group by um.id""")
+	return proyectoRol
 
 
 def getColaboratorsByProyect(id):
@@ -226,3 +239,21 @@ def busy_end_date(start_date,busy_days):
     if res == 1:
       aux_days = aux_days + 1
   return(aux_date)
+
+def agregarHistorial(descripcion,idProyecto):
+	print("Se guarda el historial ")
+	proyecto = Proyecto.objects.get(id=idProyecto)
+	historial = Historial(
+		descripcion = descripcion
+	)
+	historial.save()
+	proyecto.historial.add(historial)
+	return
+def render_to_pdf(template_src, context_dict={}):
+    template = get_template(template_src)
+    html  = template.render(context_dict)
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return None

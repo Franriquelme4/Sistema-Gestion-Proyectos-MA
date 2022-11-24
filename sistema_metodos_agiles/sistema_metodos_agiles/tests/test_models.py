@@ -8,7 +8,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sistema_metodos_agiles.settings
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
-from usuario.models import CampoPersonalizado, FaseTUS, MiembroEquipo, PrioridadTUs, Proyecto, Cliente, Sprint, TipoUserStory, UserStory, Usuario, Rol, Permiso, ProyectoRol, Fase, Tablero, Estado, SprintUserStory
+from usuario.models import CampoPersonalizado, FaseTUS, MiembroEquipo, PrioridadTUs, Proyecto, Cliente, Sprint, TipoUserStory, UserStory, Usuario, Rol, Permiso, ProyectoRol, Fase, Tablero, Estado, SprintUserStory, Comentario
 
 class TestProyecto(TestCase):
     
@@ -340,7 +340,7 @@ class TestProyecto(TestCase):
 
     def test_sprint_us(self):
         """
-            Test para verificar la creacon de un nuevo sprint us.
+            Test para verificar la creacion de un nuevo sprint us.
         """
 
         sprint_us = SprintUserStory.objects.create(
@@ -352,3 +352,16 @@ class TestProyecto(TestCase):
 
         self.assertEqual(sprint_us.colaborador, Usuario.objects.get(nombre='nombre_usuario'), 'El colaborador de sprint no es el esperado')
         
+    def test_comentario(self):
+        """
+            Test para verificar la creacion de un nuevo comentario
+        """
+
+        comentario_prueba = Comentario.objects.create(
+            comentario = 'comentario de prueba',
+            horas = 2,
+        )
+        
+        comentario_prueba.save()
+
+        self.assertEqual(comentario_prueba.comentario, 'comentario de prueba', 'El comentario no es el esperado')
