@@ -30,7 +30,8 @@ dev(){
     case $iteracion in
     "2")
         echo "Poblando base de datos ..."
-        psql -X -U postgres password=postgres -p 5432 -W -h localhost metodologias_agiles < ../database/init.sql
+        # psql -X -U postgres password=postgres -p 5432 metodologias_agiles < ../database/iteracion_2.sql
+        python3 manage.py loaddata ../database/iteracion_2.json
     ;;
     "3") 
         echo "Poblando base de datos ..."
@@ -111,3 +112,4 @@ esac
 # shift
 # done
 # psql -U postgres -W -h localhost metodologias_agiles < database/iteracion_2.sql
+psql -X -U postgres -d metodologias_agiles password=postgres -p 5432  < ../database/iteracion_2.sql

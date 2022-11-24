@@ -1,0 +1,491 @@
+[
+    {
+		"model": "usuario.permiso",
+		"pk": 1,
+		"fields": {
+			"nombre_permiso": "def",
+			"descripcion_permiso": "Default"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 2,
+		"fields": {
+			"nombre_permiso": "crt_Sprint",
+			"descripcion_permiso": "Crear Sprint"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 3,
+		"fields": {
+			"nombre_permiso": "asg_Sprint",
+			"descripcion_permiso": "Asignar Sprint"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 4,
+		"fields": {
+			"nombre_permiso": "crt_Proyecto",
+			"descripcion_permiso": "Crear Proyecto"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 5,
+		"fields": {
+			"nombre_permiso": "act_Usuario",
+			"descripcion_permiso": "Activar Usuarios"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 6,
+		"fields": {
+			"nombre_permiso": "crt_US",
+			"descripcion_permiso": "Crear User Stories"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 7,
+		"fields": {
+			"nombre_permiso": "upd_US",
+			"descripcion_permiso": "Modificar User Stories"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 8,
+		"fields": {
+			"nombre_permiso": "dlt_US",
+			"descripcion_permiso": "Eliminar User Stories"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 34,
+		"fields": {
+			"nombre_permiso": "dsp_US",
+			"descripcion_permiso": "Consultar User Stories"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 9,
+		"fields": {
+			"nombre_permiso": "adm_Burndown",
+			"descripcion_permiso": "Administrar BurnDown Chart"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 10,
+		"fields": {
+			"nombre_permiso": "crt_Dailys",
+			"descripcion_permiso": "Crear Dailys"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 11,
+		"fields": {
+			"nombre_permiso": "dsp_SprinBack",
+			"descripcion_permiso": "Consultar Sprint Backlog"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 12,
+		"fields": {
+			"nombre_permiso": "dsp_ProductBack",
+			"descripcion_permiso": "Consultar Product Backlog"
+		}
+	},
+    
+    {
+		"model": "usuario.permiso",
+		"pk": 13,
+		"fields": {
+			"nombre_permiso": "dsp_HisCambioUS",
+			"descripcion_permiso": "Consultar Historial Cambios US"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 14,
+		"fields": {
+			"nombre_permiso": "upd_PrioridadUS",
+			"descripcion_permiso": "Modificar Prioridad US"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 15,
+		"fields": {
+			"nombre_permiso": "crt_rol",
+			"descripcion_permiso": "Crear Roles"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 16,
+		"fields": {
+			"nombre_permiso": "asg_rol",
+			"descripcion_permiso": "Asignar Roles"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 17,
+		"fields": {
+			"nombre_permiso": "dlt_rol",
+			"descripcion_permiso": "Eliminar Roles"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 28,
+		"fields": {
+			"nombre_permiso": "dsp_Roles",
+			"descripcion_permiso": "Consultar Roles"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 18,
+		"fields": {
+			"nombre_permiso": "agr_Colaborador",
+			"descripcion_permiso": "Agregar Colaboradores"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 19,
+		"fields": {
+			"nombre_permiso": "dlt_Colaborador",
+			"descripcion_permiso": "Eliminar Colaboradores"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 33,
+		"fields": {
+			"nombre_permiso": "upd_Colaborador",
+			"descripcion_permiso": "Modificar Colaborador"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 20,
+		"fields": {
+			"nombre_permiso": "upd_EstaKanban",
+			"descripcion_permiso": "Modificar Estado Kanban"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 21,
+		"fields": {
+			"nombre_permiso": "asg_Proyecto",
+			"descripcion_permiso": "Asignar Proyecto"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 22,
+		"fields": {
+			"nombre_permiso": "upd_PrioriNegoc",
+			"descripcion_permiso": "Modificar Prioridad Negocio"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 23,
+		"fields": {
+			"nombre_permiso": "dsp_Burndown",
+			"descripcion_permiso": "Consultar BurnDown Chart"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 24,
+		"fields": {
+			"nombre_permiso": "dsp_Velocity",
+			"descripcion_permiso": "Consultar Velocity Chart"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 25,
+		"fields": {
+			"nombre_permiso": "dsp_ReporteEsta",
+			"descripcion_permiso": "Consultar Reporte Estado"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 26,
+		"fields": {
+			"nombre_permiso": "dct_Usuario",
+			"descripcion_permiso": "Desactivar Usuarios"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 27,
+		"fields": {
+			"nombre_permiso": "dsp_Colaborador",
+			"descripcion_permiso": "Consultar Colaboradores"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 29,
+		"fields": {
+			"nombre_permiso": "dsp_TipoUs",
+			"descripcion_permiso": "Consultar Tipo US"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 30,
+		"fields": {
+			"nombre_permiso": "ctr_TipoUs",
+			"descripcion_permiso": "Crear Tipo US"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 31,
+		"fields": {
+			"nombre_permiso": "upd_TipoUs",
+			"descripcion_permiso": "Modificar Tipo US"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 32,
+		"fields": {
+			"nombre_permiso": "dlt_TipoUs",
+			"descripcion_permiso": "Eliminar Tipo US"
+		}
+	},
+    
+    {
+		"model": "usuario.permiso",
+		"pk": 39,
+		"fields": {
+			"nombre_permiso": "imp_TipoUs",
+			"descripcion_permiso": "Importar Tipo US"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 35,
+		"fields": {
+			"nombre_permiso": "dsp_Tablero",
+			"descripcion_permiso": "Consultar Tablero"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 36,
+		"fields": {
+			"nombre_permiso": "crt_Tablero",
+			"descripcion_permiso": "Crear Tablero"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 37,
+		"fields": {
+			"nombre_permiso": "dlt_Tablero",
+			"descripcion_permiso": "Eliminar Tablero"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 38,
+		"fields": {
+			"nombre_permiso": "upd_Tablero",
+			"descripcion_permiso": "Modificar Tablero"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 40,
+		"fields": {
+			"nombre_permiso": "upd_rol",
+			"descripcion_permiso": "Modificar Rol"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 41,
+		"fields": {
+			"nombre_permiso": "ini_Proyecto",
+			"descripcion_permiso": "Iniciar Proyecto"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 42,
+		"fields": {
+			"nombre_permiso": "upd_Proyecto",
+			"descripcion_permiso": "Editar Proyecto"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 44,
+		"fields": {
+			"nombre_permiso": "agr_Colaborador_Sprint",
+			"descripcion_permiso": "Agregar Colaborador Sprint"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 45,
+		"fields": {
+			"nombre_permiso": "dsp_Colaborador_Sprint",
+			"descripcion_permiso": "Consultar Colaborador Sprint"
+		}
+	},
+
+    {
+		"model": "usuario.permiso",
+		"pk": 46,
+		"fields": {
+			"nombre_permiso": "agr_Colaborador_US",
+			"descripcion_permiso": "Agregar US - Colaborador Sprint"
+		}
+	},
+	{
+		"model": "usuario.permiso",
+		"pk": 47,
+		"fields": {
+			"nombre_permiso": "ini_sprint",
+			"descripcion_permiso": "Iniciar Sprint"
+		}
+	},
+	{
+		"model": "usuario.permiso",
+		"pk": 48,
+		"fields": {
+			"nombre_permiso": "fin_us",
+			"descripcion_permiso": "Finalizar US"
+		}
+	},
+	{
+		"model": "usuario.permiso",
+		"pk": 49,
+		"fields": {
+			"nombre_permiso": "cancelar_sprint",
+			"descripcion_permiso": "Cancelar Sprint"
+		}
+	},
+	{
+		"model": "usuario.permiso",
+		"pk": 50,
+		"fields": {
+			"nombre_permiso": "reasignar_us",
+			"descripcion_permiso": "Reasignar User story"
+		}
+	},
+
+	{
+		"model": "usuario.permiso",
+		"pk": 47,
+		"fields": {
+			"nombre_permiso": "ini_sprint",
+			"descripcion_permiso": "Iniciar Sprint"
+		}
+	},
+
+    {
+		"model": "usuario.rol",
+		"pk": 1,
+		"fields": {
+			"nombre_rol": "Administrador",
+			"descripcion_rol": "Rol para administrar el sistema",
+            "permiso": [1,4,5,21,26]
+		}
+	},
+
+    {
+		"model": "usuario.rol",
+		"pk": 2,
+		"fields": {
+			"nombre_rol": "Observador",
+			"descripcion_rol": "Rol por default para todos los usuarios",
+            "permiso": [1]
+        }
+	},
+
+    {
+		"model": "usuario.rol",
+		"pk": 3,
+		"fields": {
+			"nombre_rol": "Scrum Master",
+			"descripcion_rol": "Rol para gestionar proyecto",
+            "permiso": [1,2,3,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,44,45,46,47,48,49,50]
+		}
+	},
+    {
+		"model": "usuario.usuario",
+		"pk": 2,
+		"fields": {
+			"nombre": "admin",
+			"apellido": "sistema",
+			"email": "as.is2.g15@gmail.com",
+			"nombre_usuario": "as.is2.g15",
+			"activo": true,
+			"df_rol_id": 1
+		}
+	} 
+]
+
+
