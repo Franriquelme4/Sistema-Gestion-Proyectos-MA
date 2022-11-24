@@ -281,3 +281,4 @@ class Historial(models.Model):
         ordering = ['fecha_creacion']
     def __str__(self):
         return self.descripcion
+    

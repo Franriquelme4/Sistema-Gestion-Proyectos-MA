@@ -5,6 +5,10 @@
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
 <style>
+  #infinite-table {
+    height: 300px;
+    overflow: auto;
+  }
   table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
@@ -33,23 +37,26 @@
     </div>
     <div class="card-body p-2">
       <div class="border">
-        {% for histo in historial %}
-        <!--<p class="m-0"><strong>{{histo.fecha_creacion}}</strong> - {{histo.descripcion}} <strong> Usuario: </strong> {{histo.usuario.nombre}}</p> -->
-        <table>
-          <tr>
-            <th>Fecha</th>
-            <th>Usuario</th>
-            <th>Descripcion</th>
-          </tr>
-          {% for histo in historial %}
-          <tr>
-              <td>{{histo.fecha_creacion}}</td>
-              <td>{{histo.usuario.nombre}}</td>
-              <td>{{histo.descripcion}}</td>
-          </tr>
-          {% endfor %}
+        <!-- <div class="table-responsive"> -->
+        <div class="table table-bordred table-striped">
+          <table id="table" class="display" style="width:100%">
+            <thead class=" text-primary">
+              <th>Fecha</th>
+              <th>Usuario</th>
+              <th>Descripcion</th>
+            </thead>
+            <tbody>
+              {% for histo in historial %}
+              <!--<p class="m-0"><strong>{{histo.fecha_creacion}}</strong> - {{histo.descripcion}} <strong> Usuario: </strong> {{histo.usuario.nombre}}</p> -->
+              <tr>
+                <td>{{histo.fecha_creacion}}</td>
+                <td>{{histo.usuario.nombre}}</td>
+                <td>{{histo.descripcion}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
           </table>
-      {% endfor %}
+        <tbody>
       </div>
  
     </div>

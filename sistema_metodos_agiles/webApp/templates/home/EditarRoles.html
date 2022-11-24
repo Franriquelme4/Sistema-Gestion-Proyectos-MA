@@ -23,8 +23,9 @@
                 value="{{rolProyecto.descripcion_rol}}">
             </div>
             <div class="form-group">
-              <select class="form-select" multiple aria-label="multiple select example" name="permisos">
-                <option selected disabled>Seleccionar los permisos</option>
+              <h6>Seleccionar permisos</h6>
+              <select class="form-select" multiple aria-label="multiple select example" size="15" name="permisos">
+                <!--<option selected disabled>Seleccionar los permisos</option>-->
                 {% for permiso in permisos %}
                 <option value="{{permiso.id}}">{{permiso.descripcion_permiso}}</option>
                 {% endfor %}
