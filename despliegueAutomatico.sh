@@ -5,7 +5,7 @@ dev(){
     if [ $crearDB = "y" ]
     then
         # Se crea la nueva base de datos
-        psql -X -U postgres password=postgres -p 5432 < ../database/init.sql
+        psql -X -U postgres password=postgres -p 5432 < database/init.sql
     fi
     # psql -X -U postgres password=postgres -p 5432 < ../database/init.sql
     git checkout $tag
