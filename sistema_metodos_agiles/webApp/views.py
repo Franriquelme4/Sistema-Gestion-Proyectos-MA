@@ -134,8 +134,8 @@ def GestionProyectoAgregar(request):
         )
         proyecto.save()
         proyecto.miembro_proyecto.add(miembro)
-        idUsuario = request.user.id
-        agregarHistorial("Se crea el proyecto",proyecto.id,idUsuario)
+        emailUsuario = request.user.email
+        agregarHistorial("Se crea el proyecto",proyecto.id,emailUsuario)
     return redirect('/')
 
 
@@ -201,8 +201,8 @@ def crearProyectoGuardar(request):
         )
         proyecto.save()
         proyecto.miembro_proyecto.add(miembro)
-        idUsuario = request.user.id
-        agregarHistorial("Se crea el proyecto",proyecto.id,idUsuario)
+        emailUsuario = request.user.email
+        agregarHistorial("Se crea el proyecto",proyecto.id,emailUsuario)
     return redirect('/')
 
 
@@ -712,7 +712,9 @@ def crearUsGuardar(request, id):
             prioridad_final=round((0.6*pn+0.4*pt)+0)
         )
         userStory.save()
-        agregarHistorial(f"Creacion de UserStory nombre = {userStory.nombre_us}",id)
+        print("REQ: " + request)
+        idUsuario = request.user.id
+        agregarHistorial(f"Creacion de UserStory nombre = {userStory.nombre_us}",id,idUsuario)
     return redirect(f'/proyecto/productBacklog/{id}')
 
 
