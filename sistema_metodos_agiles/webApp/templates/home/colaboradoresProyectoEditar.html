@@ -19,14 +19,17 @@
         {% csrf_token %}
 
         <div class="form-group">
+          <h6>Colaborador</h6>
           <select class="form-control" aria-label="Default select example" name="usuario">
             <option selected disable="true" value="{{colaboradores.id}}">{{colaboradores.nombre}} {{colaboradores.apellido}}</option>
           </select>
         </div>
 
         <div class="form-group">
+          <h6>Seleccionar rol</h6>
           <select class="form-control custom-select" aria-label="Default select example" name="rol" multiple="true">
-            <option selected>Seleccionar rol</option>
+            
+            <!--<option unselected>Seleccionar rol</option> -->
             {% for rolProyecto in rolesSelect %}
               <option selected value="{{rolProyecto.id_rol}}">{{rolProyecto.nombre_rol}}</option>  
             {% endfor %}

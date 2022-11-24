@@ -240,13 +240,18 @@ def busy_end_date(start_date,busy_days):
       aux_days = aux_days + 1
   return(aux_date)
 
-def agregarHistorial(descripcion,idProyecto):
+def agregarHistorial(request,idProyecto,descripcion):
+	emailUsuario = request.user.email
 	print("Se guarda el historial ")
+	print("Usuarioo Historial: "+emailUsuario)
 	proyecto = Proyecto.objects.get(id=idProyecto)
+	user = Usuario.objects.get(email=emailUsuario)
 	historial = Historial(
-		descripcion = descripcion
+		descripcion = descripcion,
+		usuario = user
 	)
 	historial.save()
+	#historial.usuario.add(user)
 	proyecto.historial.add(historial)
 	return
 def render_to_pdf(template_src, context_dict={}):
