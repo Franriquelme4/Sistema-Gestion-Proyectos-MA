@@ -1,4 +1,53 @@
 # !bin/bash
+dev(){
+    git checkout $tag
+    git pull
+    # Creando entorno virtual
+    cd sistema_metodos_agiles  
+    python3 -m venv env
+    # Se ingresa al entorno virtual
+    source env/bin/activate
+    # Se instalan todos lo requerimientos
+    pip3 install -r requirements.txt
+    crearDB=""
+    read -p "Desea crear una nueva base de datos (y/n)?: " crearDB
+    if [ $crearDB = "y" ]
+    then
+        # Se crea la nueva base de datos
+        psql -X -U postgres password=postgres -p 5432 < ../database/init.sql
+    fi
+    # Se aplican las migraciones
+    python3 manage.py makemigrations
+    python3 manage.py migrate
+    
+    case $iteracion in
+    "2")
+        echo "Poblando base de datos ..."
+        psql -X -U postgres password=postgres -p 5432 < ../database/iteracion_2.sql
+    ;;
+    "3") 
+        echo "Poblando base de datos ..."
+        psql -X -U postgres password=postgres -p 5432 < ../database/iteracion_3.sql
+    ;;
+    "4") 
+        echo "Poblando base de datos ..."
+        psql -X -U postgres password=postgres -p 5432 < ../database/iteracion_4.sql
+    ;;
+    "5") 
+        echo "Poblando base de datos ..."
+        python3 manage.py loaddata Init.json
+    ;;
+    "6") 
+        echo "Poblando base de datos ..."
+        python3 manage.py loaddata Init.json
+    ;;
+    esac
+    # python3 sistema_metodos_agiles/manage.py loaddata sistema_metodos_agiles/Init.json
+
+    python3 manage.py runserver
+
+}
+
 echo "--------------------------------------------------------------------------"
 echo "===================== Sistema de Gestion de Proyecto ====================="
 echo "========================= Despliegue automatico =========================="
@@ -28,20 +77,14 @@ echo "2) Produccion"
 read -p "Ingresar una opcion: " entorno
 case $entorno in
     "1") 
-    git checkout $tag
-    git pull
-    source sistema_metodos_agiles/env/bin/activate
-    pip3 install -r requirements.txt
-    python3 sistema_metodos_agiles/manage.py makemigrations
-    python3 sistema_metodos_agiles/manage.py migrate
-    python3 sistema_metodos_agiles/manage.py loaddata sistema_metodos_agiles/Init.json
-    python3 sistema_metodos_agiles/manage.py runserver
+    echo "Ejecutando entorno de desarrollo..."
+    dev
     ;;
-    "2") echo "Prod"
-    echo "Prod"
-    echo "Prod"
-    echo "Prod"
-    echo "Prod"
+
+    
+    "2") 
+    psql -U postgres -W postgres -h localhost metodologias_agiles < database/iteracion_2.sql
+
     ;;
     "*") echo "Opcion incorrecta"
 esac
@@ -60,3 +103,4 @@ esac
 # esac
 # shift
 # done
+# psql -U postgres -W -h localhost metodologias_agiles < database/iteracion_2.sql
