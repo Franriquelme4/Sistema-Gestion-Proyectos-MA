@@ -30,7 +30,7 @@ dev(){
     case $iteracion in
     "2")
         echo "Poblando base de datos ..."
-        psql -X -U postgres password=postgres -p 5432 < ../database/init.sql
+        psql -X -U postgres password=postgres -p 5432 -W -h localhost metodologias_agiles < ../database/init.sql
     ;;
     "3") 
         echo "Poblando base de datos ..."
