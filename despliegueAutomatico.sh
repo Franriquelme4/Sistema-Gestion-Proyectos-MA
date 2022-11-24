@@ -1,5 +1,12 @@
 # !bin/bash
 dev(){
+    read -p "Desea crear una nueva base de datos (y/n)?: " crearDB
+    if [ $crearDB = "y" ]
+    then
+        # Se crea la nueva base de datos
+        psql -X -U postgres password=postgres -p 5432 < ../database/init.sql
+    fi
+    # psql -X -U postgres password=postgres -p 5432 < ../database/init.sql
     git checkout $tag
     git pull
     # Creando entorno virtual
@@ -10,16 +17,16 @@ dev(){
     # Se instalan todos lo requerimientos
     pip3 install -r requirements.txt
     crearDB=""
-    read -p "Desea crear una nueva base de datos (y/n)?: " crearDB
-    if [ $crearDB = "y" ]
-    then
-        # Se crea la nueva base de datos
-        psql -X -U postgres password=postgres -p 5432 < ../database/init.sql
-    fi
+    # read -p "Desea crear una nueva base de datos (y/n)?: " crearDB
+    # if [ $crearDB = "y" ]
+    # then
+    #     # Se crea la nueva base de datos
+    #     psql -X -U postgres password=postgres -p 5432 < ../database/init.sql
+    # fi
     # Se aplican las migraciones
     python3 manage.py makemigrations
     python3 manage.py migrate
-    
+    echo "iteracion $iteracion"
     case $iteracion in
     "2")
         echo "Poblando base de datos ..."
