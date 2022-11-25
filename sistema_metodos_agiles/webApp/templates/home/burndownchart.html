@@ -50,7 +50,7 @@ new Chart("myChart", {
     labels: xValues,
     datasets: [{
       label: "User Stories",
-      backgroundColor: "FFCC00",
+      borderColor: "red",
       fill: false,
       pointRadius: 1,
       borderColor: "rgba(255,0,0,0.5)",
@@ -58,7 +58,14 @@ new Chart("myChart", {
     },
     {
       label: "Duracion Sprint(dias)",
-      data: yValues
+      borderColor: "green",
+      data: yValues,
+      fill: false
+    },
+    {
+      data: [],
+      borderColor: "blue",
+      fill: false
     }
   ]
   },    

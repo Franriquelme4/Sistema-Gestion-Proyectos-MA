@@ -1325,7 +1325,22 @@ def visualizarBurndown(request,idProyecto,idSprint):
 
     cantidadUs = Sprint.objects.get(id=idSprint).userStory_sp.count
     cantidadDiasSprint = Proyecto.objects.get(id = idProyecto).duracion
+    
 
+    arrayCUS = []
+    arrayCUSF = []
+    userStory = Sprint.objects.get(id=idSprint).userStory_sp.all()
+    for us in userStory:
+        horasUs = horasUs + us.tiempoEstimado_us
+    
+    for us in userStory:
+        horaReal = horaReal + us.tiempoTrabajado
+
+    
+
+    duracionSprint = Sprint.objects.get(id=idSprint)
+    arrayCUS.append(totalUs)
+    arrayCUSF.append(terminados)
 
     context={
     'userSession':userSession,
