@@ -1,34 +1,3 @@
-
-Skip to content
-Pull requests
-Issues
-Codespaces
-Marketplace
-Explore
-@victhupy
-Franriquelme4 /
-IS2-Grupo-15
-Public
-
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-
-    Insights
-
-IS2-Grupo-15/sistema_metodos_agiles/webApp/views.py /
-Francisco Riquelme Merge branch 'developer' into francisco
-Latest commit d0b16cb Nov 16, 2022
-History
-3 contributors
-@MatiasWinterPy
-@AntIns01
-@victhupy
-1317 lines (1213 sloc) 52.8 KB
 import datetime
 import json
 from django.http import JsonResponse
@@ -1350,24 +1319,24 @@ def verHistorialProyecto(request, id):
 @login_required
 def visualizarBurndown(request,idProyecto,idSprint):
     variables = request.POST
-    if request.method == 'POST':
-        userSession = getUsuarioSesion(request.user.email)
-        proyecto = getProyectsByID(idProyecto,userSession.id)[0]
+    #if request.method == 'POST':
+    userSession = getUsuarioSesion(request.user.email)
+    proyecto = getProyectsByID(idProyecto,userSession.id)[0]
 
-        cantidadUs = Sprint.objects.get(id=idSprint).userStory_sp.count
-        cantidadDiasSprint = Proyecto.objects.get(id = idProyecto).duracion
+    cantidadUs = Sprint.objects.get(id=idSprint).userStory_sp.count
+    cantidadDiasSprint = Proyecto.objects.get(id = idProyecto).duracion
 
 
-        context={
-        'userSession':userSession,
-        'proyecto':proyecto,
-        'cantidadUs': cantidadUs,
-        'cantidadDiasSprint' : cantidadDiasSprint
-        }
+    context={
+    'userSession':userSession,
+    'proyecto':proyecto,
+    'cantidadUs': cantidadUs,
+    'cantidadDiasSprint' : cantidadDiasSprint
+    }
 
     html_template = loader.get_template('home/burndownchart.html')
     return HttpResponse(html_template.render(context,request))
 
-        
+
 
     #return redirect(f'/proyecto/sprint/burndownchart/{idProyecto}/{idSprint}')
