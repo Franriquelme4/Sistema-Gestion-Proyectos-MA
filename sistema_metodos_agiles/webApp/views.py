@@ -215,7 +215,7 @@ def verProyecto(request, id):
     userSession = getUsuarioSesion(request.user.email)
     proyecto = getProyectsByID(id, userSession.id)[0]
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
-    print(getPermisos(userSession.id, id), 'Permisos')
+    print(request.user.email,'Correeo')
     permisosProyecto = ['dsp_Colaborador', 'dsp_Roles', 'dsp_TipoUs',
                         'dsp_ProductBack', 'dsp_SprinBack', 'ini_Proyecto', 'upd_Proyecto']
     validacionPermisos = validarPermisos(permisosProyecto, userSession.id, id)
@@ -242,6 +242,7 @@ def rolesProyecto(request, id):
     proyecto = getProyectsByID(id, userSession.id)[0]
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
     print(request.session['userSesion'])
+    print(request.user,'Correeo')
     permisosProyecto = ['crt_rol', 'dsp_Colaborador', 'dsp_Roles',
                         'dsp_TipoUs', 'dsp_ProductBack', 'dsp_SprinBack', 'dlt_rol', 'upd_rol']
     validacionPermisos = validarPermisos(permisosProyecto, userSession.id, id)
@@ -1116,6 +1117,7 @@ def pruebaAjax(request):
 
 @login_required
 def sprintTableroActualizarEstado(request, idProyecto, idSprint):
+    """Se actualiza el estado de us una vez que se desliza y se suelta en el estado en el cual se quiere dejar"""
     variables = request.POST
     if request.method == 'POST':
         idUserStory = variables.get('userStory', False)
@@ -1161,6 +1163,7 @@ def verDetallesUs(request, idProyecto, idUs):
 
 @login_required
 def getComentarios(request):
+    """Se optienen todos los comentarios de un user Story"""
     if request.accepts and request.method == "GET":
         idUs = request.GET.get("idUs", None)
         userStory = UserStory.objects.get(id=idUs)
@@ -1175,6 +1178,7 @@ def getComentarios(request):
 
 @login_required
 def guardarComentarioUs(request, idProyecto, idSprint):
+    """Cada us tiene la posibilidad de tener comentarios, dicho metodo se utiliza para almacenar la misma"""
     variables = request.POST
     if request.method == 'POST':
         comentario = variables.get('comentario', False)
@@ -1195,6 +1199,7 @@ def guardarComentarioUs(request, idProyecto, idSprint):
     return redirect(f'/proyecto/sprint/tablero/{idProyecto}/{idSprint}/0')
 @login_required
 def iniciarSprint(request, idProyecto, idSprint):
+    """Se inicia el sprint una vez que se haya cargado todos los datos, se calcula la fecha """
     sprint = Sprint.objects.filter(id = idSprint)
     sp = Sprint.objects.get(id = idSprint)
     proyectoActual = Proyecto.objects.filter(id = idProyecto)
@@ -1214,6 +1219,7 @@ def iniciarSprint(request, idProyecto, idSprint):
 
 @login_required
 def cancelarSprint(request):
+    """Se cancela el sprint, regresando la disponibilidad de los user story"""
     if request.accepts and request.method == "GET":
         idSprint = request.GET.get("idSprint", None)
         idProyecto = request.GET.get("idProyecto", None)
@@ -1248,6 +1254,7 @@ def verDocumentacion(request):
 
 @login_required
 def finalizarUserStory(request,idProyecto):
+    """Una vez que se encuentre en done el scrum tiene la posibilidad de leer finalizar el user story"""
     print(f"Finalizar Proyecto: {idProyecto}" )
     if request.accepts and request.method == "GET":
         idUs = request.GET.get("idUs", None)
@@ -1407,6 +1414,7 @@ def verHistorialProyecto(request, id):
 #     return HttpResponse(pdf, content_type='application/pdf')
 
 def ListHistorialPdf(request,id):
+    """Se descarga el archivo pdf del historial"""
     template_path = 'reportes/historial.html'
     proyecto = Proyecto.objects.get(id=id)
     context = {
@@ -1424,6 +1432,7 @@ def ListHistorialPdf(request,id):
 
 @login_required
 def cerrarProyecto(request):
+    """Se encarga de cerrar el proyecto pero da la posibilidad de aun poder ver los parametros"""
     if request.accepts and request.method == "GET":
         idProyecto = request.GET.get("idProyecto", None)
         proyecto = Proyecto.objects.filter(id=idProyecto)
