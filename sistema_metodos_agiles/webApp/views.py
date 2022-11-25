@@ -1446,3 +1446,108 @@ def cerrarProyecto(request):
         )
         return JsonResponse({} , status = 200)
     return JsonResponse({}, status = 400)  
+@login_required
+def visualizarBurndown(request,idProyecto,idSprint):
+    variables = request.POST
+    #if request.method == 'POST':
+    userSession = getUsuarioSesion(request.user.email)
+    proyecto = getProyectsByID(idProyecto,userSession.id)[0]
+
+    cantidadUs = Sprint.objects.get(id=idSprint).userStory_sp.count
+    cantidadDiasSprint = Proyecto.objects.get(id = idProyecto).duracion
+    
+
+    arrayCUS = []
+    arrayCUSF = []
+    userStory = Sprint.objects.get(id=idSprint).userStory_sp.all()
+    for us in userStory:
+        horasUs = horasUs + us.tiempoEstimado_us
+    
+    for us in userStory:
+        horaReal = horaReal + us.tiempoTrabajado
+
+    
+
+    duracionSprint = Sprint.objects.get(id=idSprint)
+    arrayCUS.append(totalUs)
+    arrayCUSF.append(terminados)
+
+    context={
+    'userSession':userSession,
+    'proyecto':proyecto,
+    'cantidadUs': cantidadUs,
+    'cantidadDiasSprint' : cantidadDiasSprint
+    }
+
+    html_template = loader.get_template('home/burndownchart.html')
+    return HttpResponse(html_template.render(context,request))
+
+
+
+    #return redirect(f'/proyecto/sprint/burndownchart/{idProyecto}/{idSprint}')
+
+
+
+
+@login_required
+def visualizarBurndown2(request,idProyecto,idSprint):
+    variables = request.POST
+    #if request.method == 'POST':
+    userSession = getUsuarioSesion(request.user.email)
+    proyecto = getProyectsByID(idProyecto,userSession.id)[0]
+    permisosProyecto = ['dsp_Colaborador', 'dsp_Roles',
+                        'dsp_TipoUs', 'dsp_ProductBack', 'dsp_SprinBack']
+    validacionPermisos = validarPermisos(permisosProyecto, userSession.id, idProyecto)
+    cantidadDiasSprint = Proyecto.objects.get(id = idProyecto).sprint_dias
+    arraydias = []
+    arrayIdeal = []
+    arrayBurn = []
+    userStory = Sprint.objects.get(id=idSprint).userStory_sp.all()
+    horasUs = 0
+    horaReal = 0
+
+    for us in userStory:
+        horasUs = horasUs + us.us.tiempoEstimado_us
+
+    print(f"horasUS: {horasUs}")
+
+    idealxdia = round(horasUs/cantidadDiasSprint)
+    for i in range(0,cantidadDiasSprint):
+        arraydias.append(f"Dia {i + 1}")
+        #Math.round(totalHoursInSprint - (idealHoursPerDay * i++) + sumArrayUpTo(scopeChange, 0))
+        ideal = round(horasUs - (idealxdia * i))
+        if ideal >= 0:
+            arrayIdeal.append(ideal)
+        else:
+            break
+        
+
+        
+    for us in userStory:
+        horaReal = horaReal + us.us.tiempoTrabajado
+        arrayBurn.append(horaReal)
+    
+    arrayBurn = arrayBurn[::-1]
+
+    dataBurndown = {
+        "TotalDias" : cantidadDiasSprint,
+        "Dias" : arraydias,
+        "totalHoursInSprint" : horasUs,
+        "arrayIdeal" : arrayIdeal,
+        "arrayBurn" : arrayBurn
+    }
+    #print(dataBurndown)
+    dicc_Burndown = json.dumps(dataBurndown)
+    print(dicc_Burndown)
+
+
+    context={
+    'userSession':userSession,
+    'proyecto':proyecto,
+    'cantidadDiasSprint' : cantidadDiasSprint,
+    'validacionPermisos': validacionPermisos,
+    'dicc_Burndown' : dicc_Burndown
+    }
+
+    html_template = loader.get_template('home/burndownchart2.html')
+    return HttpResponse(html_template.render(context,request))
