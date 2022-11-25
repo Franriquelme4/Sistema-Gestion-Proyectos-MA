@@ -6,10 +6,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from usuario.utils import validarPermisos, render_to_pdf,busy_end_date,agregarHistorial, getRolByproyectUsuario,getUsuarioSesion, getTipoUsBySprint, getIdScrumRol, getProyectsByUsuarioID, getProyectsByID, getRolByProyectId, getColaboratorsByProyect, calcularFechaFin, getTipoUsbyProyectId, getTipoUsbyNotProyectId, getPermisos
-from usuario.models import Usuario, FaseTUS, TipoUs_Proyecto,Comentario, SprintUserStory, SprintColaborador, Sprint, Cliente, Proyecto, MiembroEquipo, Permiso, Rol, ProyectoRol, TipoUserStory, PrioridadTUs, UserStory, Fase, Estado
+from usuario.models import Usuario, FaseTUS,HoraTrabajada, TipoUs_Proyecto,Comentario, SprintUserStory, SprintColaborador, Sprint, Cliente, Proyecto, MiembroEquipo, Permiso, Rol, ProyectoRol, TipoUserStory, PrioridadTUs, UserStory, Fase, Estado
 from django.template import loader
 from django.db.models import Q
-from datetime import datetime
+from datetime import datetime,timedelta
 from django.views.generic import ListView,View
 from xhtml2pdf import pisa
 from django.template.loader import get_template
@@ -1193,6 +1193,12 @@ def guardarComentarioUs(request, idProyecto, idSprint):
         UserStory.objects.filter(id=idUs).update(
             tiempoTrabajado = userStory.tiempoTrabajado + horasTrabajadas
         )
+        HoraTrabajada.objects.create(
+           sprint =Sprint.objects.get(id=idSprint),
+           horas= horasTrabajadas,
+            us=UserStory.objects.get(id=idUs),
+            proyecto=Proyecto.objects.get(id=idProyecto)
+        ) 
         userStory.comentario.add(newComentario)
         descripcion = f"Se agrego un comentario: '{newComentario.comentario}' al US: {userStory.nombre_us}"
         agregarHistorial(request,idProyecto,descripcion)
@@ -1520,14 +1526,28 @@ def visualizarBurndown2(request,idProyecto,idSprint):
             arrayIdeal.append(ideal)
         else:
             break
-        
 
-        
-    for us in userStory:
-        horaReal = horaReal + us.us.tiempoTrabajado
-        arrayBurn.append(horaReal)
+    sprintActual = Sprint.objects.get(id=idSprint)
+    fechaInicio = sprintActual.fechaIni_sp
+    aux=[]
+    flag=0
+    arrayBurn.append(horasUs)
+    while 1==1:
+        horasTrabajadas=0
+        aux = HoraTrabajada.objects.filter(sprint=idSprint).filter(fecha_creacion__range=(fechaInicio,fechaInicio+timedelta(days = flag)))
+        print(fechaInicio+timedelta(days = flag),"aux")
+        for a in aux:
+            horasTrabajadas+=a.horas
+        arrayBurn.append(horasUs-horasTrabajadas)
+        flag+=1
+        if fechaInicio+timedelta(days = flag) > datetime.date(datetime.today()):
+            break
+ 
+    # for us in userStory:
+    #     horaReal = horaReal + us.us.tiempoTrabajado
+    #     arrayBurn.append(horaReal)
     
-    arrayBurn = arrayBurn[::-1]
+    # arrayBurn = arrayBurn[::-1]
 
     dataBurndown = {
         "TotalDias" : cantidadDiasSprint,

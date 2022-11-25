@@ -31,18 +31,6 @@
         </a>
       </li>
       {% endif %}
-
-      <li class="nav-item">
-        <a class="nav-link collapsed text-truncate" href="#submenu1" data-toggle="collapse" data-target="#submenu1"><i class="fa fa-table"></i> <span class="d-none d-sm-inline">Reportes</span></a>
-        <div class="collapse" id="submenu1" aria-expanded="false">
-            <ul class="flex-column pl-2 nav">
-                
-                <li class="nav-item"><a class="nav-link py-0" href="#"><span>Velocity Chart</span></a></li>
-            </ul>
-        </div>
-      </li> 
-
-
       {% if validacionPermisos.dsp_Roles and not proyecto.estado.descripcion == "PENDIENTE" %}
       <li class="nav-item">
         <a class="nav-link" href="{% url 'webApp:rolesProyecto' proyecto.id %}">
