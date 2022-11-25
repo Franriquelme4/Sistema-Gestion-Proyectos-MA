@@ -7,6 +7,12 @@ import numpy as np
 from xhtml2pdf import pisa
 from django.template.loader import get_template
 from io import BytesIO
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from pathlib import Path
+from email.mime.image import MIMEImage
+import smtplib
+
 
 
 def getUsuarioSesion(email):
@@ -262,3 +268,109 @@ def render_to_pdf(template_src, context_dict={}):
     if not pdf.err:
         return HttpResponse(result.getvalue(), content_type='application/pdf')
     return None
+
+def enviarNotificacion(caso,mail,proyecto):
+	print("EL MAIL ES ============"+mail)
+	if caso==1:
+		mailSuccess(mail)
+	if caso==2:
+		mailScrum(mail,proyecto)
+	if caso == 3:
+		mailColaborador(mail,proyecto)
+
+def mailSuccess(mail):
+	html = """\
+	<html>
+	<head>
+		<link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap" rel="stylesheet">
+	</head>
+		<body style="text-align: center;padding: 40px 0;background: #EBF0F5;">
+		<div class="card" style="background: white;padding: 60px;border-radius: 4px;box-shadow: 0 2px 3px #C8D0D8;display: inline-block;margin: 0 auto;">
+		<div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
+			<i style="color: #9ABC66;font-size: 100px;line-height: 200px;margin-left:-15px;" class="checkmark">✓</i>
+		</div>
+			<h1 style="color: #88B04B;font-family: "Nunito Sans", "Helvetica Neue", sans-serif;font-weight: 900;font-size: 40px;margin-bottom: 10px;">Cuenta Habilitada</h1> 
+			<p style="color: #404F5E;font-family: "Nunito Sans", "Helvetica Neue", sans-serif;font-size:20px;margin: 0;">El administrador ha habilitado su cuenta;<br/> Ya puede comenzar a echar un vistazo en el siguiente link</p>
+			<br/> <a href="http://localhost:8000/login/?next=/">Click Aquí</a></p>
+		</div>
+		</body>
+	</html>
+	"""
+	mensaje = MIMEMultipart()
+	mensaje["from"] = "Sistema Metodologias Agiles"
+	mensaje["to"] = mail
+	mensaje["subject"] = "Cuenta Habilitada"
+	mensaje.attach(MIMEText(html,'html'))
+
+	with smtplib.SMTP(host="smtp.gmail.com", port=587) as smtp:
+		smtp.ehlo()
+		smtp.starttls()
+		smtp.login("as.is2.g15@gmail.com","iulxdlvglyvqjhjg")
+		smtp.send_message(mensaje)
+		print("enviado")
+	return None
+
+def mailScrum(mail,proyecto):
+	html = f"""\
+		<html>
+		<head>
+			<link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap" rel="stylesheet">
+		</head>
+		<body style="text-align: center;padding: 40px 0;background: #EBF0F5;">
+			<div class="card" style="background: white;padding: 60px;border-radius: 4px;box-shadow: 0 2px 3px #C8D0D8;display: inline-block;margin: 0 auto;">
+				<div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
+					<i style="color: #c4d5e8;font-size: 100px;line-height: 200px;margin-left:-15px;" class="checkmark">i</i>
+				</div>
+				<h1 style="color: #88B04B;font-family: " Nunito Sans ", "Helvetica Neue ", sans-serif;font-weight: 900;font-size: 40px;margin-bottom: 10px;">Ahora eres Scrum Master</h1>
+				<p style="color: #404F5E;font-family: " Nunito Sans ", "Helvetica Neue ", sans-serif;font-size:20px;margin: 0;">El administrador le ha convertido a Scrum Master del proyecto {proyecto};<br/> Ya puede comenzar a echar un vistazo en el siguiente link</p>
+				<br><a href="http://localhost:8000/login/?next=/">Click Aquí</a></p>
+			</div>
+		</body>
+		</html>
+	"""
+	mensaje = MIMEMultipart()
+	mensaje["from"] = "Sistema Metodologias Agiles"
+	mensaje["to"] = mail
+	mensaje["subject"] = "Cuenta Habilitada"
+	mensaje.attach(MIMEText(html,'html'))
+
+	with smtplib.SMTP(host="smtp.gmail.com", port=587) as smtp:
+		smtp.ehlo()
+		smtp.starttls()
+		smtp.login("as.is2.g15@gmail.com","iulxdlvglyvqjhjg")
+		smtp.send_message(mensaje)
+		print("enviado")
+	return None
+
+def mailColaborador(mail,proyecto):
+	html = f"""\
+		<html>
+		<head>
+			<link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap" rel="stylesheet">
+		</head>
+
+		<body style="text-align: center;padding: 40px 0;background: #EBF0F5;">
+			<div class="card" style="background: white;padding: 60px;border-radius: 4px;box-shadow: 0 2px 3px #C8D0D8;display: inline-block;margin: 0 auto;">
+				<div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
+					<i style="color: #c4d5e8;font-size: 100px;line-height: 200px;margin-left:-15px;" class="checkmark">i</i>
+				</div>
+				<h1 style="color: #88B04B;font-family: " Nunito Sans ", "Helvetica Neue ", sans-serif;font-weight: 900;font-size: 40px;margin-bottom: 10px;">Ahora eres un colaborador<br>del proyecto {proyecto}</h1>
+				<p style="color: #404F5E;font-family: " Nunito Sans ", "Helvetica Neue ", sans-serif;font-size:20px;margin: 0;">El Scrum Master del proyecto {proyecto} le ha convertido en un colaborador;<br/> Ya puede comenzar a echar un vistazo en el siguiente link</p>
+				<br><a href="http://localhost:8000/login/?next=/">Click Aquí</a></p>			
+			</div>
+		</body>
+		</html>
+	"""
+	mensaje = MIMEMultipart()
+	mensaje["from"] = "Sistema Metodologias Agiles"
+	mensaje["to"] = mail
+	mensaje["subject"] = "Cuenta Habilitada"
+	mensaje.attach(MIMEText(html,'html'))
+
+	with smtplib.SMTP(host="smtp.gmail.com", port=587) as smtp:
+		smtp.ehlo()
+		smtp.starttls()
+		smtp.login("as.is2.g15@gmail.com","iulxdlvglyvqjhjg")
+		smtp.send_message(mensaje)
+		print("enviado")
+	return None

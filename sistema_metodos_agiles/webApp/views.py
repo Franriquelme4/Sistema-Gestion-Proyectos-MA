@@ -5,7 +5,7 @@ from django.core import serializers
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from usuario.utils import validarPermisos, render_to_pdf,busy_end_date,agregarHistorial, getRolByproyectUsuario,getUsuarioSesion, getTipoUsBySprint, getIdScrumRol, getProyectsByUsuarioID, getProyectsByID, getRolByProyectId, getColaboratorsByProyect, calcularFechaFin, getTipoUsbyProyectId, getTipoUsbyNotProyectId, getPermisos
+from usuario.utils import validarPermisos, render_to_pdf,busy_end_date,agregarHistorial, getRolByproyectUsuario,getUsuarioSesion, getTipoUsBySprint, getIdScrumRol, getProyectsByUsuarioID, getProyectsByID, getRolByProyectId, getColaboratorsByProyect, calcularFechaFin, getTipoUsbyProyectId, getTipoUsbyNotProyectId, getPermisos,enviarNotificacion
 from usuario.models import Usuario, FaseTUS, TipoUs_Proyecto,Comentario, SprintUserStory, SprintColaborador, Sprint, Cliente, Proyecto, MiembroEquipo, Permiso, Rol, ProyectoRol, TipoUserStory, PrioridadTUs, UserStory, Fase, Estado
 from django.template import loader
 from django.db.models import Q
@@ -164,6 +164,9 @@ def activarUsuario(request, id):
     usuario = Usuario.objects.get(id=id)
     usuario.activo = True
     usuario.save()
+    print("ANTES DE LA NOTIFICACION")
+    enviarNotificacion(1,usuario.email)
+    print("DESPUES DE LA NOTIFICACION")
     return redirect('/')
 
 
@@ -189,6 +192,7 @@ def crearProyectoGuardar(request):
         miembro.miembro_rol.add(getIdScrumRol())
         miembro.miembro_usuario.add(
             Usuario.objects.get(id=variables['scrumMaster']))
+        usuario = Usuario.objects.get(id=variables['scrumMaster'])
         proyecto = Proyecto(
             nombre_proyecto=variables['nombreProyecto'],
             cliente_proyecto=cliente,
@@ -203,6 +207,7 @@ def crearProyectoGuardar(request):
         proyecto.miembro_proyecto.add(miembro)
         descripcion = "Se crea el proyecto"
         agregarHistorial(request,proyecto.id,descripcion)
+        enviarNotificacion(2,usuario.email,proyecto.nombre_proyecto)
     return redirect('/')
 
 
@@ -535,6 +540,7 @@ def asignarColaboradorProyecto(request, id, editar):
         if not editar:
             descripcion = f"Se asigno nuevo colaborador: {usuario.nombre}"
             agregarHistorial(request,id,descripcion)
+        enviarNotificacion(3,usuario.email,proyecto.nombre_proyecto)
     return redirect(f'/proyecto/colaboradores/{id}')
 
 
