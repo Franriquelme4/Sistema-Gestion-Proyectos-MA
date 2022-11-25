@@ -40,10 +40,6 @@ Velocity Chart</a>
           <a href="{% url 'webApp:sprintColaboradores' proyecto.id sp.id %}"
             class="btn btn-sm btn-dark">Colaboradores</a>
           {% endif %}
-          {% if validacionPermisos.dsp_Burndown %}
-          <a href="{% url 'webApp:visualizarBurndown2' proyecto.id sp.id %}"
-            class="btn btn-sm btn-dark">Burndown Chart</a>
-          {% endif %}
           {% if validacionPermisos.dsp_SprinBack %}
           <a href="{% url 'webApp:sprintBacklog' proyecto.id sp.id %}" class="btn btn-sm btn-dark">Sprint Backlog</a>
           {% endif %}
@@ -64,6 +60,10 @@ Velocity Chart</a>
           {% endif %}
           {% endif %}
           {% if sp.estado.descripcion == "EN PROGRESO" %}
+          {% if validacionPermisos.dsp_Burndown %}
+          <a href="{% url 'webApp:visualizarBurndown2' proyecto.id sp.id %}"
+            class="btn btn-sm btn-dark">Burndown Chart</a>
+          {% endif %}
           {% if validacionPermisos.dsp_Tablero %}
           <a href="{% url 'webApp:sprintTablero' proyecto.id sp.id 0 %}" class="btn btn-sm btn-primary">Tablero</a>
           {% endif %}

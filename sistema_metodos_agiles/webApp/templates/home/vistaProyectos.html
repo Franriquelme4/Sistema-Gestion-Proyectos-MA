@@ -37,7 +37,7 @@
       <h3 class="card-title">
         <small>Dias Sprint: {{proyecto.sprint_dias}}</small>
       </h3>
-      {% if proyecto.estado.descripcion == "EN PROGRESO" %}
+      {% if validacionPermisos.cerrar_proyecto and proyecto.estado.descripcion == "EN PROGRESO" %}
       <button class="btn btn-danger btn-sm cerrar-proyecto" id="{{proyecto.id}}">Cerrar Proyecto</button>
       {% endif %}
       <a class="btn btn-primary btn-sm" href="{% url 'webApp:verHistorialProyecto' proyecto.id %}">Ver historial</a>
