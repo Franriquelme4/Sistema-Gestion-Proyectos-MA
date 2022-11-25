@@ -1153,25 +1153,29 @@ def iniciarSprint(request, idProyecto, idSprint):
     )
     return redirect(f'/proyecto/sprint/{idProyecto}')
 @login_required
-def cancelarSprint(request, idProyecto, idSprint):
-    sprint = Sprint.objects.filter(id = idSprint)
-    sprintActual = Sprint.objects.get(id = idSprint).userStory_sp.all()
-    for sp in sprintActual:
-        if not sp.us.finalizado:
-            UserStory.objects.filter(id = sp.us.id).update(
-                disponible = True
-            )
-    proyectoActual = Proyecto.objects.filter(id = idProyecto)
-    proyecto = Proyecto.objects.get(id = idProyecto)
-    fecha_hoy = datetime.today()
-    sprint.update(
-        estado=Estado.objects.get(descripcion="CANCELADO")
-    )
-    proyectoActual.update(
-       sprint_actual = None
-    )
+def cancelarSprint(request):
+    if request.accepts and request.method == "GET":
+        idSprint = request.GET.get("idSprint", None)
+        idProyecto = request.GET.get("idProyecto", None)
+        sprint = Sprint.objects.filter(id = idSprint)
+        sprintActual = Sprint.objects.get(id = idSprint).userStory_sp.all()
+        for sp in sprintActual:
+            if not sp.us.finalizado:
+                UserStory.objects.filter(id = sp.us.id).update(
+                    disponible = True
+                )
+        proyectoActual = Proyecto.objects.filter(id = idProyecto)
+        proyecto = Proyecto.objects.get(id = idProyecto)
+        fecha_hoy = datetime.today()
+        sprint.update(
+            estado=Estado.objects.get(descripcion="CANCELADO")
+        )
+        proyectoActual.update(
+        sprint_actual = None
+        )
+        return JsonResponse({} , status = 200)
+    return JsonResponse({}, status = 400)  
 
-    return redirect(f'/proyecto/sprint/{idProyecto}')
 @login_required
 def verDocumentacion(request):
     """

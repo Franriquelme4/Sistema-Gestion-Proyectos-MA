@@ -6,10 +6,8 @@ dev(){
     if [ $crearDB = "y" ]
     then
         # Se crea la nueva base de datos
-        # psql -X -U postgres password=postgres -p 5432 < database/init.sql
         cat database/init.sql | psql -U postgres -p 5432 
     fi
-    # psql -X -U postgres password=postgres -p 5432 < ../database/init.sql
     git checkout $tag
     git pull
     # Creando entorno virtual
@@ -19,84 +17,57 @@ dev(){
     source env/bin/activate
     # Se instalan todos lo requerimientos
     pip3 install -r requirements.txt
-    # read -p "Desea crear una nueva base de datos (y/n)?: " crearDB
-    # if [ $crearDB = "y" ]
-    # then
-    #     # Se crea la nueva base de datos
-    #     psql -X -U postgres password=postgres -p 5432 < ../database/init.sql
-    # fi
     # Se aplican las migraciones
     python3 manage.py makemigrations
     python3 manage.py migrate
-    echo "iteracion $iteracion"
-    case $iteracion in
-    "2")
+    if [ $crearDB = "y" ]
+    then
         echo "Poblando base de datos ..."
-        # psql -X -U postgres password=postgres -p 5432 metodologias_agiles < ../database/iteracion_2.sql
-        cat ../database/init.sql | psql -X -U postgres -p 5432 -d metodologias_agiles
-    ;;
-    "3") 
-        echo "Poblando base de datos ..."
-        cat ../database/init.sql | psql -X -U postgres -p 5432 -d metodologias_agiles
-    ;;
-    "4") 
-        echo "Poblando base de datos ..."
-        cat ../database/init.sql | psql -X -U postgres -p 5432 -d metodologias_agiles
-    ;;
-    "5") 
-        echo "Poblando base de datos ..."
-        python3 manage.py loaddata Init.json
-    ;;
-    "6") 
-        echo "Poblando base de datos ..."
-        python3 manage.py loaddata Init.json
-    ;;
-    esac
-    # python3 sistema_metodos_agiles/manage.py loaddata sistema_metodos_agiles/Init.json
+        case $iteracion in
+        "2")
+            cat ../database/init.sql | psql -X -U postgres -p 5432 -d metodologias_agiles
+        ;;
+        "3") 
+            cat ../database/init.sql | psql -X -U postgres -p 5432 -d metodologias_agiles
+        ;;
+        "4") 
+            cat ../database/init.sql | psql -X -U postgres -p 5432 -d metodologias_agiles
+        ;;
+        "5") 
+            python3 manage.py loaddata Init.json
+        ;;
+        "6") 
+            python3 manage.py loaddata Init.json
+        ;;
+        esac
+    fi
     python3 manage.py runserver
 }
 prod(){
-    # crearDB=""
-    # read -p "Desea crear una nueva base de datos (y/n)?: " crearDB
-    # if [ $crearDB = "y" ]
-    # then
-    #     # Se crea la nueva base de datos
-    #     psql -X -U postgres password=postgres -p 5432 < database/init.sql
-    # fi
-    # psql -X -U postgres password=postgres -p 5432 < ../database/init.sql
+    # Se elimina todos los contenedores 
+    docker-compose down --rmi all -v --remove-orphans
     git checkout $tag
     git pull
-    docker-compose build
-    echo "iteracion $iteracion"
+    docker-compose up --build
+    echo "Poblando base de datos ..."
     case $iteracion in
     "2")
-        echo "Poblando base de datos ..."
         docker-compose  exec -T db psql -U postgres -d metodologias_agiles < database/init.sql
-        # python3 manage.py loaddata ../database/iteracion_2.json
     ;;
     "3") 
-        echo "Poblando base de datos ..."
-        # psql -X -U postgres password=postgres -p 5432 < ../database/init.sql
         docker-compose  exec -T db psql -U postgres -d metodologias_agiles < database/init.sql
     ;;
     "4") 
-        echo "Poblando base de datos ..."
-        # psql -X -U postgres password=postgres -p 5432 < ../database/init.sql
         docker-compose  exec -T db psql -U postgres -d metodologias_agiles < database/init.sql
     ;;
     "5") 
-        echo "Poblando base de datos ..."
-        docker-compose exec web python3 manage.py loaddata Init.json
+        docker-compose exec web python manage.py loaddata Init.json
     ;;
     "6") 
-        echo "Poblando base de datos ..."
         docker-compose exec web python3 manage.py loaddata Init.json
     ;;
     esac
-    # python3 sistema_metodos_agiles/manage.py loaddata sistema_metodos_agiles/Init.json
-    docker-compose up 
 }
-
 echo "--------------------------------------------------------------------------"
 echo "===================== Sistema de Gestion de Proyecto ====================="
 echo "========================= Despliegue automatico =========================="

@@ -8,7 +8,7 @@
 {% block content %}
 {% include 'includes/options.html' %}
 {% if sprint.estado.descripcion == "PENDIENTE" %}
-  {% if validacionPermisos.agr_Colaborador_US %}
+  {% if validacionPermisos.agr_Colaborador_US and not proyecto.estado.descripcion == "CANCELADO" %}
   <a class="btn btn-primary btn-sm " href="{% url 'webApp:sprintColaboradorAgregar' proyecto.id sprint.id %}"><i class="material-icons">add</i>Agregar Colaborador</a>
   {% endif %}
 {% endif %}
