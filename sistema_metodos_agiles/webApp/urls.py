@@ -55,10 +55,11 @@ urlpatterns = [
     path('proyecto/sprint/get/comentarios', views.getComentarios, name = "ajax_comentarios"),
     path('proyecto/sprint/comentarios/guardar/<int:idProyecto>/<int:idSprint>', views.guardarComentarioUs, name = "guardarComentarioUs"),
     path('proyecto/sprint/iniciar/<int:idProyecto>/<int:idSprint>', views.iniciarSprint, name="iniciarSprint"),
-    path('proyecto/sprint/cancelar/<int:idProyecto>/<int:idSprint>', views.cancelarSprint, name="cancelarSprint"),
-    path('proyecto/sprint/us/finalizar/<int:idProyecto>', views.finalizarUserStory, name="finalizarUserStory"),
+    path('proyecto/sprint/cancelar', views.cancelarSprint, name="cancelarSprint"),
+    path('proyecto/sprint/us/finalizar', views.finalizarUserStory, name="finalizarUserStory"),
     path('proyecto/historial/<int:id>',views.verHistorialProyecto, name='verHistorialProyecto'),
     path('proyecto/historial/descargar/<int:id>',views.ListHistorialPdf, name='ListHistorialPdf'),
+    path('proyecto/finalizar', views.cerrarProyecto, name="cerrarProyecto"),
 
 
 ]

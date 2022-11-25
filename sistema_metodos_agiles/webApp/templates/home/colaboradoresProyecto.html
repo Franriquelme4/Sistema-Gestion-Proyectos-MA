@@ -7,7 +7,7 @@
 
 {% block content %}
 {% include 'includes/options.html' %}
-{% if validacionPermisos.agr_Colaborador %}
+{% if validacionPermisos.agr_Colaborador and not proyecto.estado.descripcion == "CANCELADO" %}
 <a class="btn btn-primary " href="{% url 'webApp:colaboradoresProyectoCrear' proyecto.id %}"><i
     class="material-icons">add</i>Agregar colaborador</a>
 {% endif %}
@@ -60,14 +60,14 @@
                   {{colaborador.descripcion_rol}}
                 </td>
                 <td>
-                  {% if validacionPermisos.upd_Colaborador %}
+                  {% if validacionPermisos.upd_Colaborador and not proyecto.estado.descripcion == "CANCELADO" %}
                     <a class="btn btn-success btn-sm"
                       href="{% url 'webApp:colaboradoresProyectoEditar' proyecto.id colaborador.id %}"><i
                         class="material-icons">&#xE254;</i>
                     </a>
                   {% endif %}
 
-                  {% if validacionPermisos.dlt_Colaborador %}
+                  {% if validacionPermisos.dlt_Colaborador and not proyecto.estado.descripcion == "CANCELADO" %}
                     <form action="{% url 'webApp:eliminarColaboradorProyecto' proyecto.id %}" method="post">
                       {% csrf_token %}
                       <input name="idColaborador" type="text" hidden="true" value="{{colaborador.id}}">

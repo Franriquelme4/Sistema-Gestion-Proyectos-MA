@@ -23,7 +23,7 @@
       </li>
       {% endif %}
 
-      {% if validacionPermisos.dsp_SprinBack and proyecto.estado.descripcion == "EN PROGRESO" %}
+      {% if validacionPermisos.dsp_SprinBack and not proyecto.estado.descripcion == "PENDIENTE" %}
       <li class="nav-item">
         <a class="nav-link" href="{% url 'webApp:sprintProyecto' proyecto.id %}">
           <i class="material-icons">schedule</i>
@@ -33,7 +33,7 @@
       {% endif %}
 
 
-      {% if validacionPermisos.dsp_Roles and proyecto.estado.descripcion == "EN PROGRESO" %}
+      {% if validacionPermisos.dsp_Roles and not proyecto.estado.descripcion == "PENDIENTE" %}
       <li class="nav-item">
         <a class="nav-link" href="{% url 'webApp:rolesProyecto' proyecto.id %}">
           <i class="material-icons">block</i>
@@ -41,7 +41,7 @@
         </a>
       </li>
       {% endif %}
-      {% if validacionPermisos.dsp_Colaborador and proyecto.estado.descripcion == "EN PROGRESO" %}
+      {% if validacionPermisos.dsp_Colaborador and not proyecto.estado.descripcion == "PENDIENTE" %}
       <li class="nav-item">
         <a class="nav-link" href="{% url 'webApp:colaboradoresProyecto' proyecto.id %}">
           <i class="material-icons">account_circle</i>
@@ -50,7 +50,7 @@
       </li>
       {% endif %}
 
-      {% if validacionPermisos.dsp_TipoUs and proyecto.estado.descripcion == "EN PROGRESO" %}
+      {% if validacionPermisos.dsp_TipoUs and not proyecto.estado.descripcion == "PENDIENTE" %}
       <li class="class="nav-item"">
         <a class="nav-link " href="{% url 'webApp:tipoUs' proyecto.id %}"  >
             <i class="material-icons">apps</i>
@@ -59,7 +59,7 @@
       </li>
       {% endif %}
 
-      {% if validacionPermisos.dsp_ProductBack and proyecto.estado.descripcion == "EN PROGRESO" %}
+      {% if validacionPermisos.dsp_ProductBack and not proyecto.estado.descripcion == "PENDIENTE" %}
       <li class="class="nav-item"">
         <a class="nav-link " href="{% url 'webApp:verProductBacklog' proyecto.id %}"  >
             <i class="material-icons">backup</i>

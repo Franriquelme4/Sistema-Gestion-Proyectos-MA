@@ -24,6 +24,7 @@
             <th scope="col"><b>Descripcion</b></th>
             <th scope="col"><b>Fecha Inicio</b></th>
             <th scope="col"><b>Fecha Fin</b></th>
+            <th scope="col"><b>Estado</b></th>
           </tr>
         </thead>
         <tbody>
@@ -43,6 +44,17 @@
             </td>
             <td>
               {{proyecto.fecha_fin_proyecto}}
+            </td>
+            <td>
+              <div class='
+              {% if proyecto.estado.descripcion == "EN PROGRESO" %}
+              text-success
+              {% elif proyecto.estado.descripcion == "CANCELADO" %}
+              text-danger
+              {% endif %}
+              '>
+                {{proyecto.estado}}
+              </div>
             </td>
           </tr>
           {% endfor %}

@@ -9,7 +9,7 @@
 {% include 'includes/options.html' %}
 
 <h2>Product BackLog</h2>
-{% if validacionPermisos.crt_US %}
+{% if validacionPermisos.crt_US and not proyecto.estado.descripcion == "CANCELADO" %}
 <a class="btn btn-primary btn-sm" href="{% url 'webApp:crearUs' proyecto.id %}"><i class="material-icons">add</i>Agregar Us</a>
 {% endif %}
 
