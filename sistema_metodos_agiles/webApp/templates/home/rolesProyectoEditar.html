@@ -7,7 +7,7 @@
 
 {% block content %}
 {% include 'includes/options.html' %}
-<div class="container">
+<div class="container" width>
   <div class="card">
     <div class="card-header">
       <h3>Editar Rol</h3>
@@ -28,7 +28,8 @@
           <input type="text" class="form-control" id="recipient-name" name="descripcion" value="{{rolEditar.descripcion_rol}}">
         </div>
         <div class="form-group">
-          <select class="form-select" multiple aria-label="multiple select example" name="permisos" value="{{rolEditar.getPermisos}}">
+          <h6> Seleccionar Permisos</h6>
+          <select class="form-select " multiple aria-label="multiple select example" size="15" name="permisos" value="{{rolEditar.getPermisos}}">
             {% for seleccionado in permisosSelect %}
             <option value="{{seleccionado.id}}" selected>{{seleccionado.descripcion_permiso}}</option>
             {% endfor %}

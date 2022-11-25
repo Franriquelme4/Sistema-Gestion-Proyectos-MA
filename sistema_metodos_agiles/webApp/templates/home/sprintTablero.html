@@ -171,8 +171,9 @@
       if (result.isConfirmed) {
         $.ajax({
           type: 'GET',
-          url: "{% url 'webApp:finalizarUserStory' %}",
+          url: "{% url 'webApp:finalizarUserStory' proyecto.id %}",
           data: {"idUs":e.target.id},
+          //data: {"idUs":e.target.id,"proyecto.id":e.target.id},
           success: function (response) {
             console.log(response);
             Swal.fire({

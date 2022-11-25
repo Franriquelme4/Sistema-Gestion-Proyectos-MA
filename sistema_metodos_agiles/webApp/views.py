@@ -134,7 +134,8 @@ def GestionProyectoAgregar(request):
         )
         proyecto.save()
         proyecto.miembro_proyecto.add(miembro)
-        agregarHistorial("Se crea el proyecto",proyecto.id)
+        descripcion = "Se crea el proyecto"
+        agregarHistorial(request,proyecto.id,descripcion)
     return redirect('/')
 
 
@@ -200,7 +201,8 @@ def crearProyectoGuardar(request):
         )
         proyecto.save()
         proyecto.miembro_proyecto.add(miembro)
-        agregarHistorial("Se crea el proyecto",proyecto.id)
+        descripcion = "Se crea el proyecto"
+        agregarHistorial(request,proyecto.id,descripcion)
     return redirect('/')
 
 
@@ -223,6 +225,8 @@ def verProyecto(request, id):
                'rolUsuario': rolUsuario,
                'validacionPermisos': validacionPermisos
                }
+    #descripcion = "Se ingreso al proyecto"
+    #agregarHistorial(request,proyecto.id,descripcion)
     html_template = loader.get_template('home/vistaProyectos.html')
     return HttpResponse(html_template.render(context, request))
 
@@ -416,10 +420,14 @@ def rolesProyectoEditar(request, idProyecto, idRol):
     html_template = loader.get_template('home/rolesProyectoEditar.html')
     return HttpResponse(html_template.render(context, request))
 
-def eliminarColaboradorProyecto2(request,idColaborador,idProyecto):
+def eliminarColaboradorProyecto2(request,idColaborador,idProyecto,editar):
     variables = request.POST
     print(f"ID COLABORADOR ELIMINAR = {idColaborador}")
+    usuario = Usuario.objects.get(id = idColaborador)
     record = MiembroEquipo.objects.filter(miembro_usuario=idColaborador)
+    if not editar:
+        descripcion = f"Se elimino colaborador: {usuario.nombre}"
+        agregarHistorial(request,idProyecto,descripcion)
     record.delete()
     return redirect(f'/proyecto/{idProyecto}')
 
@@ -428,10 +436,13 @@ def eliminarRolProyecto(request, id):
     """Se elimina el rol asociado al id"""
     variables = request.POST
     record = Rol.objects.filter(id = variables.get('idRol',False))
+    rol = Rol.objects.get(id = variables.get('idRol',False))
+    descripcion = f"Se elimino rol del proyecto: {rol.nombre_rol}"
+    agregarHistorial(request,id,descripcion)
     for x in record:
         x.permiso.clear()
     record.delete()
-    return redirect(f'/proyecto/roles/1')
+    return redirect(f'/proyecto/roles/{id}')
 
 
 def editarRolProyecto(request, id):
@@ -458,6 +469,8 @@ def actualizarRolProyecto(request, id):
         for permiso in variables.getlist('permisos', False):
             print(permiso)
             rol.permiso.add(Permiso.objects.get(id=permiso))
+        descripcion = f"Se actualizo los permisos del rol: {rol.nombre_rol}"
+        agregarHistorial(request,id,descripcion)
     return redirect(f'/proyecto/roles/{id}')
 
 
@@ -480,6 +493,8 @@ def crearRolProyecto(request, id):
         proyecto_rol.save()
         proyecto_rol.rol.add(rol)
         proyecto_rol.proyecto.add(Proyecto.objects.get(id=id))
+        descripcion = f"Se creo nuevo rol: {rol.nombre_rol}"
+        agregarHistorial(request,id,descripcion)
     return redirect(f'/proyecto/roles/{id}')
 
 def editarColaboradorProyecto(request, idProyecto):
@@ -489,13 +504,20 @@ def editarColaboradorProyecto(request, idProyecto):
         idColaborador = variables.get('idColaborador', False)
         print(f"ID COLABORADOR EDITAR = {idColaborador}")
         print(f"ID PROYECTO EDITAR= {idProyecto}")
-        eliminarColaboradorProyecto2(request, idColaborador, idProyecto)
-        asignarColaboradorProyecto(request, idProyecto)
+        editar = True
+        eliminarColaboradorProyecto2(request, idColaborador, idProyecto,editar)
+        asignarColaboradorProyecto(request, idProyecto,editar)
+
+        usuario = Usuario.objects.get(id = idColaborador)
+        descripcion = f"Se edito el colaborador: {usuario.nombre}"
+        agregarHistorial(request,idProyecto,descripcion)
+
     return redirect(f'/proyecto/colaboradores/{idProyecto}')
 
 @login_required
-def asignarColaboradorProyecto(request, id):
+def asignarColaboradorProyecto(request, id, editar):
     """Se almacena el nuevo rol con el colaborador al proyecto"""
+    print(f"editar:{editar}")
     variables = request.POST
     roles = variables.getlist('rol', False)
     if request.method == 'POST':
@@ -506,10 +528,13 @@ def asignarColaboradorProyecto(request, id):
         for rol in variables.getlist('rol', False):
             print(rol, 'rol')
             miembro.miembro_rol.add(Rol.objects.get(id=rol))
-        miembro.miembro_usuario.add(Usuario.objects.get(
-            id=variables.get('usuario', False)))
+        usuario = Usuario.objects.get(id=variables.get('usuario', False))
+        miembro.miembro_usuario.add(usuario)
         proyecto = Proyecto.objects.get(id=id)
         proyecto.miembro_proyecto.add(miembro)
+        if not editar:
+            descripcion = f"Se asigno nuevo colaborador: {usuario.nombre}"
+            agregarHistorial(request,id,descripcion)
     return redirect(f'/proyecto/colaboradores/{id}')
 
 
@@ -519,6 +544,9 @@ def eliminarColaboradorProyecto(request, id):
     print("ID COLABORADOR 576")
     print(variables.get('idColaborador',False))
     record = MiembroEquipo.objects.filter(miembro_usuario = variables.get('idColaborador',False))
+    usuario = Usuario.objects.get(id = variables.get('idColaborador',False))
+    descripcion = f"Se elimino colaborador: {usuario.nombre}"
+    agregarHistorial(request,id,descripcion)
     record.delete()
     return redirect(f'/proyecto/colaboradores/{id}')
 
@@ -584,6 +612,8 @@ def crearTUSProyecto(request, id):
         tipoUs = TipoUserStory(
             nombre_tipo_us=variables.get('nombre', False),
             descripcion_tipo_us=variables.get('descripcion', False),
+            proyecto_tipo_us = Proyecto.objects.get(id=id)
+
         )
         tipoUs.save()
         print(jsonFase)
@@ -597,6 +627,8 @@ def crearTUSProyecto(request, id):
             proyecto=Proyecto.objects.get(id=id),
             tipoUs=tipoUs
         )
+        descripcion = f"Se creo nuevo tipo de US: {tipoUs.nombre_tipo_us}"
+        agregarHistorial(request,id,descripcion)
     return redirect(f'/proyecto/tipoUs/{id}')
 
 
@@ -633,8 +665,13 @@ def importarTusDeProyecto(request, id):
     print("idTipoUs")
     if request.method == 'POST':
         tipoUs = TipoUserStory.objects.get(id=variables.get('idTipoUs', False))
+        idproyO = TipoUserStory.objects.get(id=variables.get('idTipoUs', False)).proyecto_tipo_us_id
+        proyectoO = Proyecto.objects.get(id = idproyO)
         proyecto = Proyecto.objects.get(id=id)
         TipoUs_Proyecto.objects.create(proyecto=proyecto, tipoUs=tipoUs)
+
+        descripcion = f"Se importo tipos de US: {tipoUs.nombre_tipo_us} del proyecto {proyectoO.nombre_proyecto}"
+        agregarHistorial(request,id,descripcion)   
     return redirect(f'/proyecto/tipoUs/{id}')
 
 
@@ -710,9 +747,9 @@ def crearUsGuardar(request, id):
             prioridad_final=round((0.6*pn+0.4*pt)+0)
         )
         userStory.save()
-        agregarHistorial(f"Creacion de UserStory nombre = {userStory.nombre_us}",id)
+        descripcion = f"Creacion de UserStory nombre: {userStory.nombre_us}"
+        agregarHistorial(request,id,descripcion)
     return redirect(f'/proyecto/productBacklog/{id}')
-
 
 @login_required
 def editarProyecto(request, id):
@@ -757,6 +794,8 @@ def editarProyectoGuardar(request, id):
             descripcion_proyecto=variables['descripcion'],
             sprint_dias=variables['sprintDias']
         )
+        descripcion = f"Se edito el proyecto"
+        agregarHistorial(request,id,descripcion)
     return redirect(f'/proyecto/{id}')
 
 
@@ -769,6 +808,8 @@ def iniciarProyecto(request, id):
             datetime.today(), proyectoActual.duracion),
         estado=Estado.objects.get(descripcion="EN PROGRESO"),
     )
+    descripcion = f"Se inicio el proyecto"
+    agregarHistorial(request,id,descripcion)
     return redirect(f'/proyecto/{id}')
 
 
@@ -846,6 +887,8 @@ def sprintCrearGuardar(request, id):
             estado=Estado.objects.get(descripcion="PENDIENTE"),
         )
         sprint.save()
+        descripcion = f"Creacion de Sprint nombre = {sprint.nombre_sp}"
+        agregarHistorial(request,id,descripcion)
     return redirect(f'/proyecto/sprint/{id}')
 
 @login_required
@@ -921,14 +964,16 @@ def sprintColaboradorAgregarGuardar(request, id):
     proyecto = getProyectsByID(id, userSession.id)[0]
     if request.method == 'POST':
         sprint = Sprint.objects.get(id=variables.get('idSprint', False))
+        usuario = Usuario.objects.get(id=variables.get('usuario', False))
         spColaborador = SprintColaborador.objects.create(
-            colaborador=Usuario.objects.get(
-                id=variables.get('usuario', False)),
+            colaborador= usuario,
             horas=variables.get('horas', False),
             horasDisponibles=int(variables.get(
                 'horas', False))*proyecto.sprint_dias
         )
         sprint.colaborador_sp.add(spColaborador)
+        descripcion = f"Colaborador : {usuario.nombre} anhadido al Sprint: {sprint.nombre_sp}"
+        agregarHistorial(request,id,descripcion)
     return redirect(f'/proyecto/sprint/{id}')
 
 @login_required
@@ -991,6 +1036,10 @@ def sprintUsAgregarGuardar(request, id):
                                   userStory.prioridad_tecnica)+userStory.prioridad_sprint+3)
         )
         sprint.userStory_sp.add(spUs)
+        
+        descripcion = f"US: {userStory.nombre_us} anhadido al Sprint: {sprint.nombre_sp}"
+        agregarHistorial(request,id,descripcion)
+
     return redirect(f'/proyecto/sprint/{id}')
 
 @login_required
@@ -1075,6 +1124,12 @@ def sprintTableroActualizarEstado(request, idProyecto, idSprint):
         UserStory.objects.filter(id=idUserStory).update(
             fase=Fase.objects.get(id=idNuevaFase)
         )
+        US = UserStory.objects.get(id=idUserStory)
+        sp = Sprint.objects.get(id=idSprint)
+        fas = Fase.objects.get(id=idNuevaFase)
+    descripcion = f"Se actualizo a fase: {fas.nombre_fase} al US: {US.nombre_us} del Sprint: {sp.nombre_sp}"
+    agregarHistorial(request,idProyecto,descripcion)
+
     return redirect(f'/proyecto/sprint/tablero/{idProyecto}/{idSprint}/{idTipoUs}')
 
 @login_required
@@ -1135,11 +1190,13 @@ def guardarComentarioUs(request, idProyecto, idSprint):
             tiempoTrabajado = userStory.tiempoTrabajado + horasTrabajadas
         )
         userStory.comentario.add(newComentario)
-
+        descripcion = f"Se agrego un comentario: '{newComentario.comentario}' al US: {userStory.nombre_us}"
+        agregarHistorial(request,idProyecto,descripcion)
     return redirect(f'/proyecto/sprint/tablero/{idProyecto}/{idSprint}/0')
 @login_required
 def iniciarSprint(request, idProyecto, idSprint):
     sprint = Sprint.objects.filter(id = idSprint)
+    sp = Sprint.objects.get(id = idSprint)
     proyectoActual = Proyecto.objects.filter(id = idProyecto)
     proyecto = Proyecto.objects.get(id = idProyecto)
     fecha_hoy = datetime.today()
@@ -1151,7 +1208,10 @@ def iniciarSprint(request, idProyecto, idSprint):
     proyectoActual.update(
        sprint_actual = sprint[0] 
     )
+    descripcion = f"Se inicio el sprint: {sp.nombre_sp}"
+    agregarHistorial(request,idProyecto,descripcion)
     return redirect(f'/proyecto/sprint/{idProyecto}')
+
 @login_required
 def cancelarSprint(request, idProyecto, idSprint):
     sprint = Sprint.objects.filter(id = idSprint)
@@ -1170,6 +1230,9 @@ def cancelarSprint(request, idProyecto, idSprint):
     proyectoActual.update(
        sprint_actual = None
     )
+    sp = Sprint.objects.get(id = idSprint)
+    descripcion = f"Se cancelo el sprint: {sp.nombre_sp}"
+    agregarHistorial(request,idProyecto,descripcion)
 
     return redirect(f'/proyecto/sprint/{idProyecto}')
 @login_required
@@ -1183,11 +1246,16 @@ def verDocumentacion(request):
     return HttpResponse(html_template.render(context, request))
 
 @login_required
-def finalizarUserStory(request):
+def finalizarUserStory(request,idProyecto):
+    print(f"Finalizar Proyecto: {idProyecto}" )
     if request.accepts and request.method == "GET":
         idUs = request.GET.get("idUs", None)
         userStory = UserStory.objects.filter(id=idUs)
         userStory.update(finalizado = True)
+        
+        US = UserStory.objects.get(id=idUs)
+        descripcion = f"Se finalizo el US: {US.nombre_us}"
+        agregarHistorial(request,idProyecto,descripcion)
 
         return JsonResponse({} , status = 200)
     return JsonResponse({}, status = 400)  
@@ -1249,6 +1317,9 @@ def sprintUsEditarGuardar(request,id):
         sColaboradorGet = sprint.colaborador_sp.get(colaborador=int(variables.get('colaborador', False)))
         sColaborador = sprint.colaborador_sp.filter(colaborador=int(variables.get('colaborador', False)))
         sColaborador.update(horasDisponibles=sColaboradorGet.horasDisponibles - UserStory.objects.get(id=variables.get('us', False)).tiempoEstimado_us)
+        
+        descripcion = f"Se edito el sprint: {sprint.nombre_sp}"
+        agregarHistorial(request,id,descripcion)
 
     return redirect(f'/proyecto/sprint/{id}')
 
@@ -1269,6 +1340,7 @@ def visualizarVelocity(request,idProyecto):
     arraysprint = []
     arrayCUS = []
     arrayCUSF = []
+    
     for sp in sprint:
         arraysprint.append(sp.nombre_sp)
         totalUs = 0
@@ -1281,6 +1353,9 @@ def visualizarVelocity(request,idProyecto):
         arrayCUS.append(totalUs)
         arrayCUSF.append(terminados)
     
+    arrayCUS.append(0)
+    arrayCUSF.append(0)
+
     dataVelocity = {
     "nombre":arraysprint,
     "estimado":arrayCUS, 
@@ -1288,7 +1363,7 @@ def visualizarVelocity(request,idProyecto):
     }
     #print(dataVelocity)
     dicc_velocity = json.dumps(dataVelocity)
-    print(dicc_velocity)
+    #print(dicc_velocity)
     context={
     'userSession':userSession,
     'proyecto':proyecto,
@@ -1307,6 +1382,7 @@ def verHistorialProyecto(request, id):
     proyecto = getProyectsByID(id, userSession.id)[0]
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
     print(request.session['userSesion'])
+    print("Usuario nombre", request.user.first_name)
     permisosProyecto = ['crt_rol', 'dsp_Colaborador', 'dsp_Roles',
                         'dsp_TipoUs', 'dsp_ProductBack', 'dsp_SprinBack']
     validacionPermisos = validarPermisos(permisosProyecto, userSession.id, id)
