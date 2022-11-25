@@ -65,4 +65,8 @@ urlpatterns = [
     path('proyecto/sprint/get/comentarios', views.getComentarios, name = "ajax_comentarios"),
     path('proyecto/userStory/detalles/<int:idProyecto>/<int:idUs>',views.verDetallesUs, name='verDetallesUs'),
     path('proyecto/sprint/iniciar/<int:idProyecto>/<int:idSprint>', views.iniciarSprint, name="iniciarSprint"),
+    path('proyecto/sprint/velocitychart/<int:idProyecto>',views.visualizarVelocity, name='visualizarVelocity'),
+    path('proyecto/historial/<int:id>',views.verHistorialProyecto, name='verHistorialProyecto'),
+    path('proyecto/finalizar', views.cerrarProyecto, name="cerrarProyecto"),
+    path('proyecto/sprint/burndownchart2/<int:idProyecto>/<int:idSprint>',views.visualizarBurndown2, name='visualizarBurndown2'),
 ]
