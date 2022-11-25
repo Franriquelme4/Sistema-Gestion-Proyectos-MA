@@ -41,12 +41,13 @@ Velocity Chart</a>
             class="btn btn-sm btn-dark">Colaboradores</a>
           {% endif %}
           {% if validacionPermisos.dsp_Burndown %}
-          <a href=""
+          <a href="{% url 'webApp:visualizarBurndown2' proyecto.id sp.id %}"
             class="btn btn-sm btn-dark">Burndown Chart</a>
           {% endif %}
           {% if validacionPermisos.dsp_SprinBack %}
           <a href="{% url 'webApp:sprintBacklog' proyecto.id sp.id %}" class="btn btn-sm btn-dark">Sprint Backlog</a>
           {% endif %}
+          
           {% if sp.estado.descripcion == "PENDIENTE" %}
           {% if validacionPermisos.dsp_Colaborador_Sprint %}
           <a href="{% url 'webApp:sprintUsAgregar' proyecto.id sp.id %}" class="btn btn-sm btn-dark">Agregar US</a>

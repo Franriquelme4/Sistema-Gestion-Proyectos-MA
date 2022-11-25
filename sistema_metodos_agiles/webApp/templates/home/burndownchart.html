@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+
+</body>
+</html>
+
+
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+{% include 'includes/options.html' %}
+
+<input type="text" id="cantidadUs" value = "{{cantidadUs}}">
+<input type="text" id="cantidadDias" value = "{{cantidadDiasSprint}}">
+
+
+<canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<body>
+
+
+<script>
+//var xValues = [$("input#cantidadUs").val()];
+var xValues = [];
+for(let x = 1; x <= $("input#cantidadDias"); x += 1){
+  xValues.push(x);
+}
+
+
+var yValues = [$("input#cantidadUs").val()];
+ 
+
+ //generateData("x * 2 + 7", 0, 10, 0.5);
+
+new Chart("myChart", {
+  type: "line",
+  data: {
+    labels: xValues,
+    datasets: [{
+      label: "User Stories",
+      borderColor: "red",
+      fill: false,
+      pointRadius: 1,
+      borderColor: "rgba(255,0,0,0.5)",
+      data: xValues
+    },
+    {
+      label: "Duracion Sprint(dias)",
+      borderColor: "green",
+      data: yValues,
+      fill: false
+    },
+    {
+      data: [],
+      borderColor: "blue",
+      fill: false
+    }
+  ]
+  },    
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: "Burndown Chart",
+      fontSize: 16
+    }
+  }
+});
+function generateData(value, i1, i2, step = 1) {
+  for (let x = i1; x <= i2; x += step) {
+    yValues.push(eval(value));
+    xValues.push(x);
+  }
+}
+</script>
+
+{% endblock javascripts %}

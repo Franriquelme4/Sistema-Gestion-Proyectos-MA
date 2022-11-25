@@ -5,11 +5,11 @@ from django.core import serializers
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from usuario.utils import validarPermisos, render_to_pdf,busy_end_date,agregarHistorial, getRolByproyectUsuario,getUsuarioSesion, getTipoUsBySprint, getIdScrumRol, getProyectsByUsuarioID, getProyectsByID, getRolByProyectId, getColaboratorsByProyect, calcularFechaFin, getTipoUsbyProyectId, getTipoUsbyNotProyectId, getPermisos,enviarNotificacion
-from usuario.models import Usuario, FaseTUS, TipoUs_Proyecto,Comentario, SprintUserStory, SprintColaborador, Sprint, Cliente, Proyecto, MiembroEquipo, Permiso, Rol, ProyectoRol, TipoUserStory, PrioridadTUs, UserStory, Fase, Estado
+from usuario.utils import validarPermisos, render_to_pdf,busy_end_date,agregarHistorial, getRolByproyectUsuario,getUsuarioSesion, getTipoUsBySprint, getIdScrumRol, getProyectsByUsuarioID, getProyectsByID, getRolByProyectId, getColaboratorsByProyect, calcularFechaFin, getTipoUsbyProyectId, getTipoUsbyNotProyectId, getPermisos
+from usuario.models import Usuario, FaseTUS,HoraTrabajada, TipoUs_Proyecto,Comentario, SprintUserStory, SprintColaborador, Sprint, Cliente, Proyecto, MiembroEquipo, Permiso, Rol, ProyectoRol, TipoUserStory, PrioridadTUs, UserStory, Fase, Estado
 from django.template import loader
 from django.db.models import Q
-from datetime import datetime
+from datetime import datetime,timedelta
 from django.views.generic import ListView,View
 from xhtml2pdf import pisa
 from django.template.loader import get_template
@@ -220,7 +220,7 @@ def verProyecto(request, id):
     userSession = getUsuarioSesion(request.user.email)
     proyecto = getProyectsByID(id, userSession.id)[0]
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
-    print(getPermisos(userSession.id, id), 'Permisos')
+    print(request.user.email,'Correeo')
     permisosProyecto = ['dsp_Colaborador', 'dsp_Roles', 'dsp_TipoUs',
                         'dsp_ProductBack', 'dsp_SprinBack', 'ini_Proyecto', 'upd_Proyecto']
     validacionPermisos = validarPermisos(permisosProyecto, userSession.id, id)
@@ -247,6 +247,7 @@ def rolesProyecto(request, id):
     proyecto = getProyectsByID(id, userSession.id)[0]
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
     print(request.session['userSesion'])
+    print(request.user,'Correeo')
     permisosProyecto = ['crt_rol', 'dsp_Colaborador', 'dsp_Roles',
                         'dsp_TipoUs', 'dsp_ProductBack', 'dsp_SprinBack', 'dlt_rol', 'upd_rol']
     validacionPermisos = validarPermisos(permisosProyecto, userSession.id, id)
@@ -1122,6 +1123,7 @@ def pruebaAjax(request):
 
 @login_required
 def sprintTableroActualizarEstado(request, idProyecto, idSprint):
+    """Se actualiza el estado de us una vez que se desliza y se suelta en el estado en el cual se quiere dejar"""
     variables = request.POST
     if request.method == 'POST':
         idUserStory = variables.get('userStory', False)
@@ -1167,6 +1169,7 @@ def verDetallesUs(request, idProyecto, idUs):
 
 @login_required
 def getComentarios(request):
+    """Se optienen todos los comentarios de un user Story"""
     if request.accepts and request.method == "GET":
         idUs = request.GET.get("idUs", None)
         userStory = UserStory.objects.get(id=idUs)
@@ -1181,6 +1184,7 @@ def getComentarios(request):
 
 @login_required
 def guardarComentarioUs(request, idProyecto, idSprint):
+    """Cada us tiene la posibilidad de tener comentarios, dicho metodo se utiliza para almacenar la misma"""
     variables = request.POST
     if request.method == 'POST':
         comentario = variables.get('comentario', False)
@@ -1195,12 +1199,19 @@ def guardarComentarioUs(request, idProyecto, idSprint):
         UserStory.objects.filter(id=idUs).update(
             tiempoTrabajado = userStory.tiempoTrabajado + horasTrabajadas
         )
+        HoraTrabajada.objects.create(
+           sprint =Sprint.objects.get(id=idSprint),
+           horas= horasTrabajadas,
+            us=UserStory.objects.get(id=idUs),
+            proyecto=Proyecto.objects.get(id=idProyecto)
+        ) 
         userStory.comentario.add(newComentario)
         descripcion = f"Se agrego un comentario: '{newComentario.comentario}' al US: {userStory.nombre_us}"
         agregarHistorial(request,idProyecto,descripcion)
     return redirect(f'/proyecto/sprint/tablero/{idProyecto}/{idSprint}/0')
 @login_required
 def iniciarSprint(request, idProyecto, idSprint):
+    """Se inicia el sprint una vez que se haya cargado todos los datos, se calcula la fecha """
     sprint = Sprint.objects.filter(id = idSprint)
     sp = Sprint.objects.get(id = idSprint)
     proyectoActual = Proyecto.objects.filter(id = idProyecto)
@@ -1220,6 +1231,7 @@ def iniciarSprint(request, idProyecto, idSprint):
 
 @login_required
 def cancelarSprint(request):
+    """Se cancela el sprint, regresando la disponibilidad de los user story"""
     if request.accepts and request.method == "GET":
         idSprint = request.GET.get("idSprint", None)
         idProyecto = request.GET.get("idProyecto", None)
@@ -1254,6 +1266,7 @@ def verDocumentacion(request):
 
 @login_required
 def finalizarUserStory(request,idProyecto):
+    """Una vez que se encuentre en done el scrum tiene la posibilidad de leer finalizar el user story"""
     print(f"Finalizar Proyecto: {idProyecto}" )
     if request.accepts and request.method == "GET":
         idUs = request.GET.get("idUs", None)
@@ -1413,6 +1426,7 @@ def verHistorialProyecto(request, id):
 #     return HttpResponse(pdf, content_type='application/pdf')
 
 def ListHistorialPdf(request,id):
+    """Se descarga el archivo pdf del historial"""
     template_path = 'reportes/historial.html'
     proyecto = Proyecto.objects.get(id=id)
     context = {
@@ -1430,6 +1444,7 @@ def ListHistorialPdf(request,id):
 
 @login_required
 def cerrarProyecto(request):
+    """Se encarga de cerrar el proyecto pero da la posibilidad de aun poder ver los parametros"""
     if request.accepts and request.method == "GET":
         idProyecto = request.GET.get("idProyecto", None)
         proyecto = Proyecto.objects.filter(id=idProyecto)
@@ -1443,3 +1458,122 @@ def cerrarProyecto(request):
         )
         return JsonResponse({} , status = 200)
     return JsonResponse({}, status = 400)  
+@login_required
+def visualizarBurndown(request,idProyecto,idSprint):
+    variables = request.POST
+    #if request.method == 'POST':
+    userSession = getUsuarioSesion(request.user.email)
+    proyecto = getProyectsByID(idProyecto,userSession.id)[0]
+
+    cantidadUs = Sprint.objects.get(id=idSprint).userStory_sp.count
+    cantidadDiasSprint = Proyecto.objects.get(id = idProyecto).duracion
+    
+
+    arrayCUS = []
+    arrayCUSF = []
+    userStory = Sprint.objects.get(id=idSprint).userStory_sp.all()
+    for us in userStory:
+        horasUs = horasUs + us.tiempoEstimado_us
+    
+    for us in userStory:
+        horaReal = horaReal + us.tiempoTrabajado
+
+    
+
+    duracionSprint = Sprint.objects.get(id=idSprint)
+    arrayCUS.append(totalUs)
+    arrayCUSF.append(terminados)
+
+    context={
+    'userSession':userSession,
+    'proyecto':proyecto,
+    'cantidadUs': cantidadUs,
+    'cantidadDiasSprint' : cantidadDiasSprint
+    }
+
+    html_template = loader.get_template('home/burndownchart.html')
+    return HttpResponse(html_template.render(context,request))
+
+
+
+    #return redirect(f'/proyecto/sprint/burndownchart/{idProyecto}/{idSprint}')
+
+
+
+
+@login_required
+def visualizarBurndown2(request,idProyecto,idSprint):
+    variables = request.POST
+    #if request.method == 'POST':
+    userSession = getUsuarioSesion(request.user.email)
+    proyecto = getProyectsByID(idProyecto,userSession.id)[0]
+    permisosProyecto = ['dsp_Colaborador', 'dsp_Roles',
+                        'dsp_TipoUs', 'dsp_ProductBack', 'dsp_SprinBack']
+    validacionPermisos = validarPermisos(permisosProyecto, userSession.id, idProyecto)
+    cantidadDiasSprint = Proyecto.objects.get(id = idProyecto).sprint_dias
+    arraydias = []
+    arrayIdeal = []
+    arrayBurn = []
+    userStory = Sprint.objects.get(id=idSprint).userStory_sp.all()
+    horasUs = 0
+    horaReal = 0
+
+    for us in userStory:
+        horasUs = horasUs + us.us.tiempoEstimado_us
+
+    print(f"horasUS: {horasUs}")
+
+    idealxdia = round(horasUs/cantidadDiasSprint)
+    for i in range(0,cantidadDiasSprint):
+        arraydias.append(f"Dia {i + 1}")
+        #Math.round(totalHoursInSprint - (idealHoursPerDay * i++) + sumArrayUpTo(scopeChange, 0))
+        ideal = round(horasUs - (idealxdia * i))
+        if ideal >= 0:
+            arrayIdeal.append(ideal)
+        else:
+            break
+
+    sprintActual = Sprint.objects.get(id=idSprint)
+    fechaInicio = sprintActual.fechaIni_sp
+    aux=[]
+    flag=0
+    arrayBurn.append(horasUs)
+    while 1==1:
+        horasTrabajadas=0
+        aux = HoraTrabajada.objects.filter(sprint=idSprint).filter(fecha_creacion__range=(fechaInicio,fechaInicio+timedelta(days = flag)))
+        print(fechaInicio+timedelta(days = flag),"aux")
+        for a in aux:
+            horasTrabajadas+=a.horas
+        arrayBurn.append(horasUs-horasTrabajadas)
+        flag+=1
+        if fechaInicio+timedelta(days = flag) > datetime.date(datetime.today()):
+            break
+ 
+    # for us in userStory:
+    #     horaReal = horaReal + us.us.tiempoTrabajado
+    #     arrayBurn.append(horaReal)
+    
+    # arrayBurn = arrayBurn[::-1]
+
+    dataBurndown = {
+        "TotalDias" : cantidadDiasSprint,
+        "Dias" : arraydias,
+        "totalHoursInSprint" : horasUs,
+        "arrayIdeal" : arrayIdeal,
+        "arrayBurn" : arrayBurn
+    }
+    #print(dataBurndown)
+    dicc_Burndown = json.dumps(dataBurndown)
+    print(dicc_Burndown)
+
+
+    context={
+    'userSession':userSession,
+    'proyecto':proyecto,
+    'cantidadDiasSprint' : cantidadDiasSprint,
+    'validacionPermisos': validacionPermisos,
+    'dicc_Burndown' : dicc_Burndown
+    }
+
+    html_template = loader.get_template('home/burndownchart2.html')
+    return HttpResponse(html_template.render(context,request))

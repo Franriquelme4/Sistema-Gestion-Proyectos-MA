@@ -281,4 +281,17 @@ class Historial(models.Model):
         ordering = ['fecha_creacion']
     def __str__(self):
         return self.descripcion
+
+
+class HoraTrabajada(models.Model):
+    """Se almacena el historial de todo el ciclo del proyecto"""
+    sprint = models.ForeignKey('Sprint',on_delete=models.CASCADE,null=True)
+    horas = models.IntegerField()
+    us = models.ForeignKey('UserStory',on_delete=models.CASCADE)
+    usuario = models.ForeignKey('Usuario',on_delete=models.CASCADE,null=True)
+    proyecto = models.ForeignKey('Proyecto',on_delete=models.CASCADE,null=True)
+    fecha_creacion = models.DateField(default=datetime.date.today)
+    class Meta:
+        ordering = ['fecha_creacion']
+
     
