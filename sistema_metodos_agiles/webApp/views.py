@@ -1395,13 +1395,16 @@ def visualizarBurndown2(request,idProyecto,idSprint):
         
     for us in userStory:
         horaReal = horaReal + us.us.tiempoTrabajado
-        arrayIdeal.append(horaReal)
+        arrayBurn.append(horaReal)
+    
+    arrayBurn = arrayBurn[::-1]
 
     dataBurndown = {
         "TotalDias" : cantidadDiasSprint,
         "Dias" : arraydias,
         "totalHoursInSprint" : horasUs,
-        "arrayIdeal" : arrayIdeal 
+        "arrayIdeal" : arrayIdeal,
+        "arrayBurn" : arrayBurn
     }
     #print(dataBurndown)
     dicc_Burndown = json.dumps(dataBurndown)
