@@ -215,18 +215,18 @@ class TestViews(TestCase):
 
         self.assertEqual(response.status_code, 200, 'El codigo estado del response no es 200')
 
-    def test_eliminar_rol_proyecto_post(self):
-        """
-            Test para verificar post al eliminar rol de un proyecto.
-        """
+    # def test_eliminar_rol_proyecto_post(self):
+    #     """
+    #         Test para verificar post al eliminar rol de un proyecto.
+    #     """
 
-        url = reverse('eliminarRolProyecto', args=['1'])
+    #     url = reverse('eliminarRolProyecto', args=['1'])
 
-        response = self.client.post(url, {
-            'record' : self.rol
-        }, follow=True)
+    #     response = self.client.post(url, {
+    #         'record' : self.rol
+    #     }, follow=True)
 
-        self.assertEqual(response.status_code, 200, 'El codigo estado del response no es 200')
+    #     self.assertEqual(response.status_code, 200, 'El codigo estado del response no es 200')
 
     def test_eliminar_rol_proyecto_get(self):
         """

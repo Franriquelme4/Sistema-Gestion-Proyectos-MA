@@ -438,6 +438,7 @@ def eliminarColaboradorProyecto2(request,idColaborador,idProyecto,editar):
     return redirect(f'/proyecto/{idProyecto}')
 
 
+@login_required(login_url="/login/")
 def eliminarRolProyecto(request, id):
     """Se elimina el rol asociado al id"""
     variables = request.POST

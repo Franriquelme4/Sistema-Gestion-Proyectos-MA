@@ -39,11 +39,11 @@
 <span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">redirect</span>
 <span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
 <span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
-<span class="kn">from</span> <span class="nn">usuario.utils</span> <span class="kn">import</span> <span class="n">validarPermisos</span><span class="p">,</span> <span class="n">render_to_pdf</span><span class="p">,</span><span class="n">busy_end_date</span><span class="p">,</span><span class="n">agregarHistorial</span><span class="p">,</span> <span class="n">getRolByproyectUsuario</span><span class="p">,</span><span class="n">getUsuarioSesion</span><span class="p">,</span> <span class="n">getTipoUsBySprint</span><span class="p">,</span> <span class="n">getIdScrumRol</span><span class="p">,</span> <span class="n">getProyectsByUsuarioID</span><span class="p">,</span> <span class="n">getProyectsByID</span><span class="p">,</span> <span class="n">getRolByProyectId</span><span class="p">,</span> <span class="n">getColaboratorsByProyect</span><span class="p">,</span> <span class="n">calcularFechaFin</span><span class="p">,</span> <span class="n">getTipoUsbyProyectId</span><span class="p">,</span> <span class="n">getTipoUsbyNotProyectId</span><span class="p">,</span> <span class="n">getPermisos</span>
-<span class="kn">from</span> <span class="nn">usuario.models</span> <span class="kn">import</span> <span class="n">Usuario</span><span class="p">,</span> <span class="n">FaseTUS</span><span class="p">,</span> <span class="n">TipoUs_Proyecto</span><span class="p">,</span><span class="n">Comentario</span><span class="p">,</span> <span class="n">SprintUserStory</span><span class="p">,</span> <span class="n">SprintColaborador</span><span class="p">,</span> <span class="n">Sprint</span><span class="p">,</span> <span class="n">Cliente</span><span class="p">,</span> <span class="n">Proyecto</span><span class="p">,</span> <span class="n">MiembroEquipo</span><span class="p">,</span> <span class="n">Permiso</span><span class="p">,</span> <span class="n">Rol</span><span class="p">,</span> <span class="n">ProyectoRol</span><span class="p">,</span> <span class="n">TipoUserStory</span><span class="p">,</span> <span class="n">PrioridadTUs</span><span class="p">,</span> <span class="n">UserStory</span><span class="p">,</span> <span class="n">Fase</span><span class="p">,</span> <span class="n">Estado</span>
+<span class="kn">from</span> <span class="nn">usuario.utils</span> <span class="kn">import</span> <span class="n">validarPermisos</span><span class="p">,</span><span class="n">enviarNotificacion</span><span class="p">,</span> <span class="n">render_to_pdf</span><span class="p">,</span><span class="n">busy_end_date</span><span class="p">,</span><span class="n">agregarHistorial</span><span class="p">,</span> <span class="n">getRolByproyectUsuario</span><span class="p">,</span><span class="n">getUsuarioSesion</span><span class="p">,</span> <span class="n">getTipoUsBySprint</span><span class="p">,</span> <span class="n">getIdScrumRol</span><span class="p">,</span> <span class="n">getProyectsByUsuarioID</span><span class="p">,</span> <span class="n">getProyectsByID</span><span class="p">,</span> <span class="n">getRolByProyectId</span><span class="p">,</span> <span class="n">getColaboratorsByProyect</span><span class="p">,</span> <span class="n">calcularFechaFin</span><span class="p">,</span> <span class="n">getTipoUsbyProyectId</span><span class="p">,</span> <span class="n">getTipoUsbyNotProyectId</span><span class="p">,</span> <span class="n">getPermisos</span>
+<span class="kn">from</span> <span class="nn">usuario.models</span> <span class="kn">import</span> <span class="n">Usuario</span><span class="p">,</span> <span class="n">FaseTUS</span><span class="p">,</span><span class="n">HoraTrabajada</span><span class="p">,</span> <span class="n">TipoUs_Proyecto</span><span class="p">,</span><span class="n">Comentario</span><span class="p">,</span> <span class="n">SprintUserStory</span><span class="p">,</span> <span class="n">SprintColaborador</span><span class="p">,</span> <span class="n">Sprint</span><span class="p">,</span> <span class="n">Cliente</span><span class="p">,</span> <span class="n">Proyecto</span><span class="p">,</span> <span class="n">MiembroEquipo</span><span class="p">,</span> <span class="n">Permiso</span><span class="p">,</span> <span class="n">Rol</span><span class="p">,</span> <span class="n">ProyectoRol</span><span class="p">,</span> <span class="n">TipoUserStory</span><span class="p">,</span> <span class="n">PrioridadTUs</span><span class="p">,</span> <span class="n">UserStory</span><span class="p">,</span> <span class="n">Fase</span><span class="p">,</span> <span class="n">Estado</span>
 <span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">loader</span>
 <span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span><span class="n">timedelta</span>
 <span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">ListView</span><span class="p">,</span><span class="n">View</span>
 <span class="kn">from</span> <span class="nn">xhtml2pdf</span> <span class="kn">import</span> <span class="n">pisa</span>
 <span class="kn">from</span> <span class="nn">django.template.loader</span> <span class="kn">import</span> <span class="n">get_template</span>
@@ -198,6 +198,9 @@
     <span class="n">usuario</span> <span class="o">=</span> <span class="n">Usuario</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
     <span class="n">usuario</span><span class="o">.</span><span class="n">activo</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">usuario</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ANTES DE LA NOTIFICACION&quot;</span><span class="p">)</span>
+    <span class="n">enviarNotificacion</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">usuario</span><span class="o">.</span><span class="n">email</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DESPUES DE LA NOTIFICACION&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span></div>
 
 
@@ -223,6 +226,7 @@
         <span class="n">miembro</span><span class="o">.</span><span class="n">miembro_rol</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">getIdScrumRol</span><span class="p">())</span>
         <span class="n">miembro</span><span class="o">.</span><span class="n">miembro_usuario</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
             <span class="n">Usuario</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;scrumMaster&#39;</span><span class="p">]))</span>
+        <span class="n">usuario</span> <span class="o">=</span> <span class="n">Usuario</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;scrumMaster&#39;</span><span class="p">])</span>
         <span class="n">proyecto</span> <span class="o">=</span> <span class="n">Proyecto</span><span class="p">(</span>
             <span class="n">nombre_proyecto</span><span class="o">=</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;nombreProyecto&#39;</span><span class="p">],</span>
             <span class="n">cliente_proyecto</span><span class="o">=</span><span class="n">cliente</span><span class="p">,</span>
@@ -237,6 +241,7 @@
         <span class="n">proyecto</span><span class="o">.</span><span class="n">miembro_proyecto</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">miembro</span><span class="p">)</span>
         <span class="n">descripcion</span> <span class="o">=</span> <span class="s2">&quot;Se crea el proyecto&quot;</span>
         <span class="n">agregarHistorial</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="n">proyecto</span><span class="o">.</span><span class="n">id</span><span class="p">,</span><span class="n">descripcion</span><span class="p">)</span>
+        <span class="n">enviarNotificacion</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">usuario</span><span class="o">.</span><span class="n">email</span><span class="p">,</span><span class="n">proyecto</span><span class="o">.</span><span class="n">nombre_proyecto</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span></div>
 
 
@@ -251,7 +256,7 @@
     <span class="n">rolUsuario</span> <span class="o">=</span> <span class="n">Rol</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">proyecto</span><span class="o">.</span><span class="n">id_rol</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span><span class="s1">&#39;Correeo&#39;</span><span class="p">)</span>
     <span class="n">permisosProyecto</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;dsp_Colaborador&#39;</span><span class="p">,</span> <span class="s1">&#39;dsp_Roles&#39;</span><span class="p">,</span> <span class="s1">&#39;dsp_TipoUs&#39;</span><span class="p">,</span>
-                        <span class="s1">&#39;dsp_ProductBack&#39;</span><span class="p">,</span> <span class="s1">&#39;dsp_SprinBack&#39;</span><span class="p">,</span> <span class="s1">&#39;ini_Proyecto&#39;</span><span class="p">,</span> <span class="s1">&#39;upd_Proyecto&#39;</span><span class="p">]</span>
+                        <span class="s1">&#39;dsp_ProductBack&#39;</span><span class="p">,</span> <span class="s1">&#39;dsp_SprinBack&#39;</span><span class="p">,</span> <span class="s1">&#39;ini_Proyecto&#39;</span><span class="p">,</span> <span class="s1">&#39;upd_Proyecto&#39;</span><span class="p">,</span><span class="s1">&#39;cerrar_proyecto&#39;</span><span class="p">]</span>
     <span class="n">validacionPermisos</span> <span class="o">=</span> <span class="n">validarPermisos</span><span class="p">(</span><span class="n">permisosProyecto</span><span class="p">,</span> <span class="n">userSession</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span>
     <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;userSession&#39;</span><span class="p">:</span> <span class="n">userSession</span><span class="p">,</span>
                <span class="s1">&#39;proyecto&#39;</span><span class="p">:</span> <span class="n">proyecto</span><span class="p">,</span>
@@ -467,7 +472,8 @@
     <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;/proyecto/</span><span class="si">{</span><span class="n">idProyecto</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="eliminarRolProyecto"><a class="viewcode-back" href="../../modules/webApp.html#webApp.views.eliminarRolProyecto">[docs]</a><span class="k">def</span> <span class="nf">eliminarRolProyecto</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+<div class="viewcode-block" id="eliminarRolProyecto"><a class="viewcode-back" href="../../modules/webApp.html#webApp.views.eliminarRolProyecto">[docs]</a><span class="nd">@login_required</span><span class="p">(</span><span class="n">login_url</span><span class="o">=</span><span class="s2">&quot;/login/&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">eliminarRolProyecto</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Se elimina el rol asociado al id&quot;&quot;&quot;</span>
     <span class="n">variables</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span>
     <span class="n">record</span> <span class="o">=</span> <span class="n">Rol</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span> <span class="o">=</span> <span class="n">variables</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;idRol&#39;</span><span class="p">,</span><span class="kc">False</span><span class="p">))</span>
@@ -570,6 +576,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">editar</span><span class="p">:</span>
             <span class="n">descripcion</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Se asigno nuevo colaborador: </span><span class="si">{</span><span class="n">usuario</span><span class="o">.</span><span class="n">nombre</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">agregarHistorial</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="nb">id</span><span class="p">,</span><span class="n">descripcion</span><span class="p">)</span>
+        <span class="n">enviarNotificacion</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">usuario</span><span class="o">.</span><span class="n">email</span><span class="p">,</span><span class="n">proyecto</span><span class="o">.</span><span class="n">nombre_proyecto</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;/proyecto/colaboradores/</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 
@@ -1227,6 +1234,12 @@
         <span class="n">UserStory</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">idUs</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
             <span class="n">tiempoTrabajado</span> <span class="o">=</span> <span class="n">userStory</span><span class="o">.</span><span class="n">tiempoTrabajado</span> <span class="o">+</span> <span class="n">horasTrabajadas</span>
         <span class="p">)</span>
+        <span class="n">HoraTrabajada</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+           <span class="n">sprint</span> <span class="o">=</span><span class="n">Sprint</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">idSprint</span><span class="p">),</span>
+           <span class="n">horas</span><span class="o">=</span> <span class="n">horasTrabajadas</span><span class="p">,</span>
+            <span class="n">us</span><span class="o">=</span><span class="n">UserStory</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">idUs</span><span class="p">),</span>
+            <span class="n">proyecto</span><span class="o">=</span><span class="n">Proyecto</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">idProyecto</span><span class="p">)</span>
+        <span class="p">)</span> 
         <span class="n">userStory</span><span class="o">.</span><span class="n">comentario</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">newComentario</span><span class="p">)</span>
         <span class="n">descripcion</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Se agrego un comentario: &#39;</span><span class="si">{</span><span class="n">newComentario</span><span class="o">.</span><span class="n">comentario</span><span class="si">}</span><span class="s2">&#39; al US: </span><span class="si">{</span><span class="n">userStory</span><span class="o">.</span><span class="n">nombre_us</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="n">agregarHistorial</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="n">idProyecto</span><span class="p">,</span><span class="n">descripcion</span><span class="p">)</span>
@@ -1480,6 +1493,128 @@
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">JsonResponse</span><span class="p">({}</span> <span class="p">,</span> <span class="n">status</span> <span class="o">=</span> <span class="mi">200</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">JsonResponse</span><span class="p">({},</span> <span class="n">status</span> <span class="o">=</span> <span class="mi">400</span><span class="p">)</span>  </div>
+<div class="viewcode-block" id="visualizarBurndown"><a class="viewcode-back" href="../../modules/webApp.html#webApp.views.visualizarBurndown">[docs]</a><span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">visualizarBurndown</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="n">idProyecto</span><span class="p">,</span><span class="n">idSprint</span><span class="p">):</span>
+    <span class="n">variables</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span>
+    <span class="c1">#if request.method == &#39;POST&#39;:</span>
+    <span class="n">userSession</span> <span class="o">=</span> <span class="n">getUsuarioSesion</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">)</span>
+    <span class="n">proyecto</span> <span class="o">=</span> <span class="n">getProyectsByID</span><span class="p">(</span><span class="n">idProyecto</span><span class="p">,</span><span class="n">userSession</span><span class="o">.</span><span class="n">id</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">cantidadUs</span> <span class="o">=</span> <span class="n">Sprint</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">idSprint</span><span class="p">)</span><span class="o">.</span><span class="n">userStory_sp</span><span class="o">.</span><span class="n">count</span>
+    <span class="n">cantidadDiasSprint</span> <span class="o">=</span> <span class="n">Proyecto</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span> <span class="o">=</span> <span class="n">idProyecto</span><span class="p">)</span><span class="o">.</span><span class="n">duracion</span>
+    
+
+    <span class="n">arrayCUS</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">arrayCUSF</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">userStory</span> <span class="o">=</span> <span class="n">Sprint</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">idSprint</span><span class="p">)</span><span class="o">.</span><span class="n">userStory_sp</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">us</span> <span class="ow">in</span> <span class="n">userStory</span><span class="p">:</span>
+        <span class="n">horasUs</span> <span class="o">=</span> <span class="n">horasUs</span> <span class="o">+</span> <span class="n">us</span><span class="o">.</span><span class="n">tiempoEstimado_us</span>
+    
+    <span class="k">for</span> <span class="n">us</span> <span class="ow">in</span> <span class="n">userStory</span><span class="p">:</span>
+        <span class="n">horaReal</span> <span class="o">=</span> <span class="n">horaReal</span> <span class="o">+</span> <span class="n">us</span><span class="o">.</span><span class="n">tiempoTrabajado</span>
+
+    
+
+    <span class="n">duracionSprint</span> <span class="o">=</span> <span class="n">Sprint</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">idSprint</span><span class="p">)</span>
+    <span class="n">arrayCUS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">totalUs</span><span class="p">)</span>
+    <span class="n">arrayCUSF</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">terminados</span><span class="p">)</span>
+
+    <span class="n">context</span><span class="o">=</span><span class="p">{</span>
+    <span class="s1">&#39;userSession&#39;</span><span class="p">:</span><span class="n">userSession</span><span class="p">,</span>
+    <span class="s1">&#39;proyecto&#39;</span><span class="p">:</span><span class="n">proyecto</span><span class="p">,</span>
+    <span class="s1">&#39;cantidadUs&#39;</span><span class="p">:</span> <span class="n">cantidadUs</span><span class="p">,</span>
+    <span class="s1">&#39;cantidadDiasSprint&#39;</span> <span class="p">:</span> <span class="n">cantidadDiasSprint</span>
+    <span class="p">}</span>
+
+    <span class="n">html_template</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s1">&#39;home/burndownchart.html&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">html_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="n">request</span><span class="p">))</span></div>
+
+
+
+    <span class="c1">#return redirect(f&#39;/proyecto/sprint/burndownchart/{idProyecto}/{idSprint}&#39;)</span>
+
+
+
+
+<div class="viewcode-block" id="visualizarBurndown2"><a class="viewcode-back" href="../../modules/webApp.html#webApp.views.visualizarBurndown2">[docs]</a><span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">visualizarBurndown2</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="n">idProyecto</span><span class="p">,</span><span class="n">idSprint</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Se visualia el burndown chart, el cual muestra el grafico de como se esta avanzando con el proyecto, teniendo una vista ideal y el real&quot;&quot;&quot;</span>
+    <span class="n">variables</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span>
+    <span class="c1">#if request.method == &#39;POST&#39;:</span>
+    <span class="n">userSession</span> <span class="o">=</span> <span class="n">getUsuarioSesion</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">)</span>
+    <span class="n">proyecto</span> <span class="o">=</span> <span class="n">getProyectsByID</span><span class="p">(</span><span class="n">idProyecto</span><span class="p">,</span><span class="n">userSession</span><span class="o">.</span><span class="n">id</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">permisosProyecto</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;dsp_Colaborador&#39;</span><span class="p">,</span> <span class="s1">&#39;dsp_Roles&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;dsp_TipoUs&#39;</span><span class="p">,</span> <span class="s1">&#39;dsp_ProductBack&#39;</span><span class="p">,</span> <span class="s1">&#39;dsp_SprinBack&#39;</span><span class="p">]</span>
+    <span class="n">validacionPermisos</span> <span class="o">=</span> <span class="n">validarPermisos</span><span class="p">(</span><span class="n">permisosProyecto</span><span class="p">,</span> <span class="n">userSession</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">idProyecto</span><span class="p">)</span>
+    <span class="n">cantidadDiasSprint</span> <span class="o">=</span> <span class="n">Proyecto</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span> <span class="o">=</span> <span class="n">idProyecto</span><span class="p">)</span><span class="o">.</span><span class="n">sprint_dias</span>
+    <span class="n">arraydias</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">arrayIdeal</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">arrayBurn</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">userStory</span> <span class="o">=</span> <span class="n">Sprint</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">idSprint</span><span class="p">)</span><span class="o">.</span><span class="n">userStory_sp</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">horasUs</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">horaReal</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">us</span> <span class="ow">in</span> <span class="n">userStory</span><span class="p">:</span>
+        <span class="n">horasUs</span> <span class="o">=</span> <span class="n">horasUs</span> <span class="o">+</span> <span class="n">us</span><span class="o">.</span><span class="n">us</span><span class="o">.</span><span class="n">tiempoEstimado_us</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;horasUS: </span><span class="si">{</span><span class="n">horasUs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">sprintActual</span> <span class="o">=</span> <span class="n">Sprint</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">idSprint</span><span class="p">)</span>
+    <span class="n">idealxdia</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">horasUs</span><span class="o">/</span><span class="n">cantidadDiasSprint</span><span class="p">)</span>
+    <span class="n">arraydias</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span><span class="si">{</span><span class="n">sprintActual</span><span class="o">.</span><span class="n">fechaIni_sp</span><span class="si">}</span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">cantidadDiasSprint</span><span class="p">):</span>
+        <span class="n">arraydias</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dia </span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1">#Math.round(totalHoursInSprint - (idealHoursPerDay * i++) + sumArrayUpTo(scopeChange, 0))</span>
+        <span class="n">ideal</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">horasUs</span> <span class="o">-</span> <span class="p">(</span><span class="n">idealxdia</span> <span class="o">*</span> <span class="n">i</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">ideal</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">arrayIdeal</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ideal</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">break</span>
+
+    <span class="n">sprintActual</span> <span class="o">=</span> <span class="n">Sprint</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">idSprint</span><span class="p">)</span>
+    <span class="n">fechaInicio</span> <span class="o">=</span> <span class="n">sprintActual</span><span class="o">.</span><span class="n">fechaIni_sp</span>
+    <span class="n">aux</span><span class="o">=</span><span class="p">[]</span>
+    <span class="n">flag</span><span class="o">=</span><span class="mi">0</span>
+    <span class="n">arrayBurn</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">horasUs</span><span class="p">)</span>
+    <span class="k">while</span> <span class="mi">1</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">horasTrabajadas</span><span class="o">=</span><span class="mi">0</span>
+        <span class="n">aux</span> <span class="o">=</span> <span class="n">HoraTrabajada</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">sprint</span><span class="o">=</span><span class="n">idSprint</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">fecha_creacion__range</span><span class="o">=</span><span class="p">(</span><span class="n">fechaInicio</span><span class="p">,</span><span class="n">fechaInicio</span><span class="o">+</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span> <span class="o">=</span> <span class="n">flag</span><span class="p">)))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">fechaInicio</span><span class="o">+</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span> <span class="o">=</span> <span class="n">flag</span><span class="p">),</span><span class="s2">&quot;aux&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">aux</span><span class="p">:</span>
+            <span class="n">horasTrabajadas</span><span class="o">+=</span><span class="n">a</span><span class="o">.</span><span class="n">horas</span>
+        <span class="n">arrayBurn</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">horasUs</span><span class="o">-</span><span class="n">horasTrabajadas</span><span class="p">)</span>
+        <span class="n">flag</span><span class="o">+=</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="n">fechaInicio</span><span class="o">+</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span> <span class="o">=</span> <span class="n">flag</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()):</span>
+            <span class="k">break</span>
+ 
+    <span class="c1"># for us in userStory:</span>
+    <span class="c1">#     horaReal = horaReal + us.us.tiempoTrabajado</span>
+    <span class="c1">#     arrayBurn.append(horaReal)</span>
+    
+    <span class="c1"># arrayBurn = arrayBurn[::-1]</span>
+
+    <span class="n">dataBurndown</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;TotalDias&quot;</span> <span class="p">:</span> <span class="n">cantidadDiasSprint</span><span class="p">,</span>
+        <span class="s2">&quot;Dias&quot;</span> <span class="p">:</span> <span class="n">arraydias</span><span class="p">,</span>
+        <span class="s2">&quot;totalHoursInSprint&quot;</span> <span class="p">:</span> <span class="n">horasUs</span><span class="p">,</span>
+        <span class="s2">&quot;arrayIdeal&quot;</span> <span class="p">:</span> <span class="n">arrayIdeal</span><span class="p">,</span>
+        <span class="s2">&quot;arrayBurn&quot;</span> <span class="p">:</span> <span class="n">arrayBurn</span>
+    <span class="p">}</span>
+    <span class="c1">#print(dataBurndown)</span>
+    <span class="n">dicc_Burndown</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dataBurndown</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dicc_Burndown</span><span class="p">)</span>
+
+
+    <span class="n">context</span><span class="o">=</span><span class="p">{</span>
+    <span class="s1">&#39;userSession&#39;</span><span class="p">:</span><span class="n">userSession</span><span class="p">,</span>
+    <span class="s1">&#39;proyecto&#39;</span><span class="p">:</span><span class="n">proyecto</span><span class="p">,</span>
+    <span class="s1">&#39;cantidadDiasSprint&#39;</span> <span class="p">:</span> <span class="n">cantidadDiasSprint</span><span class="p">,</span>
+    <span class="s1">&#39;validacionPermisos&#39;</span><span class="p">:</span> <span class="n">validacionPermisos</span><span class="p">,</span>
+    <span class="s1">&#39;dicc_Burndown&#39;</span> <span class="p">:</span> <span class="n">dicc_Burndown</span>
+    <span class="p">}</span>
+
+    <span class="n">html_template</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s1">&#39;home/burndownchart2.html&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">html_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="n">request</span><span class="p">))</span></div>
 </pre></div>
 
           </div>

@@ -290,6 +290,8 @@
       <ul>
         <li><a href="modules/usuario.html#usuario.models.Historial.fecha_creacion">(usuario.models.Historial attribute)</a>
 </li>
+        <li><a href="modules/usuario.html#usuario.models.HoraTrabajada.fecha_creacion">(usuario.models.HoraTrabajada attribute)</a>
+</li>
         <li><a href="modules/usuario.html#usuario.models.Proyecto.fecha_creacion">(usuario.models.Proyecto attribute)</a>
 </li>
         <li><a href="modules/usuario.html#usuario.models.Sprint.fecha_creacion">(usuario.models.Sprint attribute)</a>
@@ -336,6 +338,8 @@
       <ul>
         <li><a href="modules/usuario.html#usuario.models.Historial.get_next_by_fecha_creacion">(usuario.models.Historial method)</a>
 </li>
+        <li><a href="modules/usuario.html#usuario.models.HoraTrabajada.get_next_by_fecha_creacion">(usuario.models.HoraTrabajada method)</a>
+</li>
         <li><a href="modules/usuario.html#usuario.models.Proyecto.get_next_by_fecha_creacion">(usuario.models.Proyecto method)</a>
 </li>
         <li><a href="modules/usuario.html#usuario.models.Sprint.get_next_by_fecha_creacion">(usuario.models.Sprint method)</a>
@@ -357,6 +361,8 @@
 
       <ul>
         <li><a href="modules/usuario.html#usuario.models.Historial.get_previous_by_fecha_creacion">(usuario.models.Historial method)</a>
+</li>
+        <li><a href="modules/usuario.html#usuario.models.HoraTrabajada.get_previous_by_fecha_creacion">(usuario.models.HoraTrabajada method)</a>
 </li>
         <li><a href="modules/usuario.html#usuario.models.Proyecto.get_previous_by_fecha_creacion">(usuario.models.Proyecto method)</a>
 </li>
@@ -393,18 +399,36 @@
 </li>
       <li><a href="modules/usuario.html#usuario.models.Historial.MultipleObjectsReturned">Historial.MultipleObjectsReturned</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/usuario.html#usuario.models.Usuario.historial_set">historial_set (usuario.models.Usuario attribute)</a>
 </li>
       <li><a href="modules/usuario.html#usuario.models.Comentario.horas">horas (usuario.models.Comentario attribute)</a>
 
       <ul>
+        <li><a href="modules/usuario.html#usuario.models.HoraTrabajada.horas">(usuario.models.HoraTrabajada attribute)</a>
+</li>
         <li><a href="modules/usuario.html#usuario.models.SprintColaborador.horas">(usuario.models.SprintColaborador attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/usuario.html#usuario.models.SprintColaborador.horasDisponibles">horasDisponibles (usuario.models.SprintColaborador attribute)</a>
 </li>
+      <li><a href="modules/usuario.html#usuario.models.HoraTrabajada">HoraTrabajada (class in usuario.models)</a>
+</li>
+      <li><a href="modules/usuario.html#usuario.models.HoraTrabajada.DoesNotExist">HoraTrabajada.DoesNotExist</a>
+</li>
+      <li><a href="modules/usuario.html#usuario.models.HoraTrabajada.MultipleObjectsReturned">HoraTrabajada.MultipleObjectsReturned</a>
+</li>
+      <li><a href="modules/usuario.html#usuario.models.Proyecto.horatrabajada_set">horatrabajada_set (usuario.models.Proyecto attribute)</a>
+
+      <ul>
+        <li><a href="modules/usuario.html#usuario.models.Sprint.horatrabajada_set">(usuario.models.Sprint attribute)</a>
+</li>
+        <li><a href="modules/usuario.html#usuario.models.UserStory.horatrabajada_set">(usuario.models.UserStory attribute)</a>
+</li>
+        <li><a href="modules/usuario.html#usuario.models.Usuario.horatrabajada_set">(usuario.models.Usuario attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -425,6 +449,8 @@
         <li><a href="modules/usuario.html#usuario.models.FaseTUS.id">(usuario.models.FaseTUS attribute)</a>
 </li>
         <li><a href="modules/usuario.html#usuario.models.Historial.id">(usuario.models.Historial attribute)</a>
+</li>
+        <li><a href="modules/usuario.html#usuario.models.HoraTrabajada.id">(usuario.models.HoraTrabajada attribute)</a>
 </li>
         <li><a href="modules/usuario.html#usuario.models.MiembroEquipo.id">(usuario.models.MiembroEquipo attribute)</a>
 </li>
@@ -622,6 +648,8 @@
 </li>
         <li><a href="modules/usuario.html#usuario.models.Historial.objects">(usuario.models.Historial attribute)</a>
 </li>
+        <li><a href="modules/usuario.html#usuario.models.HoraTrabajada.objects">(usuario.models.HoraTrabajada attribute)</a>
+</li>
         <li><a href="modules/usuario.html#usuario.models.MiembroEquipo.objects">(usuario.models.MiembroEquipo attribute)</a>
 </li>
         <li><a href="modules/usuario.html#usuario.models.Permiso.objects">(usuario.models.Permiso attribute)</a>
@@ -693,9 +721,11 @@
 </li>
       <li><a href="modules/usuario.html#usuario.models.Proyecto">Proyecto (class in usuario.models)</a>
 </li>
-      <li><a href="modules/usuario.html#usuario.models.ProyectoRol.proyecto">proyecto (usuario.models.ProyectoRol attribute)</a>
+      <li><a href="modules/usuario.html#usuario.models.HoraTrabajada.proyecto">proyecto (usuario.models.HoraTrabajada attribute)</a>
 
       <ul>
+        <li><a href="modules/usuario.html#usuario.models.ProyectoRol.proyecto">(usuario.models.ProyectoRol attribute)</a>
+</li>
         <li><a href="modules/usuario.html#usuario.models.TipoUs_Proyecto.proyecto">(usuario.models.TipoUs_Proyecto attribute)</a>
 </li>
       </ul></li>
@@ -705,8 +735,12 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/usuario.html#usuario.models.TipoUs_Proyecto.proyecto_id">proyecto_id (usuario.models.TipoUs_Proyecto attribute)</a>
+      <li><a href="modules/usuario.html#usuario.models.HoraTrabajada.proyecto_id">proyecto_id (usuario.models.HoraTrabajada attribute)</a>
+
+      <ul>
+        <li><a href="modules/usuario.html#usuario.models.TipoUs_Proyecto.proyecto_id">(usuario.models.TipoUs_Proyecto attribute)</a>
 </li>
+      </ul></li>
       <li><a href="modules/usuario.html#usuario.models.Cliente.proyecto_set">proyecto_set (usuario.models.Cliente attribute)</a>
 
       <ul>
@@ -816,6 +850,8 @@
       </ul></li>
       <li><a href="modules/usuario.html#usuario.models.Sprint">Sprint (class in usuario.models)</a>
 </li>
+      <li><a href="modules/usuario.html#usuario.models.HoraTrabajada.sprint">sprint (usuario.models.HoraTrabajada attribute)</a>
+</li>
       <li><a href="modules/usuario.html#usuario.models.Sprint.DoesNotExist">Sprint.DoesNotExist</a>
 </li>
       <li><a href="modules/usuario.html#usuario.models.Sprint.MultipleObjectsReturned">Sprint.MultipleObjectsReturned</a>
@@ -825,6 +861,8 @@
       <li><a href="modules/usuario.html#usuario.models.Proyecto.sprint_actual_id">sprint_actual_id (usuario.models.Proyecto attribute)</a>
 </li>
       <li><a href="modules/usuario.html#usuario.models.Proyecto.sprint_dias">sprint_dias (usuario.models.Proyecto attribute)</a>
+</li>
+      <li><a href="modules/usuario.html#usuario.models.HoraTrabajada.sprint_id">sprint_id (usuario.models.HoraTrabajada attribute)</a>
 </li>
       <li><a href="modules/usuario.html#usuario.models.Estado.sprint_set">sprint_set (usuario.models.Estado attribute)</a>
 
@@ -838,10 +876,10 @@
       </ul></li>
       <li><a href="modules/usuario.html#usuario.models.Tablero.sprint_tablero">sprint_tablero (usuario.models.Tablero attribute)</a>
 </li>
-      <li><a href="modules/usuario.html#usuario.models.Tablero.sprint_tablero_id">sprint_tablero_id (usuario.models.Tablero attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/usuario.html#usuario.models.Tablero.sprint_tablero_id">sprint_tablero_id (usuario.models.Tablero attribute)</a>
+</li>
       <li><a href="modules/webApp.html#webApp.views.sprintBacklog">sprintBacklog() (in module webApp.views)</a>
 </li>
       <li><a href="modules/usuario.html#usuario.models.SprintColaborador">SprintColaborador (class in usuario.models)</a>
@@ -982,10 +1020,18 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/usuario.html#usuario.models.SprintUserStory.us">us (usuario.models.SprintUserStory attribute)</a>
+      <li><a href="modules/usuario.html#usuario.models.HoraTrabajada.us">us (usuario.models.HoraTrabajada attribute)</a>
+
+      <ul>
+        <li><a href="modules/usuario.html#usuario.models.SprintUserStory.us">(usuario.models.SprintUserStory attribute)</a>
 </li>
-      <li><a href="modules/usuario.html#usuario.models.SprintUserStory.us_id">us_id (usuario.models.SprintUserStory attribute)</a>
+      </ul></li>
+      <li><a href="modules/usuario.html#usuario.models.HoraTrabajada.us_id">us_id (usuario.models.HoraTrabajada attribute)</a>
+
+      <ul>
+        <li><a href="modules/usuario.html#usuario.models.SprintUserStory.us_id">(usuario.models.SprintUserStory attribute)</a>
 </li>
+      </ul></li>
       <li><a href="modules/usuario.html#usuario.models.UserStory">UserStory (class in usuario.models)</a>
 </li>
       <li><a href="modules/usuario.html#usuario.models.UserStory.DoesNotExist">UserStory.DoesNotExist</a>
@@ -1016,7 +1062,11 @@
       <li><a href="modules/usuario.html#usuario.models.Usuario">Usuario (class in usuario.models)</a>
 </li>
       <li><a href="modules/usuario.html#usuario.models.Historial.usuario">usuario (usuario.models.Historial attribute)</a>
+
+      <ul>
+        <li><a href="modules/usuario.html#usuario.models.HoraTrabajada.usuario">(usuario.models.HoraTrabajada attribute)</a>
 </li>
+      </ul></li>
       <li>
     usuario.admin
 
@@ -1073,7 +1123,11 @@
 </li>
       </ul></li>
       <li><a href="modules/usuario.html#usuario.models.Historial.usuario_id">usuario_id (usuario.models.Historial attribute)</a>
+
+      <ul>
+        <li><a href="modules/usuario.html#usuario.models.HoraTrabajada.usuario_id">(usuario.models.HoraTrabajada attribute)</a>
 </li>
+      </ul></li>
       <li><a href="modules/usuario.html#usuario.models.Rol.usuario_set">usuario_set (usuario.models.Rol attribute)</a>
 </li>
       <li><a href="modules/usuario.html#usuario.apps.UsuarioConfig">UsuarioConfig (class in usuario.apps)</a>
@@ -1094,13 +1148,17 @@
 </li>
       <li><a href="modules/webApp.html#webApp.views.verDocumentacion">verDocumentacion() (in module webApp.views)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/webApp.html#webApp.views.verHistorialProyecto">verHistorialProyecto() (in module webApp.views)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/webApp.html#webApp.views.verProductBacklog">verProductBacklog() (in module webApp.views)</a>
 </li>
       <li><a href="modules/webApp.html#webApp.views.verProyecto">verProyecto() (in module webApp.views)</a>
+</li>
+      <li><a href="modules/webApp.html#webApp.views.visualizarBurndown">visualizarBurndown() (in module webApp.views)</a>
+</li>
+      <li><a href="modules/webApp.html#webApp.views.visualizarBurndown2">visualizarBurndown2() (in module webApp.views)</a>
 </li>
       <li><a href="modules/webApp.html#webApp.views.visualizarVelocity">visualizarVelocity() (in module webApp.views)</a>
 </li>

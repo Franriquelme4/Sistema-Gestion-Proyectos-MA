@@ -367,6 +367,7 @@ class TestProyecto(TestCase):
         self.assertEqual(comentario_prueba.comentario, 'comentario de prueba', 'El comentario no es el esperado')
 
     def test_hora_trabajada(self):
+        """Test para verificar horas trabajadas"""
         hora_trabajada = HoraTrabajada.objects.create(
             sprint = Sprint.objects.get(nombre_sp = 'sprint inicial'),
             horas = 8,
