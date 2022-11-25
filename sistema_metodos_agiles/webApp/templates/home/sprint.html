@@ -41,7 +41,7 @@ Velocity Chart</a>
             class="btn btn-sm btn-dark">Colaboradores</a>
           {% endif %}
           {% if validacionPermisos.dsp_Burndown %}
-          <a href="{% url 'webApp:visualizarBurndown' proyecto.id sp.id %}"
+          <a href="{% url 'webApp:visualizarBurndown2' proyecto.id sp.id %}"
             class="btn btn-sm btn-dark">Burndown Chart</a>
           {% endif %}
           {% if validacionPermisos.dsp_SprinBack %}
