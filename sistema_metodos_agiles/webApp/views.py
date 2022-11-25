@@ -165,7 +165,7 @@ def activarUsuario(request, id):
     usuario.activo = True
     usuario.save()
     print("ANTES DE LA NOTIFICACION")
-    enviarNotificacion(1,usuario.email)
+    enviarNotificacion(1,usuario.email,None)
     print("DESPUES DE LA NOTIFICACION")
     return redirect('/')
 
