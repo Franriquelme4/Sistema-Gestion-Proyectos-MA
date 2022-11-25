@@ -5,7 +5,7 @@ from django.core import serializers
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from usuario.utils import validarPermisos, render_to_pdf,busy_end_date,agregarHistorial, getRolByproyectUsuario,getUsuarioSesion, getTipoUsBySprint, getIdScrumRol, getProyectsByUsuarioID, getProyectsByID, getRolByProyectId, getColaboratorsByProyect, calcularFechaFin, getTipoUsbyProyectId, getTipoUsbyNotProyectId, getPermisos
+from usuario.utils import validarPermisos,enviarNotificacion, render_to_pdf,busy_end_date,agregarHistorial, getRolByproyectUsuario,getUsuarioSesion, getTipoUsBySprint, getIdScrumRol, getProyectsByUsuarioID, getProyectsByID, getRolByProyectId, getColaboratorsByProyect, calcularFechaFin, getTipoUsbyProyectId, getTipoUsbyNotProyectId, getPermisos
 from usuario.models import Usuario, FaseTUS,HoraTrabajada, TipoUs_Proyecto,Comentario, SprintUserStory, SprintColaborador, Sprint, Cliente, Proyecto, MiembroEquipo, Permiso, Rol, ProyectoRol, TipoUserStory, PrioridadTUs, UserStory, Fase, Estado
 from django.template import loader
 from django.db.models import Q
@@ -222,7 +222,7 @@ def verProyecto(request, id):
     rolUsuario = Rol.objects.get(id=proyecto.id_rol)
     print(request.user.email,'Correeo')
     permisosProyecto = ['dsp_Colaborador', 'dsp_Roles', 'dsp_TipoUs',
-                        'dsp_ProductBack', 'dsp_SprinBack', 'ini_Proyecto', 'upd_Proyecto']
+                        'dsp_ProductBack', 'dsp_SprinBack', 'ini_Proyecto', 'upd_Proyecto','cerrar_proyecto']
     validacionPermisos = validarPermisos(permisosProyecto, userSession.id, id)
     context = {'userSession': userSession,
                'proyecto': proyecto,
@@ -1503,6 +1503,7 @@ def visualizarBurndown(request,idProyecto,idSprint):
 
 @login_required
 def visualizarBurndown2(request,idProyecto,idSprint):
+    """Se visualia el burndown chart, el cual muestra el grafico de como se esta avanzando con el proyecto, teniendo una vista ideal y el real"""
     variables = request.POST
     #if request.method == 'POST':
     userSession = getUsuarioSesion(request.user.email)
@@ -1522,8 +1523,10 @@ def visualizarBurndown2(request,idProyecto,idSprint):
         horasUs = horasUs + us.us.tiempoEstimado_us
 
     print(f"horasUS: {horasUs}")
-
+    sprintActual = Sprint.objects.get(id=idSprint)
     idealxdia = round(horasUs/cantidadDiasSprint)
+    arraydias.append(f"""{sprintActual.fechaIni_sp}""")
+
     for i in range(0,cantidadDiasSprint):
         arraydias.append(f"Dia {i + 1}")
         #Math.round(totalHoursInSprint - (idealHoursPerDay * i++) + sumArrayUpTo(scopeChange, 0))
