@@ -24,7 +24,7 @@ urlpatterns = [
     path('proyecto/colaboradores/<int:id>',views.colaboradoresProyecto, name='colaboradoresProyecto'),
     path('proyecto/colaboradores/crear/<int:id>',views.colaboradoresProyectoCrear, name='colaboradoresProyectoCrear'),
     path('proyecto/colaboradores/editar/<int:idProyecto>/<int:idColaborador>',views.colaboradoresProyectoEditar, name='colaboradoresProyectoEditar'),
-    path('proyecto/colaboradores/guardar/<int:id>',views.asignarColaboradorProyecto, name='asignarColaboradorProyecto'),
+    path('proyecto/colaboradores/guardar/<int:id>/<int:editar>',views.asignarColaboradorProyecto, name='asignarColaboradorProyecto'),
     path('proyecto/tipoUs/<int:id>',views.tipoUs, name='tipoUs'),
     path('proyecto/tipoUs/crear/<int:id>',views.tipoUsCrear, name='tipoUsCrear'),
     path('proyecto/tipoUs/importar/<int:id>',views.tipoUsImportar, name='tipoUsImportar'),
@@ -51,11 +51,17 @@ urlpatterns = [
     path('proyecto/sprint/tablero/<int:idProyecto>/<int:idSprint>/<int:idTipoUs>',views.sprintTablero, name='sprintTablero'),
     path('proyecto/sprint/tablero/<int:idProyecto>/<int:idSprint>',views.sprintTablero, name='sprintTablero2'),
     path('proyecto/sprint/tablero/actualizar/<int:idProyecto>/<int:idSprint>',views.sprintTableroActualizarEstado, name='sprintTableroActualizarEstado'),
+    path('proyecto/sprint/burndownchart/<int:idProyecto>/<int:idSprint>',views.visualizarBurndown, name='visualizarBurndown'),
+    path('proyecto/sprint/burndownchart2/<int:idProyecto>/<int:idSprint>',views.visualizarBurndown2, name='visualizarBurndown2'),
     path('proyecto/sprint/velocitychart/<int:idProyecto>',views.visualizarVelocity, name='visualizarVelocity'),
     path('proyecto/sprint/get/comentarios', views.getComentarios, name = "ajax_comentarios"),
     path('proyecto/sprint/comentarios/guardar/<int:idProyecto>/<int:idSprint>', views.guardarComentarioUs, name = "guardarComentarioUs"),
     path('proyecto/sprint/iniciar/<int:idProyecto>/<int:idSprint>', views.iniciarSprint, name="iniciarSprint"),
-    path('proyecto/sprint/cancelar/<int:idProyecto>/<int:idSprint>', views.cancelarSprint, name="cancelarSprint"),
-    path('proyecto/sprint/us/finalizar', views.finalizarUserStory, name="finalizarUserStory"),
+    path('proyecto/sprint/cancelar', views.cancelarSprint, name="cancelarSprint"),
+    path('proyecto/sprint/us/finalizar/<int:idProyecto>', views.finalizarUserStory, name="finalizarUserStory"),
+    path('proyecto/historial/<int:id>',views.verHistorialProyecto, name='verHistorialProyecto'),
+    path('proyecto/historial/descargar/<int:id>',views.ListHistorialPdf, name='ListHistorialPdf'),
+    path('proyecto/finalizar', views.cerrarProyecto, name="cerrarProyecto"),
+
 
 ]

@@ -1,0 +1,53 @@
+<head>
+    <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+      border-color: #96D4D4;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+    </style>
+</head>
+<h1> <center>Proyecto - {{proyecto}}</center></h1>
+<div>
+    <h2>Datos del Proyecto</h2>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Nombre del Proyecto:</strong> {{proyecto.nombre_proyecto}}</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Duracion:</strong> {{proyecto.duracion}} meses</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Duracion de Sprint:</strong> {{proyecto.sprint_dias}} dias</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Descripcion:</strong> {{proyecto.descripcion_proyecto}}</p>
+</div>
+<div>
+    <h2>Datos del Cliente</h2>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Nombre: </strong>{{proyecto.cliente_proyecto.nombre_cliente}}</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Apellido: </strong>{{proyecto.cliente_proyecto.apellido_cliente}}</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Email: </strong>{{proyecto.cliente_proyecto.email_cliente}}</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Telefono: </strong>{{proyecto.cliente_proyecto.telefono_cliente}}</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Empresa: </strong>{{proyecto.cliente_proyecto.empresa_cliente}}</p>
+</div>
+<div>
+    <h2><center>Historial de Cambios</center></h2>
+    <table>
+        <tr>
+          <th>Fecha</th>
+          <th>Usuario</th>
+          <th>Descripcion</th>
+        </tr>
+        {% for histo in historial %}
+        <tr>
+            <td>{{histo.fecha_creacion}}</td>
+            <td>{{histo.usuario.nombre}}</td>
+            <td>{{histo.descripcion}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>

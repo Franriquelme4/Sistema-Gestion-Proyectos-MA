@@ -1,7 +1,7 @@
 from email.policy import default
 from django.db import models
 import datetime
-
+ 
 # Create your models here.
 
 class Permiso(models.Model):
@@ -97,6 +97,7 @@ class Proyecto(models.Model):
     fecha_creacion = models.DateField(default=datetime.date.today)
     estado = models.ForeignKey('Estado',on_delete=models.CASCADE)
     sprint_actual = models.ForeignKey('Sprint',on_delete=models.CASCADE,null=True)
+    historial = models.ManyToManyField('Historial')
     class Meta:
         verbose_name = 'Proyecto'
         verbose_name_plural = 'Proyectos'
@@ -268,3 +269,29 @@ class Comentario(models.Model):
         ordering = ['fecha_creacion']
     def __str__(self):
         return self.comentario
+
+class Historial(models.Model):
+    """Se almacena el historial de todo el ciclo del proyecto"""
+    descripcion = models.CharField(max_length=1000,null=False)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    usuario = models.ForeignKey('Usuario',on_delete=models.CASCADE,null=True)
+    class Meta:
+        verbose_name = 'historial'
+        verbose_name_plural = 'historiales'
+        ordering = ['fecha_creacion']
+    def __str__(self):
+        return self.descripcion
+
+
+class HoraTrabajada(models.Model):
+    """Se almacena el historial de todo el ciclo del proyecto"""
+    sprint = models.ForeignKey('Sprint',on_delete=models.CASCADE,null=True)
+    horas = models.IntegerField()
+    us = models.ForeignKey('UserStory',on_delete=models.CASCADE)
+    usuario = models.ForeignKey('Usuario',on_delete=models.CASCADE,null=True)
+    proyecto = models.ForeignKey('Proyecto',on_delete=models.CASCADE,null=True)
+    fecha_creacion = models.DateField(default=datetime.date.today)
+    class Meta:
+        ordering = ['fecha_creacion']
+
+    

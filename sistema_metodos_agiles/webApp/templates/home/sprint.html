@@ -8,8 +8,8 @@
 {% block content %}
 {% include 'includes/options.html' %}
 <h2>Sprint</h2>
-
-{% if validacionPermisos.crt_Sprint %}
+<input type="text" value="{{proyecto.id}}" hidden="true" id="proyecto-id">
+{% if validacionPermisos.crt_Sprint and not proyecto.estado.descripcion == "CANCELADO" %}
 <a class="btn btn-primary btn-sm" href="{% url 'webApp:sprintCrear' proyecto.id %}"><i
     class="material-icons">add</i>Crear
   Nuevo Sprint</a>
@@ -40,13 +40,10 @@ Velocity Chart</a>
           <a href="{% url 'webApp:sprintColaboradores' proyecto.id sp.id %}"
             class="btn btn-sm btn-dark">Colaboradores</a>
           {% endif %}
-          {% if validacionPermisos.dsp_Burndown %}
-          <a href=""
-            class="btn btn-sm btn-dark">Burndown Chart</a>
-          {% endif %}
           {% if validacionPermisos.dsp_SprinBack %}
           <a href="{% url 'webApp:sprintBacklog' proyecto.id sp.id %}" class="btn btn-sm btn-dark">Sprint Backlog</a>
           {% endif %}
+          
           {% if sp.estado.descripcion == "PENDIENTE" %}
           {% if validacionPermisos.dsp_Colaborador_Sprint %}
           <a href="{% url 'webApp:sprintUsAgregar' proyecto.id sp.id %}" class="btn btn-sm btn-dark">Agregar US</a>
@@ -63,11 +60,15 @@ Velocity Chart</a>
           {% endif %}
           {% endif %}
           {% if sp.estado.descripcion == "EN PROGRESO" %}
+          {% if validacionPermisos.dsp_Burndown %}
+          <a href="{% url 'webApp:visualizarBurndown2' proyecto.id sp.id %}"
+            class="btn btn-sm btn-dark">Burndown Chart</a>
+          {% endif %}
           {% if validacionPermisos.dsp_Tablero %}
           <a href="{% url 'webApp:sprintTablero' proyecto.id sp.id 0 %}" class="btn btn-sm btn-primary">Tablero</a>
           {% endif %}
           {% if validacionPermisos.cancelar_sprint %}
-            <a href="{% url 'webApp:cancelarSprint' proyecto.id sp.id %}" class="btn btn-sm btn-danger">Cancelar Sprint</a>
+            <button class="btn btn-sm btn-danger cancelar-sprint" id="{{sp.id}}">Cancelar Sprint</button>
           {% endif %}
           {% endif %}
 
@@ -91,4 +92,54 @@ Velocity Chart</a>
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+
+  <script>
+
+  const proyectoid = $("input#proyecto-id").val()
+  console.log(proyectoid);
+
+  $("button.cancelar-sprint").click(function (e) {
+    console.log('se apreto el');
+    e.preventDefault();
+    Swal.fire({
+      title: 'Estas Seguro/a de que desea cerrar el sprint ?',
+      text: "Todos los User Story pasaran a un estado disponible siempre y cuando no esten en estado terminado",
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          type: 'GET',
+          url: "{% url 'webApp:cancelarSprint' %}",
+          data: { "idSprint": e.target.id,"idProyecto":proyectoid},
+          success: function (response) {
+            console.log(response);
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: 'El sprint fue cancelado correctamente',
+              showConfirmButton: false,
+              timer: 1500
+            })
+            setTimeout(() => {
+              
+              location.reload()
+            }, 1500);
+          },
+          error: function (response) {
+            alert(response["responseJSON"]["error"]);
+          }
+        })
+      }
+    })
+
+
+  })
+</script>
+
+{% endblock javascripts %}

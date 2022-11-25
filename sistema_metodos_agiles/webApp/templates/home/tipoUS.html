@@ -7,10 +7,10 @@
 
 {% block content %}
 {% include 'includes/options.html' %}
-{% if validacionPermisos.ctr_TipoUs %}
+{% if validacionPermisos.ctr_TipoUs and not proyecto.estado.descripcion == "CANCELADO" %}
 <a class="btn btn-primary btn-sm" href="{% url 'webApp:tipoUsCrear' proyecto.id %}"><i class="material-icons">add</i>Agregar tipo de US</a>
 {% endif %}
-{% if validacionPermisos.imp_TipoUs %}
+{% if validacionPermisos.imp_TipoUs and not proyecto.estado.descripcion == "CANCELADO" %}
 <a class="btn btn-primary btn-sm" href="{% url 'webApp:tipoUsImportar' proyecto.id %}"><i class="material-icons">add</i>Importar tipo de US</a>
 
 {% endif %}

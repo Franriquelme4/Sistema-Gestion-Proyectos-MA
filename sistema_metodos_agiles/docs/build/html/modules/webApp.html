@@ -98,6 +98,12 @@
 <dd></dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="webApp.views.ListHistorialPdf">
+<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">ListHistorialPdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#ListHistorialPdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.ListHistorialPdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Se descarga el archivo pdf del historial</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="webApp.views.activarUsuario">
 <span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">activarUsuario</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#activarUsuario"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.activarUsuario" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cuando un usuario nuevo se loguea en el sistema queda en estado pendiente hasta que el admin le de acceso</p>
@@ -111,14 +117,21 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="webApp.views.asignarColaboradorProyecto">
-<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">asignarColaboradorProyecto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#asignarColaboradorProyecto"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.asignarColaboradorProyecto" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">asignarColaboradorProyecto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">editar</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#asignarColaboradorProyecto"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.asignarColaboradorProyecto" title="Permalink to this definition">¶</a></dt>
 <dd><p>Se almacena el nuevo rol con el colaborador al proyecto</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="webApp.views.cancelarSprint">
-<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">cancelarSprint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idProyecto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idSprint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#cancelarSprint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.cancelarSprint" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">cancelarSprint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#cancelarSprint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.cancelarSprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Se cancela el sprint, regresando la disponibilidad de los user story</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="webApp.views.cerrarProyecto">
+<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">cerrarProyecto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#cerrarProyecto"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.cerrarProyecto" title="Permalink to this definition">¶</a></dt>
+<dd><p>Se encarga de cerrar el proyecto pero da la posibilidad de aun poder ver los parametros</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="webApp.views.colaboradoresProyecto">
@@ -198,7 +211,7 @@ todos los datos de la misma</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="webApp.views.eliminarColaboradorProyecto2">
-<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">eliminarColaboradorProyecto2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idColaborador</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idProyecto</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#eliminarColaboradorProyecto2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.eliminarColaboradorProyecto2" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">eliminarColaboradorProyecto2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idColaborador</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idProyecto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">editar</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#eliminarColaboradorProyecto2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.eliminarColaboradorProyecto2" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -209,18 +222,21 @@ todos los datos de la misma</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="webApp.views.finalizarUserStory">
-<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">finalizarUserStory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#finalizarUserStory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.finalizarUserStory" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">finalizarUserStory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idProyecto</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#finalizarUserStory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.finalizarUserStory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Una vez que se encuentre en done el scrum tiene la posibilidad de leer finalizar el user story</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="webApp.views.getComentarios">
 <span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">getComentarios</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#getComentarios"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.getComentarios" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Se optienen todos los comentarios de un user Story</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="webApp.views.guardarComentarioUs">
 <span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">guardarComentarioUs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idProyecto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idSprint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#guardarComentarioUs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.guardarComentarioUs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Cada us tiene la posibilidad de tener comentarios, dicho metodo se utiliza para almacenar la misma</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="webApp.views.importarTusDeProyecto">
@@ -242,7 +258,8 @@ distintas opciones dependiendo el rol que tenga</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="webApp.views.iniciarSprint">
 <span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">iniciarSprint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idProyecto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idSprint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#iniciarSprint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.iniciarSprint" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Se inicia el sprint una vez que se haya cargado todos los datos, se calcula la fecha</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="webApp.views.login">
@@ -335,7 +352,8 @@ todos los datos de la misma</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="webApp.views.sprintTableroActualizarEstado">
 <span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">sprintTableroActualizarEstado</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idProyecto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idSprint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#sprintTableroActualizarEstado"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.sprintTableroActualizarEstado" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Se actualiza el estado de us una vez que se desliza y se suelta en el estado en el cual se quiere dejar</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="webApp.views.sprintUsAgregar">
@@ -402,6 +420,12 @@ todos los datos de la misma</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="webApp.views.verHistorialProyecto">
+<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">verHistorialProyecto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#verHistorialProyecto"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.verHistorialProyecto" title="Permalink to this definition">¶</a></dt>
+<dd><p>Se lista todos los roles especificos de cada proyecto</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="webApp.views.verProductBacklog">
 <span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">verProductBacklog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#verProductBacklog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.verProductBacklog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Se visualiza todos los US</p>
@@ -412,6 +436,17 @@ todos los datos de la misma</p>
 <span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">verProyecto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#verProyecto"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.verProyecto" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cuando un usuario ingresa a un proyecto en el cual fue asignado se visualizan 
 todos los datos de la misma</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="webApp.views.visualizarBurndown">
+<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">visualizarBurndown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idProyecto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idSprint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#visualizarBurndown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.visualizarBurndown" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="webApp.views.visualizarBurndown2">
+<span class="sig-prename descclassname"><span class="pre">webApp.views.</span></span><span class="sig-name descname"><span class="pre">visualizarBurndown2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idProyecto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idSprint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/webApp/views.html#visualizarBurndown2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#webApp.views.visualizarBurndown2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Se visualia el burndown chart, el cual muestra el grafico de como se esta avanzando con el proyecto, teniendo una vista ideal y el real</p>
 </dd></dl>
 
 <dl class="py function">

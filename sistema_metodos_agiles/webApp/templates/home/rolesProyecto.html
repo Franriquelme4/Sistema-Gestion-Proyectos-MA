@@ -7,7 +7,7 @@
 
 {% block content %}
 {% include 'includes/options.html' %}
-{% if validacionPermisos.crt_rol %}
+{% if validacionPermisos.crt_rol and not proyecto.estado.descripcion == "CANCELADO" %}
 <a class="btn btn-primary btn-sm" href="{% url 'webApp:rolesProyectoCrear' proyecto.id %}"><i
     class="material-icons">add</i>Agregar rol</a>
 {% endif %}
