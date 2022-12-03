@@ -10,6 +10,7 @@ from usuario.models import Usuario, FaseTUS, TipoUs_Proyecto,Comentario, SprintU
 from django.template import loader
 from django.db.models import Q
 from datetime import datetime
+import numpy
 
 # Create your views here.
 
@@ -1369,8 +1370,10 @@ def visualizarBurndown2(request,idProyecto,idSprint):
                         'dsp_TipoUs', 'dsp_ProductBack', 'dsp_SprinBack']
     validacionPermisos = validarPermisos(permisosProyecto, userSession.id, idProyecto)
     cantidadDiasSprint = Proyecto.objects.get(id = idProyecto).sprint_dias
+    sprint = Sprint.objects.get(id = idSprint)
     arraydias = []
     arrayIdeal = []
+    progreso = []
     arrayBurn = []
     userStory = Sprint.objects.get(id=idSprint).userStory_sp.all()
     horasUs = 0
@@ -1393,11 +1396,26 @@ def visualizarBurndown2(request,idProyecto,idSprint):
         
 
         
-    for us in userStory:
-        horaReal = horaReal + us.us.tiempoTrabajado
-        arrayBurn.append(horaReal)
+    #for us in userStory:
+    #    horaReal = horaReal + us.us.tiempoTrabajado
+    #    arrayBurn.append(horaReal)
     
-    arrayBurn = arrayBurn[::-1]
+    for us in userStory:
+        #if hasattr(us.us.fase, 'DONE') and us.us.finalizado:
+        diferenciaDia = 16 #int(numpy.busday_count(sprint.fechaIni_sp,us.us.fechaMod_us))
+        print(f"diferenciaDia: {diferenciaDia}")
+        for i in range(0, cantidadDiasSprint + 1 - diferenciaDia):
+            progreso[(cantidadDiasSprint) - i] -= us.us.tiempoEstimado_us
+            if progreso[(duracionSprint) - i] < 0:
+                progreso[(duracionSprint) - i] = 0
+    
+    
+    arrayBurn = progreso
+
+
+
+
+    #arrayBurn = arrayBurn[::-1]
 
     dataBurndown = {
         "TotalDias" : cantidadDiasSprint,
