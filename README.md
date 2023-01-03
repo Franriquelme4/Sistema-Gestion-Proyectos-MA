@@ -1,6 +1,7 @@
 # Sistema de gestion de proyectos#
 ##  Descripción ##
-Proyecto de Ingenieria de Software II
+Sistema de gention de proyectos utilizando metodologias agiles 
+Scrum, kamban
 
 ## Construcción ##
 * ***Lenguaje*** : Python 3.10
